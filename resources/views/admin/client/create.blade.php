@@ -118,7 +118,7 @@
                                             <label for="pinflInput" class="fw-semibold">PINFL:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input id="pinfl" type="text" class="form-control mb-3" placeholder="PINFL" name="pinfl" pattern="\d{14}" title="PINFL should be exactly 14 digits long" required>
+                                            <input id="pinfl" type="text" class="form-control mb-3" placeholder="PINFL" name="pinfl" pattern="\d{14}" title="PINFL should be exactly 14 digits long">
                                             @error('pinfl')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror

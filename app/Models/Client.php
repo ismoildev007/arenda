@@ -12,8 +12,8 @@ class Client extends Model
     protected $fillable = [
         'branch_id',
         'last_name',
-        'first_name',
         'middle_name',
+        'first_name',
         'password',
         'pinfl',
         'birth_day',

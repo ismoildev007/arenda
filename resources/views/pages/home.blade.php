@@ -1,6 +1,6 @@
-    @extends('layouts.auth')
-    @section('content')
-    
+@extends('layouts.layout')
+@section('content')
+
     <!--! ================================================================ !-->
     <!--! [Start] Main Content !-->
     <!--! ================================================================ !-->
@@ -11,13 +11,6 @@
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
                         <h5 class="m-b-10">Dashboard</h5>
-                            <form class="d-block" action="{{ route('logout') }}" method="post">
-                                @csrf
-                                <button type="submit" class="dropdown-item"><i class="feather-log-out"></i>
-                                    Logout
-                                </button>
-                                {{--                                    <button class="btn d-block mx-5 text-primary" type="submit"><i class="feather-log-out"></i> Logout</button>--}}
-                            </form>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -300,95 +293,95 @@
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
-                                            <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col" class="wd-100">Sale Rep.</th>
-                                                <th scope="col">Contacted</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Value</th>
-                                            </tr>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col" class="wd-100">Sale Rep.</th>
+                                            <th scope="col">Contacted</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Value</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="position-relative">
-                                                    <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-success rounded"></div>
-                                                    <a href="javascript:void(0);">Archie Tones</a>
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="avatar-image avatar-md">
-                                                        <img src="assets/images/avatar/1.png" alt="" class="img-fluid">
-                                                    </a>
-                                                </td>
-                                                <td>15 June, 2023</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="badge bg-soft-success text-success">Deal Won</a>
-                                                </td>
-                                                <td><a href="javascript:void(0);">$15.65K</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="position-relative">
-                                                    <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-warning rounded"></div>
-                                                    <a href="javascript:void(0);">Holmes Cherry</a>
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="avatar-image avatar-md">
-                                                        <img src="assets/images/avatar/2.png" alt="" class="img-fluid">
-                                                    </a>
-                                                </td>
-                                                <td>20 June, 2023</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="badge bg-soft-warning text-warning">Intro Call</a>
-                                                </td>
-                                                <td><a href="javascript:void(0);">$10.24K</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="position-relative">
-                                                    <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-primary rounded"></div>
-                                                    <a href="javascript:void(0);">Kenneth Hune</a>
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="avatar-image avatar-md">
-                                                        <img src="assets/images/avatar/3.png" alt="" class="img-fluid">
-                                                    </a>
-                                                </td>
-                                                <td>18 June, 2023</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="badge bg-soft-primary text-primary">Stuck</a>
-                                                </td>
-                                                <td><a href="javascript:void(0);">$12.47K</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="position-relative">
-                                                    <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-danger rounded"></div>
-                                                    <a href="javascript:void(0);">Malanie Hanvey</a>
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="avatar-image avatar-md">
-                                                        <img src="assets/images/avatar/4.png" alt="" class="img-fluid">
-                                                    </a>
-                                                </td>
-                                                <td>22 June, 2023</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="badge bg-soft-danger text-danger">Cancelled</a>
-                                                </td>
-                                                <td><a href="javascript:void(0);">$10.88K</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="position-relative">
-                                                    <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-dark rounded"></div>
-                                                    <a href="javascript:void(0);">Valentine Maton</a>
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="avatar-image avatar-md">
-                                                        <img src="assets/images/avatar/5.png" alt="" class="img-fluid">
-                                                    </a>
-                                                </td>
-                                                <td>25 June, 2023</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="badge bg-soft-primary text-primary">Progress</a>
-                                                </td>
-                                                <td><a href="javascript:void(0);">$13.85K</a></td>
-                                            </tr>
+                                        <tr>
+                                            <td class="position-relative">
+                                                <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-success rounded"></div>
+                                                <a href="javascript:void(0);">Archie Tones</a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="avatar-image avatar-md">
+                                                    <img src="assets/images/avatar/1.png" alt="" class="img-fluid">
+                                                </a>
+                                            </td>
+                                            <td>15 June, 2023</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="badge bg-soft-success text-success">Deal Won</a>
+                                            </td>
+                                            <td><a href="javascript:void(0);">$15.65K</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="position-relative">
+                                                <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-warning rounded"></div>
+                                                <a href="javascript:void(0);">Holmes Cherry</a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="avatar-image avatar-md">
+                                                    <img src="assets/images/avatar/2.png" alt="" class="img-fluid">
+                                                </a>
+                                            </td>
+                                            <td>20 June, 2023</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="badge bg-soft-warning text-warning">Intro Call</a>
+                                            </td>
+                                            <td><a href="javascript:void(0);">$10.24K</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="position-relative">
+                                                <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-primary rounded"></div>
+                                                <a href="javascript:void(0);">Kenneth Hune</a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="avatar-image avatar-md">
+                                                    <img src="assets/images/avatar/3.png" alt="" class="img-fluid">
+                                                </a>
+                                            </td>
+                                            <td>18 June, 2023</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="badge bg-soft-primary text-primary">Stuck</a>
+                                            </td>
+                                            <td><a href="javascript:void(0);">$12.47K</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="position-relative">
+                                                <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-danger rounded"></div>
+                                                <a href="javascript:void(0);">Malanie Hanvey</a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="avatar-image avatar-md">
+                                                    <img src="assets/images/avatar/4.png" alt="" class="img-fluid">
+                                                </a>
+                                            </td>
+                                            <td>22 June, 2023</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="badge bg-soft-danger text-danger">Cancelled</a>
+                                            </td>
+                                            <td><a href="javascript:void(0);">$10.88K</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="position-relative">
+                                                <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-dark rounded"></div>
+                                                <a href="javascript:void(0);">Valentine Maton</a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="avatar-image avatar-md">
+                                                    <img src="assets/images/avatar/5.png" alt="" class="img-fluid">
+                                                </a>
+                                            </td>
+                                            <td>25 June, 2023</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="badge bg-soft-primary text-primary">Progress</a>
+                                            </td>
+                                            <td><a href="javascript:void(0);">$13.85K</a></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -908,5 +901,5 @@
     <!--! ================================================================ !-->
     <!--! [End] Main Content !-->
     <!--! ================================================================ !-->
-    
-    @endsection
+
+@endsection

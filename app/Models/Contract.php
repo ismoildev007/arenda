@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Contract extends Model
 {
@@ -30,5 +31,15 @@ class Contract extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function getStartDateAttribute($value)
+    {
+        return Carbon::parse($value);
+    }
+
+    public function getEndDateAttribute($value)
+    {
+        return Carbon::parse($value);
     }
 }

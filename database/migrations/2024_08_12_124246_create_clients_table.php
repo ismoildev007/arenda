@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('client', function (Blueprint $table) {
+        Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('pinfl')->nullable()->unique();
-            $table->string('birth_day')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('middle_name')->nullable();
-            $table->string('password')->unique();
             $table->foreignId('branch_id')->constrained('branches')->cascadeOnDelete();
+            $table->string('last_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('password')->unique();
+            $table->string('pinfl')->nullable();
+            $table->string('birth_day')->nullable();
+            $table->string('company_name')->nullable();
             $table->foreignId('region_id')->constrained('regions')->cascadeOnDelete();
             $table->foreignId('district_id')->constrained('districts')->cascadeOnDelete();
-            $table->string('company_name')->nullable();
             $table->string('oked')->nullable();
             $table->string('bank')->nullable();
             $table->string('account')->nullable();
-            $table->string('inn')->nullable()->unique();
+            $table->string('inn')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('client');
+        Schema::dropIfExists('clients');
     }
 };

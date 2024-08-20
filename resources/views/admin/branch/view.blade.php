@@ -62,262 +62,54 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> Alexandra Della</a>
-                                        <a href="javascript:void(0);" class="fs-12 fw-normal text-muted d-block">alex.della@outlook.com</a>
+                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $branch->name }} </a>
                                     </div>
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">28.65K</h6>
-                                            <p class="fs-12 text-muted mb-0">Followers</p>
+                                            <h6 class="fs-15 fw-bolder">5000</h6>
+                                            <p class="fs-12 text-muted mb-0">Umumiy hajmi m <sup>2</sup></p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">38.85K</h6>
-                                            <p class="fs-12 text-muted mb-0">Following</p>
+                                            <h6 class="fs-15 fw-bolder">6</h6>
+                                            <p class="fs-12 text-muted mb-0">Umumiy qavat</p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">43.67K</h6>
-                                            <p class="fs-12 text-muted mb-0">Engagement</p>
+                                            <h6 class="fs-15 fw-bolder">50</h6>
+                                            <p class="fs-12 text-muted mb-0">Umumiy xonalar soni</p>
                                         </div>
                                     </div>
                                 </div>
                                 <ul class="list-unstyled mb-4">
                                     <li class="hstack justify-content-between mb-4">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Location</span>
-                                        <a href="javascript:void(0);" class="float-end">California, USA</a>
+                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Joylashuv</span>
+                                        <a href="javascript:void(0);" class="float-end">{{ $branch->region->name }}, {{ $branch->district->name }}</a>
                                     </li>
-                                    <li class="hstack justify-content-between mb-4">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Phone</span>
-                                        <a href="javascript:void(0);" class="float-end">+01 (375) 2589 645</a>
-                                    </li>
-                                    <li class="hstack justify-content-between mb-0">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Email</span>
-                                        <a href="javascript:void(0);" class="float-end">alex.della@outlook.com</a>
-                                    </li>
+                                    @foreach($branch->employees as $email)
+                                        <li class="hstack justify-content-between mb-4">
+                                            <span class="text-muted fw-medium hstack gap-3"><i class="feather-user"></i>Lavozim</span>
+                                            <a href="javascript:void(0);" class="float-end">@if($email->role === 'manager') Manager @endif</a>
+                                        </li>
+                                        <li class="hstack justify-content-between mb-0">
+                                            <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Email</span>
+                                            <a href="javascript:void(0);" class="float-end">{{ $email->email }}</a>
+                                        </li>
+                                    @endforeach
                                 </ul>
                                 <div class="d-flex gap-2 text-center pt-4">
-                                    <a href="javascript:void(0);" class="w-50 btn btn-light-brand">
-                                        <i class="feather-trash-2 me-2"></i>
-                                        <span>Delete</span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="w-50 btn btn-primary">
+                                    <form class="btn-group w-50" action="{{ route('branches.destroy', $branch->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
+                                            <i class="feather-trash-2 me-2"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('branches.edit', $branch->id) }}" class="w-50 btn btn-primary">
                                         <i class="feather-edit me-2"></i>
-                                        <span>Edit Profile</span>
+                                        <span>Edit</span>
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card stretch stretch-full">
-                            <div class="card-header">
-                                <h5 class="card-title">Social</h5>
-                                <div class="dropdown">
-                                    <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25,25">
-                                        <i class="feather feather-more-vertical"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-lock me-3"></i>
-                                                <span>Only Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-globe me-3"></i>
-                                                <span>Everyone</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-users me-3"></i>
-                                                <span>Anonymous</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-user-check me-3"></i>
-                                                <span>People I Follow</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-eye me-3"></i>
-                                                <span>People Follow Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-settings me-3"></i>
-                                                <span>Custom Selections Ever</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-facebook"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.facebook.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.facebook.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-twitter"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.twitter.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.twitter.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-github"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.github.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.github.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-linkedin"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.linkedin.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.linkedin.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-youtube"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.youtube.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.youtube.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                            </div>
-                            <a href="javascript:void(0);" class="ladda-button zoom-out" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Refresh Now">
-                                <span>Refresh</span>
-                                <span class="spinner"></span>
-                            </a>
-                        </div>
-                        <div class="card stretch stretch-full">
-                            <div class="card-header">
-                                <h2 class="card-title">Suggestions</h2>
-                                <div class="dropdown">
-                                    <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25,25">
-                                        <i class="feather feather-more-vertical"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-lock me-3"></i>
-                                                <span>Only Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-globe me-3"></i>
-                                                <span>Everyone</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-users me-3"></i>
-                                                <span>Anonymous</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-user-check me-3"></i>
-                                                <span>People I Follow</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-eye me-3"></i>
-                                                <span>People Follow Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-settings me-3"></i>
-                                                <span>Custom Selections Ever</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="avatar-image flex-shrink-0 me-3">
-                                        <img src="/assets/images/avatar/1.png" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Alexandra Della</h5>
-                                            <p class="fs-12 text-muted mb-0">Frontend Developer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="bg-warning text-white avatar-text">B</div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Bryan Waters</h5>
-                                            <p class="fs-12 text-muted mb-0">UI/UX Designer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="avatar-image flex-shrink-0 me-3">
-                                        <img src="/assets/images/avatar/2.png" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Curtis Green</h5>
-                                            <p class="fs-12 text-muted mb-0">Backend Developer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="bg-danger text-white avatar-text">E</div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Edward Andrade</h5>
-                                            <p class="fs-12 text-muted mb-0">Fullstack Designer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-image flex-shrink-0 me-3">
-                                        <img src="/assets/images/avatar/3.png" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Marianne Audrey</h5>
-                                            <p class="fs-12 text-muted mb-0">Fullstack Developer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="javascript:void(0);" class="ladda-button zoom-out" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Refresh Now">
-                                <span>Refresh</span>
-                                <span class="spinner"></span>
-                            </a>
                         </div>
                     </div>
                     <div class="col-xxl-8 col-xl-6">
@@ -347,69 +139,120 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active p-4" id="overviewTab" role="tabpanel">
-                                    <div class="about-section mb-5">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Profile About:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Updates</a>
-                                        </div>
-                                        <p>John Doe is a frontend developer with over 5 years of experience creating high-quality, user-friendly websites and web applications. He has a strong understanding of web development technologies and a keen eye for design.</p>
-                                        <p>John is proficient in languages such as HTML, CSS, and JavaScript, and is experienced in using popular frontend frameworks such as React and Angular. He is also well-versed in user experience design and uses his knowledge to create engaging and intuitive user interfaces.</p>
-                                        <p>Throughout his career, John has worked on a wide range of projects for clients in various industries, including e-commerce, healthcare, and education. He takes a collaborative approach to development and enjoys working closely with clients and other developers to bring their ideas to life.</p>
-                                    </div>
                                     <div class="profile-details mb-5">
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Profile Details:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Edit Profile</a>
+                                            <h5 class="fw-bold mb-0">Branch Details:</h5>
+                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Edit Branch</a>
+                                        </div>
+
+                                        <div class="row g-0 mb-4">
+                                            <div class="col-sm-6 text-muted">Branch Name:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $branch->name }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Full Name:</div>
-                                            <div class="col-sm-6 fw-semibold">Alexandra Della</div>
+                                            <div class="col-sm-6 text-muted">Region:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $branch->region->name }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Surname:</div>
-                                            <div class="col-sm-6 fw-semibold">Della</div>
+                                            <div class="col-sm-6 text-muted">District:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $branch->district->name }}</div>
                                         </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Company:</div>
-                                            <div class="col-sm-6 fw-semibold">WRAPCODERS</div>
+
+                                        <div class="mb-4 d-flex align-items-center justify-content-between">
+                                            <h5 class="fw-bold mb-0">Clients:</h5>
                                         </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Date of Birth:</div>
-                                            <div class="col-sm-6 fw-semibold">26 May, 2000</div>
+                                        @foreach($branch->clients as $client)
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Client Name:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $client->first_name }} {{ $client->last_name }}</div>
+                                            </div>
+                                            @if($client->pinfl !== null)
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">jismoniy shaxs pinfl:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $client->pinfl }}</div>
+                                                </div>
+                                                <hr/>
+                                            @endif
+                                            @if($client->inn !== null)
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Yuridik shaxs Inn:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $client->inn }}</div>
+                                                </div>
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Company:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $client->company_name }}</div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+
+                                        <div class="mb-4 d-flex align-items-center justify-content-between">
+                                            <h5 class="fw-bold mb-0">Rooms:</h5>
                                         </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Mobile Number:</div>
-                                            <div class="col-sm-6 fw-semibold">+01 (375) 5896 3214</div>
+                                        @foreach($branch->rooms as $room)
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Room Number:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $room->number }}</div>
+                                            </div>
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Size:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $room->size }} sqm</div>
+                                            </div>
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Price per sqm:</div>
+                                                <div class="col-sm-6 fw-semibold">${{ $room->price_per_sqm }}</div>
+                                            </div>
+
+                                            <div class="mb-4 d-flex align-items-center justify-content-between">
+                                                <h5 class="fw-bold mb-0">Contracts:</h5>
+                                            </div>
+                                            @foreach($room->contracts as $contract)
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Contract Number:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $contract->contract_number }}</div>
+                                                </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Client:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $contract->client->first_name }} {{ $contract->client->last_name }}</div>
+                                                </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Room:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $contract->room->number }}</div>
+                                                </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Start Date:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $contract->start_date->format('d M, Y') }}</div>
+                                                </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">End Date:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $contract->end_date->format('d M, Y') }}</div>
+                                                </div>
+                                            @endforeach
+                                        @endforeach
+
+
+                                        <div class="mb-4 d-flex align-items-center justify-content-between">
+                                            <h5 class="fw-bold mb-0">Employees:</h5>
                                         </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Email Address:</div>
-                                            <div class="col-sm-6 fw-semibold">alex.della@outlook.com</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Location:</div>
-                                            <div class="col-sm-6 fw-semibold">California, United States</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Joining Date:</div>
-                                            <div class="col-sm-6 fw-semibold">20 Dec, 2023</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Country:</div>
-                                            <div class="col-sm-6 fw-semibold">United States</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Communication:</div>
-                                            <div class="col-sm-6 fw-semibold">Email, Phone</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Allow Changes:</div>
-                                            <div class="col-sm-6 fw-semibold">YES</div>
-                                        </div>
-                                        <div class="row g-0">
-                                            <div class="col-sm-6 text-muted">Website:</div>
-                                            <div class="col-sm-6 fw-semibold">https://wrapcoders.com</div>
-                                        </div>
+                                        @foreach($branch->employees as $employee)
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Employee Name:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $employee->first_name }} {{ $employee->last_name }}</div>
+                                            </div>
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Email:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $employee->email }}</div>
+                                            </div>
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Role:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ ucfirst($employee->role) }}</div>
+                                            </div>
+                                        @endforeach
                                     </div>
+
                                     <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-warning-message profile-overview-alert" role="alert">
                                         <div class="me-4 d-none d-md-block">
                                             <i class="feather feather-alert-triangle fs-1"></i>

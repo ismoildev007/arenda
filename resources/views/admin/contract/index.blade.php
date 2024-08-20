@@ -9,13 +9,14 @@
                         <h5 class="m-b-10">Shartnomalar</h5>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a @if( auth()->user()->role == 'admin')
-                                                           href="{{ route('dashboard') }}"
-                                                       @elseif( auth()->user()->role == 'manager')
-                                                           href="{{ route('manager.dashboard') }}"
-                                                       @elseif (auth()->user()->role == 'staff')
-                                                           href="{{ route('staff.dashboard') }}"
-                                                       @endif class="nxl-link">Home</a></li>
+                        <li class="breadcrumb-item"><a
+                                    @if( auth()->user()->role == 'admin')
+                                        href="{{ route('dashboard') }}"
+                                    @elseif( auth()->user()->role == 'manager')
+                                        href="{{ route('manager.dashboard') }}"
+                                    @elseif (auth()->user()->role == 'staff')
+                                        href="{{ route('staff.dashboard') }}"
+                                    @endif class="nxl-link">Home</a></li>
                         <li class="breadcrumb-item">Shartnomalar</li>
                     </ul>
                 </div>
@@ -42,7 +43,7 @@
                                         <th>Mijoz</th>
                                         <th>Boshlanish sanasi</th>
                                         <th>Tugash sanasi</th>
-                                        <th>Chegirma</th>
+                                        <th>Chegirma %</th>
                                         <th>Harakatlar</th>
                                     </tr>
                                     </thead>
@@ -54,7 +55,7 @@
                                             <td>{{ $contract->client->first_name }}</td>
                                             <td>{{ $contract->start_date }}</td>
                                             <td>{{ $contract->end_date }}</td>
-                                            <td>{{ $contract->discount }}</td>
+                                            <td>{{ number_format($contract->discount) }} %</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">
                                                     <a href="{{ route('contracts.show', $contract->id) }}" class="avatar-text avatar-md">
@@ -76,7 +77,7 @@
                                                                 <form class="dropdown-item" action="{{ route('contracts.destroy', $contract->id) }}" method="POST" onsubmit="confirmDelete(event)">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" style="background: none; border: none; padding: 0;"  onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
+                                                                    <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
                                                                         <i class="feather feather-trash-2 me-3"></i>
                                                                         Delete
                                                                     </button>

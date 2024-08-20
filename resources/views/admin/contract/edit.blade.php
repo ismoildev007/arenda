@@ -20,7 +20,7 @@
                     <div class="card-header p-0">
                         <ul class="nav nav-tabs flex-wrap w-100 text-center customers-nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item flex-fill border-top" role="presentation">
-                                <a href="javascript:void(0);" class="nav-link text-start">Shartnoma malumotlarini kiriting:</a>
+                                <a href="javascript:void(0);" class="nav-link text-start">Shartnoma malumotlarini tahrirlang:</a>
                             </li>
                         </ul>
                     </div>
@@ -43,10 +43,11 @@
                                             <label for="roomSelect" class="fw-semibold">Xona:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <select name="room_id" id="roomSelect" class="form-control max-select" required onchange="updateRoomDetails()">
-                                                <option class="selected" disabled>Xona tanlash</option>
+                                            <select name="room_id" id="roomSelect" class="form-control max-select" required>
                                                 @foreach($rooms as $room)
-                                                    <option value="{{ $room->id }}" data-size="{{ $room->size }}" data-price="{{ $room->price_per_sqm }}" {{ $contract->room_id == $room->id ? 'selected' : '' }}>{{ $room->number }}</option>
+                                                    <option value="{{ $room->id }}" data-size="{{ $room->size }}" data-price="{{ $room->price_per_sqm }}" {{ $room->id == $contract->room_id ? 'selected' : '' }}>
+                                                        {{ $room->number }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -57,40 +58,41 @@
                                         </div>
                                         <div class="col-lg-8">
                                             <select name="client_id" id="clientSelect" class="form-control max-select" required>
-                                                <option class="selected" disabled>Mijoz tanlash</option>
                                                 @foreach($clients as $client)
-                                                    <option value="{{ $client->id }}" {{ $contract->client_id == $client->id ? 'selected' : '' }}>{{ $client->first_name }}</option>
+                                                    <option value="{{ $client->id }}" {{ $client->id == $contract->client_id ? 'selected' : '' }}>
+                                                        {{ $client->first_name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="startDate" class="fw-semibold">Boshlanish sanasi:</label>
+                                            <label for="startDateInput" class="fw-semibold">Boshlanish sanasi:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="date" class="form-control" id="startDate" name="start_date" value="{{ $contract->start_date }}" required>
+                                            <input type="date" class="form-control" id="startDateInput" name="start_date" value="{{ $contract->start_date->format('Y-m-d') }}">
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="endDate" class="fw-semibold">Tugash sanasi:</label>
+                                            <label for="endDateInput" class="fw-semibold">Tugash sanasi:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="date" class="form-control" id="endDate" name="end_date" value="{{ $contract->end_date }}" required>
+                                            <input type="date" class="form-control" id="endDateInput" name="end_date" value="{{ $contract->end_date->format('Y-m-d') }}">
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="discount" class="fw-semibold">Chegirma:</label>
+                                            <label for="discountInput" class="fw-semibold">Chegirma % da:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="number" step="0.01" class="form-control" id="discount" name="discount" value="{{ $contract->discount }}" oninput="calculateTotal()">
+                                            <input type="number" step="0.01" class="form-control" id="discountInput" name="discount" value="{{ $contract->discount }}">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col-lg-12">
-                                            <button type="submit" class="btn btn-primary">Yangilash</button>
+                                            <button type="submit" class="btn btn-primary">Saqlash</button>
                                         </div>
                                     </div>
                                 </form>
@@ -131,7 +133,15 @@
                 allowClear: true
             });
 
-            updateRoomDetails(); // Load room details when the page is loaded
+            // Xona malumotlarini yangilash
+            $('#roomSelect').on('change', updateRoomDetails);
+
+            // Tanlangan xona malumotlarini olish
+            updateRoomDetails();
+
+            // Chegirma yoki sanalar o'zgarganda umumiy summani hisoblash
+            $('#discountInput').on('input', calculateTotal);
+            $('#startDateInput, #endDateInput').on('change', calculateTotal);
         });
 
         function updateRoomDetails() {
@@ -143,6 +153,7 @@
             document.getElementById('roomSize').innerText = 'Kvadratlik: ' + size + ' m²';
             document.getElementById('roomPrice').innerText = 'Narx: ' + price + ' so\'m/m²';
 
+            // Umumiy summani hisoblash
             calculateTotal();
         }
 
@@ -150,10 +161,15 @@
             var roomSelect = document.getElementById('roomSelect');
             var selectedOption = roomSelect.options[roomSelect.selectedIndex];
             var size = selectedOption.getAttribute('data-size');
-            var price = selectedOption.getAttribute('data-price');
-            var discount = document.getElementById('discount').value;
+            var pricePerSqm = selectedOption.getAttribute('data-price');
+            var discount = parseFloat(document.getElementById('discountInput').value) || 0;
 
-            var totalPrice = size * price;
+            var startDate = new Date(document.getElementById('startDateInput').value);
+            var endDate = new Date(document.getElementById('endDateInput').value);
+            var totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // 1 kun qo'shiladi
+            var pricePerDay = (pricePerSqm * size) / 30; // Kunlik narx
+
+            var totalPrice = totalDays * pricePerDay;
             var discountedPrice = totalPrice - (totalPrice * discount / 100);
 
             document.getElementById('totalPrice').innerText = 'Umumiy narx: ' + totalPrice.toFixed(2) + ' so\'m';

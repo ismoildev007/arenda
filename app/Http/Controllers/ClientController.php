@@ -54,7 +54,7 @@ class ClientController extends Controller
         $client = Client::where('pinfl', $identifier)->orWhere('inn', $identifier)->first();
         if ($client && Hash::check($request->input('password'), $client->password)) {
             Auth::login($client);
-            return redirect()->route('client');
+            return redirect()->route('clients');
         }
 
         return redirect()->back();
@@ -95,7 +95,7 @@ class ClientController extends Controller
         // Mijozni saqlash va login qilish
         $client->save();
         Auth::login($client);
-        return redirect()->route('client');
+        return redirect()->route('clients');
     }
 
     public function index()
@@ -119,8 +119,8 @@ class ClientController extends Controller
             'branch_id' => 'nullable|exists:branches,id',
             'last_name' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
-            'pinfl' => 'nullable|string|size:14|unique:client',
-            'inn' => 'nullable|string|unique:client',
+            'pinfl' => 'nullable|string|size:14|unique:clients',
+            'inn' => 'nullable|string|unique:clients',
             // Add validation rules for other fields as needed
         ],[
             'pinfl.unique' => 'Bu PINFL avvaldan mavjud.',
@@ -144,7 +144,7 @@ class ClientController extends Controller
             'inn' => $request->inn,
         ]);
 
-        return redirect()->route('client.index')->with('success', 'Client created successfully.');
+        return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
     public function show(Client $client)
@@ -175,14 +175,14 @@ class ClientController extends Controller
 
         $client->update([
             'branch_id' => $request->branch_id,
-            'region_id' => $request->region_id,
-            'district_id' => $request->district_id,
             'last_name' => $request->last_name,
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'pinfl' => $request->pinfl,
             'birth_day' => $request->birth_day,
             'company_name' => $request->company_name,
+            'region_id' => $request->region_id,
+            'district_id' => $request->district_id,
             'oked' => $request->oked,
             'bank' => $request->bank,
             'account' => $request->account,
@@ -195,7 +195,7 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
-        return redirect()->route('client.index')->with('success', 'Client deleted successfully.');
+        return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
     }
 
 }
@@ -205,15 +205,15 @@ class ClientController extends Controller
 //        $password = $request->input('password');
 //
 //        // Identifierga ko'ra mijozni topish
-//        $client = Client::where('pinfl', $identifier)
+//        $clients = Client::where('pinfl', $identifier)
 //            ->orWhere('inn', $identifier)
 //            ->first();
 //
 //        // Agar mijoz mavjud bo'lsa, login
-//        if ($client) {
-//            if (Hash::check($password, $client->password)) {
-//                Auth::login($client);
-//                return redirect()->route('client');
+//        if ($clients) {
+//            if (Hash::check($password, $clients->password)) {
+//                Auth::login($clients);
+//                return redirect()->route('clients');
 //            } else {
 //                return redirect()->back()->withErrors(['password' => 'Parol noto\'g\'ri']);
 //            }

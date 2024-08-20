@@ -32,9 +32,9 @@
                                 <i class="feather-eye me-2"></i>
                                 <span>Follow</span>
                             </a>
-                            <a href="customers-create.html" class="btn btn-primary">
+                            <a href="{{ route('contracts.create') }}" class="btn btn-primary">
                                 <i class="feather-plus me-2"></i>
-                                <span>Create Customer</span>
+                                <span>Shartnoma yaratish</span>
                             </a>
                         </div>
                     </div>
@@ -62,50 +62,83 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> Alexandra Della</a>
-                                        <a href="javascript:void(0);" class="fs-12 fw-normal text-muted d-block">alex.della@outlook.com</a>
+                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $contract->client->first_name }} {{ $contract->client->last_name }} </a>
+                                        <a href="javascript:void(0);" class="fs-12 fw-normal text-muted d-block">
+                                            @if($contract->client->pinfl !== null)
+                                                {{ $contract->client->pinfl }}
+                                            @elseif($contract->client->inn !== null)
+                                                {{ $contract->client->inn }}
+                                            @endif
+                                        </a>
                                     </div>
+
+                                    <?php
+                                    $startDate = new DateTime($contract->start_date);
+                                    $endDate = new DateTime($contract->end_date);
+                                    $interval = $startDate->diff($endDate);
+                                    ?>
+
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">28.65K</h6>
-                                            <p class="fs-12 text-muted mb-0">Followers</p>
+                                            <h6 class="fs-15 fw-bolder">
+                                                {{ number_format($contract->room->price_per_sqm, 0, '.', ',') }} so'm
+                                            </h6>
+                                            <p class="fs-12 text-muted mb-0">1 m <sup>2</sup></p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">38.85K</h6>
-                                            <p class="fs-12 text-muted mb-0">Following</p>
+                                            <h6 class="fs-15 fw-bolder">
+                                                {{ number_format($contract->discount, 0, '.', ',') }} %
+                                            </h6>
+                                            <p class="fs-12 text-muted mb-0">Chegirma %</p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">43.67K</h6>
-                                            <p class="fs-12 text-muted mb-0">Engagement</p>
+                                            <h6 class="fs-15 fw-bolder">
+                                                {{ number_format($contract->total_amount, 0, '.', ',') }} so'm
+                                            </h6>
+                                            <p class="fs-12 text-muted mb-0">Umumiy narx ({{ $interval->days }} kun {{ $contract->room->size }} m <sup>2</sup>)</p>
                                         </div>
                                     </div>
                                 </div>
+
                                 <ul class="list-unstyled mb-4">
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Location</span>
-                                        <a href="javascript:void(0);" class="float-end">California, USA</a>
+                                        <a href="javascript:void(0);" class="float-end"> {{ $contract->client->region->name }}, {{ $contract->client->district->name }}</a>
                                     </li>
                                     <li class="hstack justify-content-between mb-4">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Phone</span>
-                                        <a href="javascript:void(0);" class="float-end">+01 (375) 2589 645</a>
+                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-home"></i>Filial</span>
+                                        <a href="javascript:void(0);" class="float-end">{{ $contract->client->branch->name }}</a>
+                                    </li>
+                                    <li class="hstack justify-content-between mb-4">
+                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-clock"></i>Boshlanish sanasi</span>
+                                        <a href="javascript:void(0);" class="float-end">{{ $contract->start_date }}</a>
                                     </li>
                                     <li class="hstack justify-content-between mb-0">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Email</span>
-                                        <a href="javascript:void(0);" class="float-end">alex.della@outlook.com</a>
+                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-clock"></i>Tugash sanasi</span>
+                                        <a href="javascript:void(0);" class="float-end">{{ $contract->end_date }}</a>
                                     </li>
                                 </ul>
-                                <div class="d-flex gap-2 text-center pt-4">
-                                    <a href="javascript:void(0);" class="w-50 btn btn-light-brand">
-                                        <i class="feather-trash-2 me-2"></i>
-                                        <span>Delete</span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="w-50 btn btn-primary">
+                                <div class="d-flex gap-3 justify-content-center pt-4">
+                                    <!-- Delete Button -->
+                                    <form class="btn-group w-50" action="{{ route('contracts.destroy', $contract->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
+                                            <i class="feather-trash-2 me-2"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    </form>
+
+                                    <!-- Edit Button -->
+                                    <a href="{{ route('contracts.edit', $contract->id) }}" class="btn btn-primary w-50">
                                         <i class="feather-edit me-2"></i>
-                                        <span>Edit Profile</span>
+                                        <span>Edit</span>
                                     </a>
                                 </div>
+
                             </div>
                         </div>
+                        <!--
                         <div class="card stretch stretch-full">
                             <div class="card-header">
                                 <h5 class="card-title">Social</h5>
@@ -319,6 +352,7 @@
                                 <span class="spinner"></span>
                             </a>
                         </div>
+                         -->
                     </div>
                     <div class="col-xxl-8 col-xl-6">
                         <div class="card border-top-0">
@@ -347,67 +381,43 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active p-4" id="overviewTab" role="tabpanel">
-                                    <div class="about-section mb-5">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Profile About:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Updates</a>
-                                        </div>
-                                        <p>John Doe is a frontend developer with over 5 years of experience creating high-quality, user-friendly websites and web applications. He has a strong understanding of web development technologies and a keen eye for design.</p>
-                                        <p>John is proficient in languages such as HTML, CSS, and JavaScript, and is experienced in using popular frontend frameworks such as React and Angular. He is also well-versed in user experience design and uses his knowledge to create engaging and intuitive user interfaces.</p>
-                                        <p>Throughout his career, John has worked on a wide range of projects for clients in various industries, including e-commerce, healthcare, and education. He takes a collaborative approach to development and enjoys working closely with clients and other developers to bring their ideas to life.</p>
-                                    </div>
+
                                     <div class="profile-details mb-5">
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Profile Details:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Edit Profile</a>
+                                            <h5 class="fw-bold mb-0">Contract Details:</h5>
+                                            <a href="{{ route('contracts.edit', $contract->id) }}" class="btn btn-sm btn-light-brand">Edit Contract</a>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Full Name:</div>
-                                            <div class="col-sm-6 fw-semibold">Alexandra Della</div>
+                                            <div class="col-sm-6 text-muted">Shartnoma raqam:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->contract_number }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Surname:</div>
-                                            <div class="col-sm-6 fw-semibold">Della</div>
+                                            <div class="col-sm-6 text-muted">Xona:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->room->number }} - xona</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Company:</div>
-                                            <div class="col-sm-6 fw-semibold">WRAPCODERS</div>
+                                            <div class="col-sm-6 text-muted">Xona hajmi:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->room->size }} - m <sup>2</sup></div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Date of Birth:</div>
-                                            <div class="col-sm-6 fw-semibold">26 May, 2000</div>
+                                            <div class="col-sm-6 text-muted">Client:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->first_name }} {{ $contract->client->last_name }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Mobile Number:</div>
-                                            <div class="col-sm-6 fw-semibold">+01 (375) 5896 3214</div>
+                                            <div class="col-sm-6 text-muted">Boshlanish sanasi:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->start_date->format('d M, Y') }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Email Address:</div>
-                                            <div class="col-sm-6 fw-semibold">alex.della@outlook.com</div>
+                                            <div class="col-sm-6 text-muted">Tugash sanasi:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->end_date->format('d M, Y') }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Location:</div>
-                                            <div class="col-sm-6 fw-semibold">California, United States</div>
+                                            <div class="col-sm-6 text-muted">chegirma %:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ number_format($contract->discount, 2) }} %</div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Joining Date:</div>
-                                            <div class="col-sm-6 fw-semibold">20 Dec, 2023</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Country:</div>
-                                            <div class="col-sm-6 fw-semibold">United States</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Communication:</div>
-                                            <div class="col-sm-6 fw-semibold">Email, Phone</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Allow Changes:</div>
-                                            <div class="col-sm-6 fw-semibold">YES</div>
-                                        </div>
-                                        <div class="row g-0">
-                                            <div class="col-sm-6 text-muted">Website:</div>
-                                            <div class="col-sm-6 fw-semibold">https://wrapcoders.com</div>
+                                            <div class="col-sm-6 text-muted">Umumiy narx:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ number_format($contract->total_amount, 0, '.', ',') }} so'm</div>
                                         </div>
                                     </div>
                                     <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-warning-message profile-overview-alert" role="alert">
@@ -1456,102 +1466,7 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="social-connections px-4 mb-4">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold">Social Connections:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">View Alls</a>
-                                        </div>
-                                        <div class="hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/facebook.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">Facebook: The World Most Popular Social Network</a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">Create an account or log into Facebook. Connect with friends, family and other people you know. Share photos and videos, send messages and get updates.</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchFacebook"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchFacebook" checked>
-                                            </div>
-                                        </div>
-                                        <div class="hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/instagram.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">Instagram: Edit & Share photos, Videos & Dessages</a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">Create an account or log in to Instagram - A simple, fun & creative way to capture, edit & share photos, videos & messages with friends & family.</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchInstagram"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchInstagram">
-                                            </div>
-                                        </div>
-                                        <div class="hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/twitter.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">Twitter: It's what's happening / Twitter </a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">From breaking news and entertainment to sports and politics, get the full story with all the live commentary.</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchTwitter"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchTwitter" checked>
-                                            </div>
-                                        </div>
-                                        <div class="hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/spotify.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">Spotify: Web Player: Music for everyone </a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">Spotify is a digital music service that gives you access to millions of songs.</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchSpotify"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchSpotify" checked>
-                                            </div>
-                                        </div>
-                                        <div class="hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/youtube.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">YouTube: The World Largest Video Sharing Platform</a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchYouTube"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchYouTube">
-                                            </div>
-                                        </div>
-                                        <div class="hstack justify-content-between p-4 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/pinterest.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">Pinterest: Discover recipes, home ideas, style inspiration and other ideas to try</a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">Pinterest is an image sharing and social media service designed to enable saving and discovery of information on the internet using images.</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchPinterest"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchPinterest" checked>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <div class="tab-pane fade p-4" id="securityTab" role="tabpanel">
                                     <div class="p-4 mb-4 border border-dashed border-gray-3 rounded-1">

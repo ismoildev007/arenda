@@ -21,6 +21,11 @@
                         <ul class="nav nav-tabs flex-wrap w-100 text-center customers-nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item flex-fill border-top" role="presentation">
                                 <a href="javascript:void(0);" class="nav-link text-start">Shartnoma malumotlarini kiriting:</a>
+                                @if ($errors->has('error'))
+                                    <div class="alert alert-danger">
+                                        {{ $errors->first('error') }}
+                                    </div>
+                                @endif
                             </li>
                         </ul>
                     </div>
@@ -68,7 +73,7 @@
                                             <label for="startDateInput" class="fw-semibold">Boshlanish sanasi:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="date" class="form-control" id="startDateInput" name="start_date" value="{{ old('start_date', $contract->start_date ?? '') }}">
+                                            <input type="date" class="form-control" id="startDateInput" name="start_date" required>
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
@@ -76,7 +81,7 @@
                                             <label for="endDateInput" class="fw-semibold">Tugash sanasi:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="date" class="form-control" id="endDateInput" name="end_date" value="{{ old('end_date', $contract->end_date ?? '') }}">
+                                            <input type="date" class="form-control" id="endDateInput" name="end_date" required>
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
@@ -84,7 +89,11 @@
                                             <label for="discountInput" class="fw-semibold">Chegirma % da:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="number" step="0.01" class="form-control" id="discountInput" name="discount" placeholder="Chegirma miqdorini kiriting agar 0% bo'lsa ham" value="{{ old('discount', $contract->discount ?? '') }}">
+                                            <input type="number" step="0.01" class="form-control" id="discountInput" name="discount" placeholder="Chegirma miqdorini kiriting agar 0% bo'lsa ham" value="{{ old('discount') }}">
+                                            <h5 class="mt-4">Chiqirma narxi:</h5>
+                                            <small class="form-text text-muted" id="discountAmount"></small>
+                                            <h5 class="mt-4">Chegirmadan keyingi narx:</h5>
+                                            <p id="discountedPrice"></p>
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -99,8 +108,6 @@
                                     <p id="roomPrice"></p>
                                     <h5>Umumiy narx:</h5>
                                     <p id="totalPrice"></p>
-                                    <h5>Chegirmadan keyingi narx:</h5>
-                                    <p id="discountedPrice"></p>
                                 </div>
                             </div>
                         </div>
@@ -118,6 +125,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Initialize Select2
             $('#roomSelect').select2({
                 theme: 'bootstrap-5',
                 placeholder: "Xona tanlash",
@@ -130,8 +138,13 @@
                 allowClear: true
             });
 
+            // Event listeners
             $('#roomSelect').on('change', updateRoomDetails);
-            $('#discountInput').on('input', calculateTotal); // Calculate total when discount changes
+            $('#discountInput').on('input', calculateTotal);
+            $('#startDateInput, #endDateInput').on('change', updateDateConstraints);
+
+            // Fetch existing contracts to prevent date conflicts
+            fetchExistingContracts();
         });
 
         function updateRoomDetails() {
@@ -153,7 +166,9 @@
             var pricePerSqm = selectedOption.getAttribute('data-price');
             var discount = parseFloat(document.getElementById('discountInput').value) || 0;
 
-            var totalDays = (new Date(document.getElementById('endDateInput').value) - new Date(document.getElementById('startDateInput').value)) / (1000 * 60 * 60 * 24) + 1; // 1 kun qo'shiladi
+            var startDate = new Date(document.getElementById('startDateInput').value);
+            var endDate = new Date(document.getElementById('endDateInput').value);
+            var totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // 1 kun qo'shiladi
             var pricePerDay = pricePerSqm / 30; // Kunlik narx
 
             var totalPrice = totalDays * pricePerDay * size;
@@ -161,7 +176,31 @@
 
             document.getElementById('totalPrice').innerText = 'Umumiy narx: ' + totalPrice.toFixed(2) + ' so\'m';
             document.getElementById('discountedPrice').innerText = 'Chegirmadan keyingi narx: ' + discountedPrice.toFixed(2) + ' so\'m';
+            document.getElementById('discountAmount').innerText = 'Chegirma miqdori: ' + (totalPrice - discountedPrice).toFixed(2) + ' so\'m';
         }
 
+        function updateDateConstraints() {
+            var startDateInput = document.getElementById('startDateInput');
+            var endDateInput = document.getElementById('endDateInput');
+
+            if (startDateInput.value) {
+                endDateInput.setAttribute('min', startDateInput.value);
+            }
+        }
+
+        function fetchExistingContracts() {
+            $.ajax({
+                url: '{{ route('contracts.existing') }}',
+                method: 'GET',
+                success: function(data) {
+                    var existingContracts = data.existingContracts;
+                    if (existingContracts.length) {
+                        existingContracts.forEach(contract => {
+                            $('#startDateInput').attr('min', contract.end_date);
+                        });
+                    }
+                }
+            });
+        }
     </script>
 @endsection

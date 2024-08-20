@@ -32,7 +32,12 @@ class Room extends Model
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branch_id');
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
     }
     // Scope to get only active rooms
     public function scopeActive($query)

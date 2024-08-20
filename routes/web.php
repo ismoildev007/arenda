@@ -6,8 +6,8 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RoomController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BranchController;
+use Illuminate\Support\Facades\Route;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -18,25 +18,29 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/check-email', [AuthController::class, 'checkEmail'])->name('checkEmail');
 
 // Client Routes
-Route::get('client/login', [ClientController::class, 'client_login'])->name('client.login');
-Route::post('client/authenticate', [ClientController::class, 'client_authenticate'])->name('client.authenticate');
+Route::get('clients/login', [ClientController::class, 'client_login'])->name('clients.login');
+Route::post('clients/authenticate', [ClientController::class, 'client_authenticate'])->name('clients.authenticate');
 Route::get('check-pinfl', [ClientController::class, 'checkPinfl'])->name('checkPinfl');
-Route::get('client/register', [ClientController::class, 'client_register'])->name('client.register');
-Route::post('client/register/store', [ClientController::class, 'client_register_store'])->name('client.register.store');
-Route::get('/client/legal', function () {
+Route::get('clients/register', [ClientController::class, 'client_register'])->name('clients.register');
+Route::post('clients/register/store', [ClientController::class, 'client_register_store'])->name('clients.register.store');
+Route::get('/clients/legal', function () {
     return view('auth.legal');
 })->name('legal');
 
-
-Route::get('/client', [MainController::class, 'home'])->name('client');
+Route::post('/modal-seen', [App\Http\Controllers\ModalController::class, 'markAsSeen'])->name('modal.seen');
+Route::get('/modal-check', [App\Http\Controllers\ModalController::class, 'checkModal'])->name('modal.check');
+Route::get('/clients', [MainController::class, 'home'])->name('clients');
 
 Route::get('/', [MainController::class, 'index'])->name('index');
+
 // Branches and Rooms Routes
 Route::get('/get-districts/{region_id}', [BranchController::class, 'getDistricts'])->name('getDistricts');
+Route::get('/contracts/existing', [ContractController::class, 'existing'])->name('contracts.existing');
 
+// Authenticated Routes
 Route::middleware('auth')->group(function() {
     Route::get('/dashboard', function () {
-        if(auth()->user()->role == 'admin') {
+        if (auth()->user()->role == 'admin') {
             return app(AuthController::class)->adminDashboard();
         } else {
             return abort(403, 'Unauthorized action.');
@@ -45,6 +49,8 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/manager', [AuthController::class, 'managerDashboard'])->name('manager.dashboard');
     Route::get('/staff', [AuthController::class, 'staffDashboard'])->name('staff.dashboard');
+
+    // Resources
     Route::resource('clients', ClientController::class);
     Route::resource('branches', BranchController::class);
     Route::resource('rooms', RoomController::class);

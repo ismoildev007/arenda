@@ -35,10 +35,22 @@ class BranchController extends Controller
         return redirect()->route('branches.index');
     }
 
-    public function show(Branch $branch)
+    public function show($id)
     {
+        $branch = Branch::with([
+            'region',
+            'rooms.contracts.client',
+            'district',
+            'employees' => function ($query) {
+                $query->where('role', 'manager');
+            },
+            'rooms',
+            'clients' // Ensure clients relationship is loaded
+        ])->findOrFail($id);
         return view('admin.branch.view', compact('branch'));
     }
+
+
 
     public function edit(Branch $branch)
     {

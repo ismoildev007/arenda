@@ -34,15 +34,10 @@
                                     @method('PUT')
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="branch_id" class="fw-semibold">Filial:</label>
+                                            <label for="nameInput" class="fw-semibold">Filial nomi:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <select name="branch_id" id="branch_id" class="form-control max-select" required>
-                                                <option disabled>Filialni tanlang</option>
-                                                @foreach($branches as $branch)
-                                                    <option value="{{ $branch->id }}" {{ $employee->branch_id == $branch->id ? 'selected' : '' }}>{{ $branch->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control" id="nameInput" name="name" value="{{ $branch->name }}" placeholder="Filial nomini kiriting">
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
@@ -105,9 +100,9 @@
                         url: '{{ url("/get-districts/") }}' + '/' + regionId,
                         type: "GET",
                         dataType: "json",
-                        success: function(data) {
+                        success: function(dataType) {
                             $('#districtSelect').empty().append('<option value="" disabled selected>Tumanni tanlang</option>');
-                            $.each(data, function(key, district) {
+                            $.each(dataType, function(key, district) {
                                 $('#districtSelect').append('<option value="'+ district.id +'">'+ district.name +'</option>');
                             });
                         }

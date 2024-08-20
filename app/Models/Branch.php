@@ -28,11 +28,17 @@ class Branch extends Model
 
     public function employees()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(User::class);
     }
 
-    public function room()
+    public function rooms()
     {
         return $this->hasMany(Room::class);
     }
+    // Branch.php (Model)
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+
 }
