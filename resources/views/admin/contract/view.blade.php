@@ -107,7 +107,7 @@
                                     </li>
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-home"></i>Filial</span>
-                                        <a href="javascript:void(0);" class="float-end">{{ $contract->client->branch->name }}</a>
+                                        <a href="javascript:void(0);" class="float-end">{{ $contract->building->name }}</a>
                                     </li>
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-clock"></i>Boshlanish sanasi</span>

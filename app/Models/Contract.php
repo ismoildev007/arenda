@@ -33,7 +33,7 @@ class Contract extends Model
 
     public function building()
     {
-        $this->belongsTo(Building::class);
+        return $this->belongsTo(Building::class);
     }
 
     public function room()
