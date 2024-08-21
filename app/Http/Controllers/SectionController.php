@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Section;
+use App\Models\Building;
+use App\Models\Floor;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class SectionController extends Controller
+{
+    public function index()
+    {
+        $sections = Section::with(['building'])->get();
+        return view('admin.sections.index', compact('sections'));
+    }
+
+    public function create()
+    {
+        $buildings = Building::all();
+        return view('admin.sections.create', compact('buildings'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'building_id' => 'required|exists:buildings,id',
+            'floor' => 'required|integer|min:1|max:100',
+            'name' => 'required|string|max:255',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('images')) {
+            // Old images storage path
+            $oldImages = [];
+
+            // Save new images and collect their paths
+            $images = array_map(function($file) {
+                return $file->store('images');
+            }, $request->file('images'));
+
+            // Save new room with images
+            $validated['images'] = $images;
+        }
+        Section::create($request->all());
+
+        return redirect()->route('sections.index')->with('success', 'Section created successfully.');
+    }
+
+    public function show(Section $section)
+    {
+        return view('admin.sections.view', compact('section'));
+    }
+
+    public function edit(Section $section)
+    {
+        $buildings = Building::all();
+        return view('admin.sections.edit', compact('section', 'buildings'));
+    }
+
+    public function update(Request $request, Section $section)
+    {
+        $request->validate([
+            'building_id' => 'required|exists:buildings,id',
+            'floor' => 'required|integer|min:1|max:100',
+            'name' => 'required|string|max:255',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('images')) {
+            // Delete old images
+            foreach ($section->images as $image) {
+                Storage::delete($image);
+            }
+
+            // Save new images and collect their paths
+            $images = array_map(function($file) {
+                return $file->store('images');
+            }, $request->file('images'));
+
+            $validated['images'] = $images;
+        }
+
+        $section->update($request->all());
+
+        return redirect()->route('sections.index')->with('success', 'Section updated successfully.');
+    }
+
+    public function destroy(Section $section)
+    {
+        $section->delete();
+
+        return redirect()->route('sections.index')->with('success', 'Section deleted successfully.');
+    }
+    // SectionController.php
+    public function getSections($buildingId)
+    {
+        // Bina (building) ga tegishli bo'lgan bo'limlar (sections)ni olamiz
+        $sections = Section::where('building_id', $buildingId)->get(['id', 'name', 'floor']); // 'id', 'name', va 'floor' ustunlarini olamiz
+
+        // JSON formatda qaytariladi
+        return response()->json(['sections' => $sections]);
+    }
+
+}

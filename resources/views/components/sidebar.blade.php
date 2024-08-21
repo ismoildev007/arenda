@@ -30,9 +30,21 @@
                     </a>
                 </li>
                 <li class="nxl-item">
-                    <a href="{{ route('branches.index') }}" class="nxl-link">
+                    <a href="{{ route('buildings.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
-                        <span class="nxl-mtext">Filial</span>
+                        <span class="nxl-mtext">Obyekti</span>
+                    </a>
+                </li>
+                <li class="nxl-item">
+                    <a href="{{ route('sections.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
+                        <span class="nxl-mtext">Seksiya</span>
+                    </a>
+                </li>
+                <li class="nxl-item">
+                    <a href="{{ route('floors.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
+                        <span class="nxl-mtext">Etaj</span>
                     </a>
                 </li>
                 <li class="nxl-item">

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Branch extends Model
+class Building extends Model
 {
     use HasFactory;
 
-    protected $table = 'branches';
+    protected $table = 'buildings';
 
     protected $fillable = [
         'name',
@@ -17,14 +17,19 @@ class Branch extends Model
         'district_id',
     ];
 
-    public function region(){
+    public function sections()
+    {
+        return $this->hasMany(Section::class);
+    }
+    public function region()
+    {
         return $this->belongsTo(Region::class, 'region_id');
     }
 
-    public function district(){
+    public function district()
+    {
         return $this->belongsTo(District::class, 'district_id');
     }
-
 
     public function employees()
     {
@@ -35,7 +40,7 @@ class Branch extends Model
     {
         return $this->hasMany(Room::class);
     }
-    // Branch.php (Model)
+
     public function clients()
     {
         return $this->hasMany(Client::class);

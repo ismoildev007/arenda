@@ -11,7 +11,7 @@ class Employee extends Model
 
     protected $fillable = [
         'first_name',
-        'branch_id',
+        'building_id',
         'last_name',
         'middle_name',
         'pinfl',
@@ -33,9 +33,9 @@ class Employee extends Model
         return $this->belongsTo(District::class);
     }
 
-    public function branch()
+    public function building()
     {
-        return $this->belongsTo(Branch::class, 'branch_id');
+        return $this->belongsTo(Building::class, 'building_id');
     }
 
     protected $hidden = [

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('birth_day')->nullable();
             $table->string('pinfl')->nullable()->unique();
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnDelete();
+            $table->foreignId('building_id')->nullable()->constrained('buildings')->cascadeOnDelete();
             $table->foreignId('region_id')->nullable()->constrained('regions')->cascadeOnDelete();
             $table->foreignId('district_id')->nullable()->constrained('districts')->cascadeOnDelete();
             $table->string('email')->unique();

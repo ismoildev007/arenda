@@ -1,3 +1,4 @@
+
 @extends('layouts.layout')
 
 @section('content')
@@ -44,14 +45,47 @@
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
+                                            <label for="buildingSelect" class="fw-semibold">Bino:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="building_id" id="buildingSelect" class="form-control max-select" required>
+                                                <option disabled selected>Bino tanlang</option>
+                                                @foreach($buildings as $building)
+                                                    <option value="{{ $building->id }}">{{ $building->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="sectionSelect" class="fw-semibold">Bo'lim:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="section_id" id="sectionSelect" class="form-control max-select" required>
+                                                <option disabled selected>Bo'lim tanlang</option>
+                                                <!-- Sections will be populated based on selected building -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="floorSelect" class="fw-semibold">Qavat:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="floor_id" id="floorSelect" class="form-control max-select" required>
+                                                <option disabled selected>Qavat tanlang</option>
+                                                <!-- Floors will be populated based on selected section -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
                                             <label for="roomSelect" class="fw-semibold">Xona:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <select name="room_id" id="roomSelect" class="form-control max-select" required onchange="updateRoomDetails()">
-                                                <option class="selected" disabled selected>Xona tanlash</option>
-                                                @foreach($rooms as $room)
-                                                    <option value="{{ $room->id }}" data-size="{{ $room->size }}" data-price="{{ $room->price_per_sqm }}">{{ $room->number }}</option>
-                                                @endforeach
+                                            <select name="room_id" id="roomSelect" class="form-control max-select" required>
+                                                <option disabled selected>Xona tanlang</option>
+                                                <!-- Rooms will be populated based on selected floor -->
                                             </select>
                                         </div>
                                     </div>
@@ -61,7 +95,7 @@
                                         </div>
                                         <div class="col-lg-8">
                                             <select name="client_id" id="clientSelect" class="form-control max-select" required>
-                                                <option class="selected" disabled selected>Mijoz tanlash</option>
+                                                <option disabled selected>Mijoz tanlang</option>
                                                 @foreach($clients as $client)
                                                     <option value="{{ $client->id }}">{{ $client->first_name }}</option>
                                                 @endforeach
@@ -124,83 +158,83 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize Select2
-            $('#roomSelect').select2({
-                theme: 'bootstrap-5',
-                placeholder: "Xona tanlash",
-                allowClear: true
-            });
-
-            $('#clientSelect').select2({
-                theme: 'bootstrap-5',
-                placeholder: "Mijoz tanlash",
-                allowClear: true
-            });
-
-            // Event listeners
-            $('#roomSelect').on('change', updateRoomDetails);
-            $('#discountInput').on('input', calculateTotal);
-            $('#startDateInput, #endDateInput').on('change', updateDateConstraints);
-
-            // Fetch existing contracts to prevent date conflicts
-            fetchExistingContracts();
-        });
-
-        function updateRoomDetails() {
-            var roomSelect = document.getElementById('roomSelect');
-            var selectedOption = roomSelect.options[roomSelect.selectedIndex];
-            var size = selectedOption.getAttribute('data-size');
-            var price = selectedOption.getAttribute('data-price');
-
-            document.getElementById('roomSize').innerText = 'Kvadratlik: ' + size + ' m²';
-            document.getElementById('roomPrice').innerText = 'Narx: ' + price + ' so\'m/m²';
-
-            calculateTotal();
-        }
-
-        function calculateTotal() {
-            var roomSelect = document.getElementById('roomSelect');
-            var selectedOption = roomSelect.options[roomSelect.selectedIndex];
-            var size = selectedOption.getAttribute('data-size');
-            var pricePerSqm = selectedOption.getAttribute('data-price');
-            var discount = parseFloat(document.getElementById('discountInput').value) || 0;
-
-            var startDate = new Date(document.getElementById('startDateInput').value);
-            var endDate = new Date(document.getElementById('endDateInput').value);
-            var totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // 1 kun qo'shiladi
-            var pricePerDay = pricePerSqm / 30; // Kunlik narx
-
-            var totalPrice = totalDays * pricePerDay * size;
-            var discountedPrice = totalPrice - (totalPrice * discount / 100);
-
-            document.getElementById('totalPrice').innerText = 'Umumiy narx: ' + totalPrice.toFixed(2) + ' so\'m';
-            document.getElementById('discountedPrice').innerText = 'Chegirmadan keyingi narx: ' + discountedPrice.toFixed(2) + ' so\'m';
-            document.getElementById('discountAmount').innerText = 'Chegirma miqdori: ' + (totalPrice - discountedPrice).toFixed(2) + ' so\'m';
-        }
-
-        function updateDateConstraints() {
-            var startDateInput = document.getElementById('startDateInput');
-            var endDateInput = document.getElementById('endDateInput');
-
-            if (startDateInput.value) {
-                endDateInput.setAttribute('min', startDateInput.value);
-            }
-        }
-
-        function fetchExistingContracts() {
-            $.ajax({
-                url: '{{ route('contracts.existing') }}',
-                method: 'GET',
-                success: function(data) {
-                    var existingContracts = data.existingContracts;
-                    if (existingContracts.length) {
-                        existingContracts.forEach(contract => {
-                            $('#startDateInput').attr('min', contract.end_date);
+        $(document).ready(function () {
+                // Initialize Select2
+                $('.max-select').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: "Xona tanlash",
+                    allowClear: true
+                });
+            $('#buildingSelect').on('change', function () {
+                let buildingId = $(this).val();
+                $.ajax({
+                    url: "{{ route('getSections', '') }}/" + buildingId,
+                    type: "GET",
+                    success: function (data) {
+                        $('#sectionSelect').empty().append('<option disabled selected>Bo\'lim tanlang</option>');
+                        data.sections.forEach(section => {
+                            $('#sectionSelect').append('<option value="' + section.id + '">' + section.name + '</option>');
                         });
                     }
-                }
+                });
             });
-        }
+
+            $('#sectionSelect').on('change', function () {
+                let sectionId = $(this).val();
+                $.ajax({
+                    url: "{{ route('getFloors', '') }}/" + sectionId,
+                    type: "GET",
+                    success: function (data) {
+                        $('#floorSelect').empty().append('<option disabled selected>Qavat tanlang</option>');
+                        data.floors.forEach(floor => {
+                            $('#floorSelect').append('<option value="' + floor.id + '">' + floor.number + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#floorSelect').on('change', function () {
+                let floorId = $(this).val();
+                $.ajax({
+                    url: "{{ route('getRooms', '') }}/" + floorId,
+                    type: "GET",
+                    success: function (data) {
+                        $('#roomSelect').empty().append('<option disabled selected>Xona tanlang</option>');
+                        data.rooms.forEach(room => {
+                            $('#roomSelect').append('<option value="' + room.id + '">' + room.number + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#roomSelect').on('change', function () {
+                let roomId = $(this).val();
+                $.ajax({
+                    url: "{{ route('contracts.existing', '') }}/" + roomId,
+                    type: "GET",
+                    success: function (data) {
+                        $('#roomSize').text('O\'lchami: ' + data.room.size + ' m²');
+                        $('#roomPrice').text('Narxi: ' + data.room.price + ' UZS');
+                        $('#totalPrice').text('Umumiy narx: ' + data.total_price + ' UZS');
+                    }
+                });
+            });
+
+            $('#discountInput').on('input', function () {
+                let discount = parseFloat($(this).val());
+                let roomPrice = parseFloat($('#roomPrice').text().split(' ')[1]);
+                let discountAmount = (discount / 100) * roomPrice;
+                let discountedPrice = roomPrice - discountAmount;
+
+                $('#discountAmount').text('Chegirma: ' + discountAmount.toFixed(2) + ' UZS');
+                $('#discountedPrice').text(discountedPrice.toFixed(2) + ' UZS');
+            });
+
+            $('#buildingSelect, #sectionSelect, #floorSelect, #roomSelect, #clientSelect').select2({
+                theme: 'bootstrap-5'
+            });
+        });
     </script>
 @endsection
+
+

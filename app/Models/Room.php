@@ -12,7 +12,9 @@ class Room extends Model
 
     protected $fillable = [
         'number',
-        'branch_id',
+        'building_id',
+        'section_id',
+        'floor_id',
         'size',
         'price_per_sqm',
         'status',
@@ -24,22 +26,31 @@ class Room extends Model
         'images' => 'array',
     ];
 
-    // Define relationships if needed, e.g., with contracts
     public function contracts()
     {
         return $this->hasMany(Contract::class);
     }
 
-    public function branch()
+    public function building()
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsTo(Building::class);
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class);
     }
 
     public function clients()
     {
         return $this->hasMany(Client::class);
     }
-    // Scope to get only active rooms
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

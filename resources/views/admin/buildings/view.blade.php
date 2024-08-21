@@ -9,7 +9,7 @@
             <div class="page-header">
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">Branch</h5>
+                        <h5 class="m-b-10">Obyekt</h5>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $branch->name }} </a>
+                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $building->name }} </a>
                                     </div>
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
@@ -82,9 +82,9 @@
                                 <ul class="list-unstyled mb-4">
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Joylashuv</span>
-                                        <a href="javascript:void(0);" class="float-end">{{ $branch->region->name }}, {{ $branch->district->name }}</a>
+                                        <a href="javascript:void(0);" class="float-end">{{ $building->region->name }}, {{ $building->district->name }}</a>
                                     </li>
-                                    @foreach($branch->employees as $email)
+                                    @foreach($building->employees as $email)
                                         <li class="hstack justify-content-between mb-4">
                                             <span class="text-muted fw-medium hstack gap-3"><i class="feather-user"></i>Lavozim</span>
                                             <a href="javascript:void(0);" class="float-end">@if($email->role === 'manager') Manager @endif</a>
@@ -96,7 +96,7 @@
                                     @endforeach
                                 </ul>
                                 <div class="d-flex gap-2 text-center pt-4">
-                                    <form class="btn-group w-50" action="{{ route('branches.destroy', $branch->id) }}" method="POST">
+                                    <form class="btn-group w-50" action="{{ route('buildings.destroy', $building->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
@@ -104,7 +104,7 @@
                                             <span>Delete</span>
                                         </button>
                                     </form>
-                                    <a href="{{ route('branches.edit', $branch->id) }}" class="w-50 btn btn-primary">
+                                    <a href="{{ route('buildings.edit', $building->id) }}" class="w-50 btn btn-primary">
                                         <i class="feather-edit me-2"></i>
                                         <span>Edit</span>
                                     </a>
@@ -141,27 +141,27 @@
                                 <div class="tab-pane fade show active p-4" id="overviewTab" role="tabpanel">
                                     <div class="profile-details mb-5">
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Branch Details:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Edit Branch</a>
+                                            <h5 class="fw-bold mb-0">Building Details:</h5>
+                                            <a href="{{ route('buildings.edit', $building->id) }}" class="btn btn-sm btn-light-brand">Edit Building</a>
                                         </div>
 
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Branch Name:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $branch->name }}</div>
+                                            <div class="col-sm-6 text-muted">Obyekt etaji:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $building->floor }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Region:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $branch->region->name }}</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $building->region->name }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">District:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $branch->district->name }}</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $building->district->name }}</div>
                                         </div>
 
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
                                             <h5 class="fw-bold mb-0">Clients:</h5>
                                         </div>
-                                        @foreach($branch->clients as $client)
+                                        @foreach($building->clients as $client)
                                             <div class="row g-0 mb-4">
                                                 <div class="col-sm-6 text-muted">Client Name:</div>
                                                 <div class="col-sm-6 fw-semibold">{{ $client->first_name }} {{ $client->last_name }}</div>
@@ -188,7 +188,7 @@
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
                                             <h5 class="fw-bold mb-0">Rooms:</h5>
                                         </div>
-                                        @foreach($branch->rooms as $room)
+                                        @foreach($building->rooms as $room)
                                             <div class="row g-0 mb-4">
                                                 <div class="col-sm-6 text-muted">Room Number:</div>
                                                 <div class="col-sm-6 fw-semibold">{{ $room->number }}</div>
@@ -237,7 +237,7 @@
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
                                             <h5 class="fw-bold mb-0">Employees:</h5>
                                         </div>
-                                        @foreach($branch->employees as $employee)
+                                        @foreach($building->employees as $employee)
                                             <div class="row g-0 mb-4">
                                                 <div class="col-sm-6 text-muted">Employee Name:</div>
                                                 <div class="col-sm-6 fw-semibold">{{ $employee->first_name }} {{ $employee->last_name }}</div>

@@ -14,14 +14,27 @@ class Contract extends Model
     protected $dates = ['start_date', 'end_date'];
 
     protected $fillable = [
-        'contract_number',
+        'building_id',
+        'section_id',
+        'floor_id',
         'room_id',
         'client_id',
+        'contract_number',
         'start_date',
         'end_date',
         'discount',
         'total_amount'
     ];
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
+    public function building()
+    {
+        $this->belongsTo(Building::class);
+    }
 
     public function room()
     {

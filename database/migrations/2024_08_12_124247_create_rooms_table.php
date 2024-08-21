@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('building_id')->constrained('buildings')->cascadeOnDelete();
+            $table->foreignId('section_id')->constrained('sections')->cascadeOnDelete();
+            $table->foreignId('floor_id')->constrained('floors')->cascadeOnDelete();
             $table->string('number');
-            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->integer('size');
             $table->decimal('price_per_sqm', 8, 2);
             $table->enum('status', ['noactive', 'active', 'bron']);

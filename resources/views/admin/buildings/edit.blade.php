@@ -9,7 +9,7 @@
                         <h5 class="m-b-10">Filialni tahrirlash</h5>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('branches.index') }}">Filiallar</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('buildings.index') }}">Filiallar</a></li>
                         <li class="breadcrumb-item">Filialni tahrirlash</li>
                     </ul>
                 </div>
@@ -29,7 +29,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="profileTab" role="tabpanel">
                             <div class="card-body personal-info">
-                                <form action="{{ route('branches.update', $branch->id) }}" method="POST">
+                                <form action="{{ route('buildings.update', $building->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="row mb-4 align-items-center">
@@ -37,7 +37,7 @@
                                             <label for="nameInput" class="fw-semibold">Filial nomi:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" id="nameInput" name="name" value="{{ $branch->name }}" placeholder="Filial nomini kiriting">
+                                            <input type="text" class="form-control" id="nameInput" name="name" value="{{ $building->name }}" placeholder="Filial nomini kiriting">
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">
@@ -48,15 +48,15 @@
                                             <select class="form-control max-select" id="regionSelect" name="region_id" placeholder="Viloyatni tanlang">
                                                 <option class="selected" disabled selected>Viloyatni tanlang</option>
                                                 @foreach ($regions as $region)
-                                                    <option value="{{ $region->id }}" {{ $branch->region_id == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
+                                                    <option value="{{ $region->id }}" {{ $building->region_id == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-4" id="districtSelectBox" style="display: {{ $branch->district_id ? 'block' : 'none' }};">
+                                        <div class="col-lg-4" id="districtSelectBox" style="display: {{ $building->district_id ? 'block' : 'none' }};">
                                             <select class="form-control max-select" id="districtSelect" name="district_id">
                                                 <option value="" disabled selected> Tumanni tanlang </option>
                                                 @foreach ($districts as $district)
-                                                    <option value="{{ $district->id }}" {{ $branch->district_id == $district->id ? 'selected' : '' }}>{{ $district->name }}</option>
+                                                    <option value="{{ $district->id }}" {{ $building->district_id == $district->id ? 'selected' : '' }}>{{ $district->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

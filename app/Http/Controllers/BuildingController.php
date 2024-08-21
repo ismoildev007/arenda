@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
+use App\Models\Building;
 use App\Models\Region;
 use App\Models\District;
 use Illuminate\Http\Request;
 
-class BranchController extends Controller
+class BuildingController extends Controller
 {
     public function index()
     {
-        $branches = Branch::all();
-        return view('admin.branch.index', compact('branches'));
+        $buildings = Building::all();
+        return view('admin.buildings.index', compact('buildings'));
     }
 
     public function create()
     {
         $regions = Region::all();
         $districts = District::all();
-        return view('admin.branch.create', compact( 'regions', 'districts'));
+        return view('admin.buildings.create', compact( 'regions', 'districts'));
     }
 
     public function store(Request $request)
@@ -30,14 +30,14 @@ class BranchController extends Controller
             'district_id' => 'required|exists:districts,id',
         ]);
 
-        Branch::create($request->all());
+        Building::create($request->all());
 
-        return redirect()->route('branches.index');
+        return redirect()->route('buildings.index');
     }
 
     public function show($id)
     {
-        $branch = Branch::with([
+        $building = Building::with([
             'region',
             'rooms.contracts.client',
             'district',
@@ -45,21 +45,22 @@ class BranchController extends Controller
                 $query->where('role', 'manager');
             },
             'rooms',
-            'clients' // Ensure clients relationship is loaded
+            'clients'
         ])->findOrFail($id);
-        return view('admin.branch.view', compact('branch'));
+
+        return view('admin.buildings.view', compact('building'));
     }
 
 
 
-    public function edit(Branch $branch)
+    public function edit(Building $building)
     {
         $regions = Region::all();
         $districts = District::all();
-        return view('admin.branch.edit', compact('branch', 'regions', 'districts'));
+        return view('admin.buildings.edit', compact('building', 'regions', 'districts'));
     }
 
-    public function update(Request $request, Branch $branch)
+    public function update(Request $request, Building $building)
     {
         $request->validate([
             'name' => 'nullable|string|max:255',
@@ -67,15 +68,15 @@ class BranchController extends Controller
             'district_id' => 'required|exists:districts,id',
         ]);
 
-        $branch->update($request->all());
+        $building->update($request->all());
 
-        return redirect()->route('branches.index');
+        return redirect()->route('buildings.index');
     }
 
-    public function destroy(Branch $branch)
+    public function destroy(Building $building)
     {
-        $branch->delete();
-        return redirect()->route('branches.index');
+        $building->delete();
+        return redirect()->route('buildings.index');
     }
     public function getDistricts($region_id)
     {

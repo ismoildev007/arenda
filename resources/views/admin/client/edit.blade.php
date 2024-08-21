@@ -40,21 +40,6 @@
                                     @method('PUT')
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="branchSelect" class="fw-semibold">Filial:</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <select class="form-control max-select" id="branchSelect" name="branch_id" required>
-                                                <option value="" disabled>Select a branch</option>
-                                                @foreach ($branches as $branch)
-                                                    <option value="{{ $branch->id }}" {{ $client->branch_id == $branch->id ? 'selected' : '' }}>
-                                                        {{ $branch->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-4 align-items-center">
-                                        <div class="col-lg-4">
                                             <label for="regionSelect" class="fw-semibold">Manzil :</label>
                                         </div>
                                         <div class="col-lg-4">

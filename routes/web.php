@@ -6,8 +6,11 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\BranchController;
+use App\Http\Controllers\BuildingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\FloorController;
+
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -34,7 +37,17 @@ Route::get('/clients', [MainController::class, 'home'])->name('clients');
 Route::get('/', [MainController::class, 'index'])->name('index');
 
 // Branches and Rooms Routes
-Route::get('/get-districts/{region_id}', [BranchController::class, 'getDistricts'])->name('getDistricts');
+Route::get('/get-districts/{region_id}', [BuildingController::class, 'getDistricts'])->name('getDistricts');
+// Sections based on Branch
+Route::get('/get-sections/{building_id}', [SectionController::class, 'getSections'])->name('getSections');
+
+// Floors based on Section
+Route::get('/get-floors/{section_id}', [FloorController::class, 'getFloors'])->name('getFloors');
+
+// Rooms based on Floor
+Route::get('/get-rooms/{floor_id}', [RoomController::class, 'getRooms'])->name('getRooms');
+
+
 Route::get('/contracts/existing', [ContractController::class, 'existing'])->name('contracts.existing');
 
 // Authenticated Routes
@@ -50,9 +63,12 @@ Route::middleware('auth')->group(function() {
     Route::get('/manager', [AuthController::class, 'managerDashboard'])->name('manager.dashboard');
     Route::get('/staff', [AuthController::class, 'staffDashboard'])->name('staff.dashboard');
 
+    Route::resource('sections', SectionController::class);
+    Route::resource('floors', FloorController::class);
+
     // Resources
     Route::resource('clients', ClientController::class);
-    Route::resource('branches', BranchController::class);
+    Route::resource('buildings', BuildingController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('contracts', ContractController::class);
     Route::resource('employees', EmployeeController::class);

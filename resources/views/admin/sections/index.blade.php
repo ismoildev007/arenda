@@ -7,24 +7,24 @@
             <div class="page-header">
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">Filiallar</h5>
+                        <h5 class="m-b-10">Seksiyalar</h5>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a @if( auth()->user()->role == 'admin')
+                        <li class="breadcrumb-item"><a @if(auth()->user()->role == 'admin')
                                                            href="{{ route('dashboard') }}"
-                                                       @elseif( auth()->user()->role == 'manager')
+                                                       @elseif(auth()->user()->role == 'manager')
                                                            href="{{ route('manager.dashboard') }}"
-                                                       @elseif (auth()->user()->role == 'staff')
+                                                       @elseif(auth()->user()->role == 'staff')
                                                            href="{{ route('staff.dashboard') }}"
                                                        @endif class="nxl-link">Home</a></li>
-                        <li class="breadcrumb-item">Filiallar</li>
+                        <li class="breadcrumb-item">Seksiyalar</li>
                     </ul>
                 </div>
                 <div class="page-header-right ms-auto">
                     <div class="page-header-right-items">
-                        <a href="{{ route('branches.create') }}" class="btn btn-primary">
+                        <a href="{{ route('sections.create') }}" class="btn btn-primary">
                             <i class="feather-plus me-2"></i>
-                            <span>Yangi filial qo'shish</span>
+                            <span>Yangi Seksiya qo'shish</span>
                         </a>
                     </div>
                 </div>
@@ -40,21 +40,21 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Filial nomi</th>
-                                        <th>Region</th>
-                                        <th>District</th>
+                                        <th>Building</th>
+                                        <th>Seksiya nomi</th>
+                                        <th>Qavati</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($branches as $branch)
+                                    @foreach($sections as $section)
                                         <tr>
-                                            <td>{{ $branch->name }}</td>
-                                            <td>{!! $branch->region->name !!}</td>
-                                            <td>{{ $branch->district->name }}</td>
+                                            <td>{{ $section->building->name }}</td>
+                                            <td>{{ $section->name }}</td>
+                                            <td>{{ $section->floor }}</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">
-                                                    <a href="{{ route('branches.show', $branch->id) }}" class="avatar-text avatar-md">
+                                                    <a href="{{ route('sections.show', $section->id) }}" class="avatar-text avatar-md">
                                                         <i class="feather-eye"></i>
                                                     </a>
 
@@ -64,16 +64,16 @@
                                                         </a>
                                                         <ul class="dropdown-menu">
                                                             <li>
-                                                                <a class="dropdown-item" href="{{ route('branches.edit', $branch->id) }}">
+                                                                <a class="dropdown-item" href="{{ route('sections.edit', $section->id) }}">
                                                                     <i class="feather feather-edit-3 me-3"></i>
                                                                     <span>Edit</span>
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <form class="dropdown-item" action="{{ route('branches.destroy', $branch->id) }}" method="POST" onsubmit="confirmDelete(event)">
+                                                                <form class="dropdown-item" action="{{ route('sections.destroy', $section->id) }}" method="POST" onsubmit="confirmDelete(event)">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" style="background: none; border: none; padding: 0;"  onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
+                                                                    <button type="submit" style="background: none; border: none; padding: 0;"  onclick="return confirm('Ushbu bo\'limni o‘chirishni xohlaysizmi?')">
                                                                         <i class="feather feather-trash-2 me-3"></i>
                                                                         Delete
                                                                     </button>

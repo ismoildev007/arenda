@@ -21,14 +21,14 @@ class User extends Authenticatable
     const ROLE_ADMIN = 'admin';
     const ROLE_STAFF = 'staff';
     protected $fillable = [
+        'building_id',
+        'region_id',
+        'district_id',
         'last_name',
         'first_name',
         'middle_name',
         'pinfl',
         'birth_day',
-        'region_id',
-        'branch_id',
-        'district_id',
         'email',
         'password',
         'role',
@@ -44,9 +44,9 @@ class User extends Authenticatable
         return $this->belongsTo(District::class);
     }
 
-    public function branch()
+    public function buildings()
     {
-        return $this->hasMany(Branch::class, 'accountant_id');
+        return $this->hasMany(Building::class, 'accountant_id');
     }
 
     /**

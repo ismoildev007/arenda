@@ -15,7 +15,7 @@ class District extends Model
     ];
 
     public function branches(){
-        return $this->hasMany(Branch::class);
+        return $this->hasMany(Building::class);
     }
 
     public function region(){

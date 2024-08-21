@@ -47,21 +47,6 @@
                                     @csrf
                                     <input type="hidden" id="clientType" name="client_type" value="">
 
-                                    <!-- Branch Field -->
-                                    <div class="row mb-4 align-items-center">
-                                        <div class="col-lg-4">
-                                            <label for="branchSelect" class="fw-semibold">Filial:</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <select class="form-control max-select" id="branchSelect" name="branch_id" required>
-                                                <option value="" disabled selected>Filialni tanlang</option>
-                                                @foreach ($branches as $branch)
-                                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
                                     <!-- Region and District Fields -->
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">

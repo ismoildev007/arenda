@@ -22,7 +22,6 @@
                 <th>Otasining ismi</th>
                 <th class="pinfl-header">PINFL</th>
                 <th class="inn-header">INN</th>
-                <th>Filial</th>
                 <th>Viloyat</th>
                 <th>Tuman</th>
                 <th>Actions</th>
@@ -36,7 +35,6 @@
                     <td>{{ $client->middle_name }}</td>
                     <td class="pinfl-cell">{{ $client->pinfl ?? 'N/A' }}</td>
                     <td class="inn-cell">{{ $client->inn ?? 'N/A' }}</td>
-                    <td>{{ $client->branch->name }}</td>
                     <td>{{ $client->region->name }}</td>
                     <td>{{ $client->district->name }}</td>
                     <td>

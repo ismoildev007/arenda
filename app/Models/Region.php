@@ -20,9 +20,9 @@ class Region extends Model
         return $this->hasMany(User::class);
     }
 
-    public function branches()
+    public function buildings()
     {
-        return $this->hasMany(Branch::class);
+        return $this->hasMany(Building::class);
     }
 
     public function districts(){

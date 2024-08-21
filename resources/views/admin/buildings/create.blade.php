@@ -9,7 +9,7 @@
                         <h5 class="m-b-10">Filial qo'shish</h5>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('branches.index') }}">Filiallar</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('buildings.index') }}">Filiallar</a></li>
                         <li class="breadcrumb-item">Yangi filial qo'shish</li>
                     </ul>
                 </div>
@@ -29,11 +29,11 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="profileTab" role="tabpanel">
                             <div class="card-body personal-info">
-                                <form action="{{ route('branches.store') }}" method="POST">
+                                <form action="{{ route('buildings.store') }}" method="POST">
                                     @csrf
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="nameInput" class="fw-semibold">Filial nomi:</label>
+                                            <label for="nameInput" class="fw-semibold">Obyekt nomi:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input type="text" class="form-control" id="nameInput" name="name" placeholder="Filial nomini kiriting">

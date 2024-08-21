@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
+use App\Models\Building;
 use App\Models\District;
 use App\Models\Region;
 use Illuminate\Http\Request;
@@ -18,10 +18,9 @@ class ClientController extends Controller
     }
     public function client_register()
     {
-        $branches = Branch::all();
         $regions = Region::all();
         $districts = District::all();
-        return view('auth.client_register', compact('branches', 'regions', 'districts'));
+        return view('auth.client_register', compact( 'regions', 'districts'));
     }
 
     public function checkPinfl(Request $request)
@@ -86,7 +85,6 @@ class ClientController extends Controller
             $client->company_name = $request->input('company_name');
             $client->region_id = $request->input('region_id');
             $client->district_id = $request->input('district_id');
-            $client->branch_id = $request->input('branch_id');
             $client->oked = $request->input('oked');
             $client->bank = $request->input('bank');
             $client->account = $request->input('account');
@@ -106,17 +104,15 @@ class ClientController extends Controller
 
     public function create()
     {
-        $branches = Branch::all();
         $regions = Region::all();
         $districts = District::all();
-        return view('admin.client.create', compact('branches', 'regions', 'districts'));
+        return view('admin.client.create', compact( 'regions', 'districts'));
     }
 
     public function store(Request $request)
     {
 //        dd($request->all());
         $request->validate([
-            'branch_id' => 'nullable|exists:branches,id',
             'last_name' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
             'pinfl' => 'nullable|string|size:14|unique:clients',
@@ -128,7 +124,6 @@ class ClientController extends Controller
         ]);
 
         Client::create([
-            'branch_id' => $request->branch_id,
             'last_name' => $request->last_name,
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
@@ -154,16 +149,14 @@ class ClientController extends Controller
 
     public function edit(Client $client)
     {
-        $branches = Branch::all();
         $regions = Region::all();
         $districts = District::all();
-        return view('admin.client.edit', compact('client', 'branches', 'regions', 'districts'));
+        return view('admin.client.edit', compact('client', 'regions', 'districts'));
     }
 
     public function update(Request $request, Client $client)
     {
         $request->validate([
-            'branch_id' => 'nullable|exists:branches,id',
             'last_name' => 'nullable|string|max:255',
             'pinfl' => 'nullable|string|size:14|unique:clients,pinfl,' . $client->id,
             'inn' => 'nullable|string|unique:clients,inn,' . $client->id,
@@ -174,7 +167,6 @@ class ClientController extends Controller
         ]);
 
         $client->update([
-            'branch_id' => $request->branch_id,
             'last_name' => $request->last_name,
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,

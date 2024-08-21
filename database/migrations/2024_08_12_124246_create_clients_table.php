@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('branch_id')->constrained('branches')->cascadeOnDelete();
             $table->string('last_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('first_name')->nullable();

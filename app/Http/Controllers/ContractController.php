@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Building;
 use App\Models\Client;
 use App\Models\Contract;
 use App\Models\Room;
@@ -18,18 +19,22 @@ class ContractController extends Controller
 
     public function create()
     {
+        $buildings = Building::all();
         $rooms = Room::active()->get(); // Only active rooms
         $clients = Client::all();
-        return view('admin.contract.create', compact('rooms', 'clients'));
+        return view('admin.contract.create', compact('rooms', 'clients', 'buildings'));
     }
 
     public function store(Request $request)
     {
         // Validatsiya
         $validated = $request->validate([
-            'contract_number' => 'required|string',
+            'building_id' => 'required|exists:buildings,id',
             'room_id' => 'required|exists:rooms,id',
+            'section_id' => 'required|exists:sections,id',
+            'floor_id' => 'required|exists:floors,id',
             'client_id' => 'required|exists:clients,id',
+            'contract_number' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'discount' => 'nullable|numeric|min:0'
@@ -59,19 +64,12 @@ class ContractController extends Controller
             $validated['discount'] ?? 0
         );
 
-        // Yangi shartnoma yaratish
-        $contract = new Contract();
-        $contract->contract_number = $validated['contract_number'];
-        $contract->room_id = $validated['room_id'];
-        $contract->client_id = $validated['client_id'];
-        $contract->start_date = $validated['start_date'];
-        $contract->end_date = $validated['end_date'];
-        $contract->discount = $validated['discount'];
-        $contract->total_amount = $totalAmount;
-        $contract->save();
+        // Create the contract with total_amount
+        Contract::create(array_merge($validated, ['total_amount' => $totalAmount]));
 
         return redirect()->route('contracts.index')->with('success', 'Shartnoma muvaffaqiyatli yaratildi.');
     }
+
 
     public function show(Contract $contract)
     {
@@ -82,11 +80,12 @@ class ContractController extends Controller
 
     public function edit(Contract $contract)
     {
+        $buildings = Building::all();
         $rooms = Room::active()->get(); // Only active rooms
         $clients = Client::all();
         $contract->start_date = Carbon::parse($contract->start_date);
         $contract->end_date = Carbon::parse($contract->end_date);
-        return view('admin.contract.edit', compact('contract', 'rooms', 'clients'));
+        return view('admin.contract.edit', compact('contract', 'rooms', 'clients', 'buildings'));
     }
     // app/Http/Controllers/ContractController.php
 
@@ -105,9 +104,12 @@ class ContractController extends Controller
     {
         // Validatsiya
         $validated = $request->validate([
-            'contract_number' => 'required|string',
+            'building_id' => 'required|exists:buildings,id',
             'room_id' => 'required|exists:rooms,id',
+            'section_id' => 'required|exists:sections,id',
+            'floor_id' => 'required|exists:floors,id',
             'client_id' => 'required|exists:clients,id',
+            'contract_number' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'discount' => 'nullable|numeric|min:0'
@@ -139,9 +141,12 @@ class ContractController extends Controller
         );
 
         // Shartnomani yangilash
-        $contract->contract_number = $validated['contract_number'];
+        $contract->building_id = $validated['building_id'];
+        $contract->section_id = $validated['section_id'];
+        $contract->floor_id = $validated['floor_id'];
         $contract->room_id = $validated['room_id'];
         $contract->client_id = $validated['client_id'];
+        $contract->contract_number = $validated['contract_number'];
         $contract->start_date = $validated['start_date'];
         $contract->end_date = $validated['end_date'];
         $contract->discount = $validated['discount'];
