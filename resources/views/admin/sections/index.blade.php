@@ -20,14 +20,14 @@
                         <li class="breadcrumb-item">Seksiyalar</li>
                     </ul>
                 </div>
-                <div class="page-header-right ms-auto">
-                    <div class="page-header-right-items">
-                        <a href="{{ route('sections.create') }}" class="btn btn-primary">
-                            <i class="feather-plus me-2"></i>
-                            <span>Yangi Seksiya qo'shish</span>
-                        </a>
-                    </div>
-                </div>
+{{--                <div class="page-header-right ms-auto">--}}
+{{--                    <div class="page-header-right-items">--}}
+{{--                        <a href="{{ route('sections.create') }}" class="btn btn-primary">--}}
+{{--                            <i class="feather-plus me-2"></i>--}}
+{{--                            <span>Yangi Seksiya qo'shish</span>--}}
+{{--                        </a>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
             <!-- [ page-header ] end -->
 

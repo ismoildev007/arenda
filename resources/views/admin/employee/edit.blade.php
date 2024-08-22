@@ -73,11 +73,11 @@
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="branch_id" class="fw-semibold">Filial:</label>
+                                            <label for="branch_id" class="fw-semibold">Building:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <select name="branch_id" id="branch_id" class="form-control max-select" required>
-                                                <option disabled>Filialni tanlang</option>
+                                                <option disabled>Building tanlang</option>
                                                 @foreach($branches as $branch)
                                                     <option value="{{ $branch->id }}" {{ $employee->branch_id == $branch->id ? 'selected' : '' }}>
                                                         {{ $branch->name }}

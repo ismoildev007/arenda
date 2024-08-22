@@ -161,29 +161,38 @@
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
                                             <h5 class="fw-bold mb-0">Clients:</h5>
                                         </div>
-                                        @foreach($building->clients as $client)
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Client Name:</div>
-                                                <div class="col-sm-6 fw-semibold">{{ $client->first_name }} {{ $client->last_name }}</div>
+                                        @if($building->contracts->isNotEmpty())
+                                            @foreach($building->contracts as $contract)
+                                                @if($contract->client)
+                                                    <div class="row g-0 mb-4">
+                                                        <div class="col-sm-6 text-muted">Client Name:</div>
+                                                        <div class="col-sm-6 fw-semibold">{{ $contract->client->first_name }} {{ $contract->client->last_name }}</div>
+                                                    </div>
+                                                    @if($contract->client->pinfl !== null)
+                                                        <div class="row g-0 mb-4">
+                                                            <div class="col-sm-6 text-muted">Jismoniy shaxs PINFL:</div>
+                                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->pinfl }}</div>
+                                                        </div>
+                                                        <hr/>
+                                                    @endif
+                                                    @if($contract->client->inn !== null)
+                                                        <div class="row g-0 mb-4">
+                                                            <div class="col-sm-6 text-muted">Yuridik shaxs INN:</div>
+                                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->inn }}</div>
+                                                        </div>
+                                                        <div class="row g-0 mb-4">
+                                                            <div class="col-sm-6 text-muted">Company:</div>
+                                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->company_name }}</div>
+                                                        </div>
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <div class="alert alert-info">
+                                                <strong>No clients found for this building.</strong>
                                             </div>
-                                            @if($client->pinfl !== null)
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">jismoniy shaxs pinfl:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $client->pinfl }}</div>
-                                                </div>
-                                                <hr/>
-                                            @endif
-                                            @if($client->inn !== null)
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">Yuridik shaxs Inn:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $client->inn }}</div>
-                                                </div>
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">Company:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $client->company_name }}</div>
-                                                </div>
-                                            @endif
-                                        @endforeach
+                                        @endif
+
 
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
                                             <h5 class="fw-bold mb-0">Rooms:</h5>

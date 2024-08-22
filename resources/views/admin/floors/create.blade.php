@@ -134,19 +134,29 @@
                                 $('#section_id').append('<option value="' + value.id + '">' + value.name + '</option>');
                             });
 
-                            // Get the maximum floor from the sections
-                            let maxFloor = Math.max(...data.sections.map(section => section.floor));
-
-                            // Populate the floor select with options from 1 to maxFloor
-                            for (let i = 1; i <= maxFloor; i++) {
-                                $('#number').append('<option value="' + i + '">' + i + '</option>');
-                            }
-
                             $('#sectionSelectBox').show();
                         }
                     });
                 }
             });
+
+            // Update the floor select when a section is selected
+            $('#section_id').on('change', function() {
+                let selectedSectionId = $(this).val();
+                let sectionData = @json($sections); // Yoki AJAX orqali olib kelingan section ma'lumotlari
+
+                let selectedSection = sectionData.find(section => section.id == selectedSectionId);
+                let floorSelect = $('#number');
+
+                floorSelect.empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
+
+                if (selectedSection) {
+                    for (let i = 1; i <= selectedSection.floor; i++) {
+                        floorSelect.append('<option value="' + i + '">' + i + '</option>');
+                    }
+                }
+            });
         });
     </script>
+
 @endsection

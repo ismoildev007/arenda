@@ -41,9 +41,9 @@ class Building extends Model
         return $this->hasMany(Room::class);
     }
 
-    public function clients()
+    public function contracts()
     {
-        return $this->hasMany(Client::class);
+        return $this->hasMany(Contract::class);
     }
 
 }

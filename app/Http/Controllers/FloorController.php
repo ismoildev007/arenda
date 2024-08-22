@@ -50,6 +50,7 @@ class FloorController extends Controller
             $validated['images'] = $images;
         }
 
+        dd($request->all());
         Floor::create($validated);
 
         return redirect()->route('floors.index')->with('success', 'Qavat muvaffaqiyatli yaratildi.');

@@ -12,89 +12,133 @@ use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
 {
-    public function client_login()
+    // Legal Login Form
+    public function showLegalLoginForm()
     {
-        return view('auth.client_login');
-    }
-    public function client_register()
-    {
-        $regions = Region::all();
-        $districts = District::all();
-        return view('auth.client_register', compact( 'regions', 'districts'));
+        return view('auth.client_legal_login');
     }
 
-    public function checkPinfl(Request $request)
+    // Legal Login Function
+    public function legalLogin(Request $request)
     {
-        $pinfl = $request->get('pinfl');
-        $inn = $request->get('inn');
+        $request->validate([
+            'inn' => 'required|digits:14',
+            'password' => 'required|string',
+        ]);
 
-        if ($pinfl) {
-            $exists = Client::where('pinfl', $pinfl)->exists();
-        } elseif ($inn) {
-            $exists = Client::where('inn', $inn)->exists();
+        $client = Client::where('inn', $request->inn)->first();
+
+        if ($client && Hash::check($request->password, $client->password)) {
+            Auth::login($client);
+            return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
         } else {
-            return response()->json(['exists' => false]);
+            return back()->withErrors(['error' => 'INN yoki parol noto‘g‘ri']);
         }
+    }
+
+    // Legal Register Form
+    public function showLegalRegisterForm()
+    {
+        return view('auth.client_legal_register');
+    }
+
+    // Legal Register Function
+    public function legalRegister(Request $request)
+    {
+        $request->validate([
+            'inn' => 'required|digits:14|unique:clients,inn',
+            'name' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $client = Client::create([
+            'inn' => $request->inn,
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ]);
+
+        Auth::login($client);
+
+        return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+    }
+
+    // Individual Login Form
+    public function showIndividualLoginForm()
+    {
+        return view('auth.client_individual_login');
+    }
+
+    // Individual Login Function
+    public function individualLogin(Request $request)
+    {
+        $request->validate([
+            'pinfl' => 'required|digits:14',
+            'password' => 'required|string',
+        ]);
+
+        $client = Client::where('pinfl', $request->pinfl)->first();
+
+        if ($client && Hash::check($request->password, $client->password)) {
+            Auth::login($client);
+            return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+        } else {
+            return back()->withErrors(['error' => 'PINFL yoki parol noto‘g‘ri']);
+        }
+    }
+
+    // Individual Register Form
+    public function showIndividualRegisterForm()
+    {
+        return view('auth.client_individual_register');
+    }
+
+    // Individual Register Function
+    public function individualRegister(Request $request)
+    {
+        $request->validate([
+            'pinfl' => 'required|digits:14|unique:clients,pinfl',
+            'name' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $client = Client::create([
+            'pinfl' => $request->pinfl,
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ]);
+
+        Auth::login($client);
+
+        return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+    }
+
+    // Logout Function
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/'); // Bosh sahifaga yo'naltirish
+    }
+    public function checkINN(Request $request)
+    {
+        $inn = $request->query('inn');
+        $exists = Client::where('inn', $inn)->exists(); // `Client` modelida `inn` ustunini tekshirish
 
         return response()->json(['exists' => $exists]);
     }
 
-    public function client_authenticate(Request $request)
+
+    public function checkPINFL(Request $request)
     {
-        $credentials = $request->validate([
-            'inn' => ['nullable', 'string'],
-            'pinfl' => ['nullable', 'string', 'size:14'],
-            'password' => ['required', 'string'],
-        ]);
+        $pinfl = $request->query('pinfl');
+        $exists = Client::where('pinfl', $pinfl)->exists(); // `Client` modelida `pinfl` ustunini tekshirish
 
-        $identifier = $request->input('pinfl') ?? $request->input('inn');
-
-        // Mijozni tekshirish
-        $client = Client::where('pinfl', $identifier)->orWhere('inn', $identifier)->first();
-        if ($client && Hash::check($request->input('password'), $client->password)) {
-            Auth::login($client);
-            return redirect()->route('clients');
-        }
-
-        return redirect()->back();
+        return response()->json(['exists' => $exists]);
     }
 
-    public function client_register_store(Request $request)
-    {
-        $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'password' => 'required|string|min:6|confirmed',
-            'pinfl' => 'nullable|string|size:14',
-            'inn' => 'nullable|string',
-        ]);
-
-        $client = new Client();
-        $client->first_name = $request->input('first_name');
-        $client->last_name = $request->input('last_name');
-        $client->middle_name = $request->input('middle_name');
-        $client->birth_day = $request->input('birth_day');
-        $client->password = Hash::make($request->input('password'));
-
-        // PINFL yoki INN bo'yicha mijozni aniqlash
-        $identifier = $request->input('pinfl') ?? $request->input('inn');
-        if ($identifier && strlen($identifier) == 14) {
-            $client->pinfl = $identifier;
-        } else {
-            $client->inn = $identifier;
-            $client->company_name = $request->input('company_name');
-            $client->region_id = $request->input('region_id');
-            $client->district_id = $request->input('district_id');
-            $client->oked = $request->input('oked');
-            $client->bank = $request->input('bank');
-            $client->account = $request->input('account');
-        }
-
-        // Mijozni saqlash va login qilish
-        $client->save();
-        Auth::login($client);
-        return redirect()->route('clients');
-    }
 
     public function index()
     {
@@ -191,25 +235,3 @@ class ClientController extends Controller
     }
 
 }
-
-//        // Identifier va parolni olish
-//        $identifier = $request->input('pinfl') ?? $request->input('inn');
-//        $password = $request->input('password');
-//
-//        // Identifierga ko'ra mijozni topish
-//        $clients = Client::where('pinfl', $identifier)
-//            ->orWhere('inn', $identifier)
-//            ->first();
-//
-//        // Agar mijoz mavjud bo'lsa, login
-//        if ($clients) {
-//            if (Hash::check($password, $clients->password)) {
-//                Auth::login($clients);
-//                return redirect()->route('clients');
-//            } else {
-//                return redirect()->back()->withErrors(['password' => 'Parol noto\'g\'ri']);
-//            }
-//        } else {
-//            // Mijoz mavjud bo'lmasa, `client_register_store` metodiga yo'naltirish
-//            return $this->client_register_store($request);
-//        }

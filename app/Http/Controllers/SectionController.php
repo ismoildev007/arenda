@@ -13,7 +13,8 @@ class SectionController extends Controller
     public function index()
     {
         $sections = Section::with(['building'])->get();
-        return view('admin.sections.index', compact('sections'));
+        $buildings = Building::all();
+        return view('admin.sections.index', compact('sections', 'buildings'));
     }
 
     public function create()
@@ -98,11 +99,16 @@ class SectionController extends Controller
     // SectionController.php
     public function getSections($buildingId)
     {
-        // Bina (building) ga tegishli bo'lgan bo'limlar (sections)ni olamiz
-        $sections = Section::where('building_id', $buildingId)->get(['id', 'name', 'floor']); // 'id', 'name', va 'floor' ustunlarini olamiz
+        $sections = Section::where('building_id', $buildingId)->get()->map(function($section) {
+            return [
+                'id' => $section->id,
+                'name' => $section->name,
+                'floor' => $section->floor, // Assuming this is the property for the max floors
+            ];
+        });
 
-        // JSON formatda qaytariladi
         return response()->json(['sections' => $sections]);
     }
+
 
 }

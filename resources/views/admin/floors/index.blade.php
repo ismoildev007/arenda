@@ -37,7 +37,7 @@
                                     <thead>
                                     <tr>
                                         <th>Qavat nomeri</th>
-                                        <th>Filial</th>
+                                        <th>Building</th>
                                         <th>Bo'lim</th>
                                         <th>Actions</th>
                                     </tr>

@@ -39,13 +39,12 @@ class BuildingController extends Controller
     {
         $building = Building::with([
             'region',
-            'rooms.contracts.client',
+            'contracts.client',
             'district',
             'employees' => function ($query) {
                 $query->where('role', 'manager');
             },
             'rooms',
-            'clients'
         ])->findOrFail($id);
 
         return view('admin.buildings.view', compact('building'));

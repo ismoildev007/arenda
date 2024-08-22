@@ -20,21 +20,37 @@ Route::post('register', [AuthController::class, 'register_store'])->name('regist
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/check-email', [AuthController::class, 'checkEmail'])->name('checkEmail');
 
+//----------------//-------------//----------------//
 // Client Routes
-Route::get('clients/login', [ClientController::class, 'client_login'])->name('clients.login');
-Route::post('clients/authenticate', [ClientController::class, 'client_authenticate'])->name('clients.authenticate');
-Route::get('check-pinfl', [ClientController::class, 'checkPinfl'])->name('checkPinfl');
-Route::get('clients/register', [ClientController::class, 'client_register'])->name('clients.register');
-Route::post('clients/register/store', [ClientController::class, 'client_register_store'])->name('clients.register.store');
-Route::get('/clients/legal', function () {
-    return view('auth.legal');
-})->name('legal');
+//---------------//-----------------//----------------------//
+
+// Legal Clients
+Route::get('/client-legal-login', [ClientController::class, 'showLegalLoginForm'])->name('client_legal_login_form');
+Route::post('/client-legal-login', [ClientController::class, 'legalLogin'])->name('client_legal_login');
+Route::get('/client-legal-register', [ClientController::class, 'showLegalRegisterForm'])->name('client_legal_register_form');
+Route::post('/client-legal-register', [ClientController::class, 'legalRegister'])->name('client_legal_register');
+Route::get('/check-inn', [ClientController::class, 'checkInn'])->name('checkInn');
+
+// Individual Clients
+Route::get('/client-individual-login', [ClientController::class, 'showIndividualLoginForm'])->name('client_individual_login_form');
+Route::post('/client-individual-login', [ClientController::class, 'individualLogin'])->name('client_individual_login');
+Route::get('/client-individual-register', [ClientController::class, 'showIndividualRegisterForm'])->name('client_individual_register_form');
+Route::post('/client-individual-register', [ClientController::class, 'individualRegister'])->name('client_individual_register');
+Route::get('/check-pinfl', [ClientController::class, 'checkPinfl'])->name('checkPinfl');
+
+// Client register qilgandan so'ng ko'ra oladigan saxifasi
+
+Route::get('/clients', [MainController::class, 'home'])->name('clients');
+// eslatmani chiqarish uchun bu routlardan foydalanish
 
 Route::post('/modal-seen', [App\Http\Controllers\ModalController::class, 'markAsSeen'])->name('modal.seen');
 Route::get('/modal-check', [App\Http\Controllers\ModalController::class, 'checkModal'])->name('modal.check');
-Route::get('/clients', [MainController::class, 'home'])->name('clients');
+
+
+// Asosiy saxifa ushbu routga chop etilishi kerak
 
 Route::get('/', [MainController::class, 'index'])->name('index');
+
 
 // Branches and Rooms Routes
 Route::get('/get-districts/{region_id}', [BuildingController::class, 'getDistricts'])->name('getDistricts');
@@ -47,10 +63,11 @@ Route::get('/get-floors/{section_id}', [FloorController::class, 'getFloors'])->n
 // Rooms based on Floor
 Route::get('/get-rooms/{floor_id}', [RoomController::class, 'getRooms'])->name('getRooms');
 
-
 Route::get('/contracts/existing', [ContractController::class, 'existing'])->name('contracts.existing');
 
-// Authenticated Routes
+
+// Authenticated Routes barcha admin managar va buhgalterlar kira oladigan qism
+
 Route::middleware('auth')->group(function() {
     Route::get('/dashboard', function () {
         if (auth()->user()->role == 'admin') {

@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="branchSelect" class="fw-semibold">Filial:</label>
+                                            <label for="branchSelect" class="fw-semibold">Building:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <select name="branch_id" id="branchSelect" class="form-control max-select">
