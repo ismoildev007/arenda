@@ -66,15 +66,15 @@
                                     </div>
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">5000</h6>
-                                            <p class="fs-12 text-muted mb-0">Umumiy hajmi m <sup>2</sup></p>
+                                            <h6 class="fs-15 fw-bolder">{{ $building->rooms->sum('size') }}</h6>
+                                            <p class="fs-12 text-muted mb-0">Umumiy hajmi m<sup>2</sup></p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">6</h6>
-                                            <p class="fs-12 text-muted mb-0">Umumiy qavat</p>
+                                            <h6 class="fs-15 fw-bolder">{{ $building->sections->count() }}</h6>
+                                            <p class="fs-12 text-muted mb-0">Seksiyalar soni</p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">50</h6>
+                                            <h6 class="fs-15 fw-bolder">{{ $building->rooms->count() }}</h6>
                                             <p class="fs-12 text-muted mb-0">Umumiy xonalar soni</p>
                                         </div>
                                     </div>

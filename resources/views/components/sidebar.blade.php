@@ -70,95 +70,95 @@
     </div>
 </nav>
 
-<!-- Modal HTML -->
-<div class="modal fade" id="branchModal" tabindex="-1" aria-labelledby="branchModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="branchModalLabel">Ushbu siyosatni yopish va (x) tugmasini bosishdan avval qaysi amallarni ketma ket qilishingizni eslab qolishingizni so'raymiz</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" disabled></button>
-            </div>
-            <div class="modal-body">
-                Eslatma
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" disabled>Yopish</button>
-            </div>
-        </div>
-    </div>
-</div>
+{{--<!-- Modal HTML -->--}}
+{{--<div class="modal fade" id="branchModal" tabindex="-1" aria-labelledby="branchModalLabel" aria-hidden="true">--}}
+{{--    <div class="modal-dialog">--}}
+{{--        <div class="modal-content">--}}
+{{--            <div class="modal-header">--}}
+{{--                <h5 class="modal-title" id="branchModalLabel">Ushbu siyosatni yopish va (x) tugmasini bosishdan avval qaysi amallarni ketma ket qilishingizni eslab qolishingizni so'raymiz</h5>--}}
+{{--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" disabled></button>--}}
+{{--            </div>--}}
+{{--            <div class="modal-body">--}}
+{{--                Eslatma--}}
+{{--            </div>--}}
+{{--            <div class="modal-footer">--}}
+{{--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" disabled>Yopish</button>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 
 
 <!-- JavaScript -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        function showModal() {
-            var messages = [
-                "Filial qo'shishingizni so'raymiz.",
-                "Xodim qo'shishingizni so'raymiz.",
-                "Xona qo'shishingizni so'raymiz.",
-                "Client qo'shishingizni so'raymiz.",
-                "Shartnoma tuzishingizni so'raymiz."
-            ];
+{{--<script>--}}
+{{--    document.addEventListener('DOMContentLoaded', function () {--}}
+{{--        function showModal() {--}}
+{{--            var messages = [--}}
+{{--                "Filial qo'shishingizni so'raymiz.",--}}
+{{--                "Xodim qo'shishingizni so'raymiz.",--}}
+{{--                "Xona qo'shishingizni so'raymiz.",--}}
+{{--                "Client qo'shishingizni so'raymiz.",--}}
+{{--                "Shartnoma tuzishingizni so'raymiz."--}}
+{{--            ];--}}
 
-            var currentIndex = 0;
-            var modal = new bootstrap.Modal(document.getElementById('branchModal'));
+{{--            var currentIndex = 0;--}}
+{{--            var modal = new bootstrap.Modal(document.getElementById('branchModal'));--}}
 
-            function showModalMessage() {
-                var messageWithIndex = (currentIndex + 1) + ". " + messages[currentIndex];
-                $('.modal-body').append('<p>' + messageWithIndex + '</p>');
-                modal.show();
-                currentIndex++;
+{{--            function showModalMessage() {--}}
+{{--                var messageWithIndex = (currentIndex + 1) + ". " + messages[currentIndex];--}}
+{{--                $('.modal-body').append('<p>' + messageWithIndex + '</p>');--}}
+{{--                modal.show();--}}
+{{--                currentIndex++;--}}
 
-                if (currentIndex < messages.length) {
-                    setTimeout(showModalMessage, 5000);
-                } else {
-                    setTimeout(function () {
-                        modal.hide();
-                        $.ajax({
-                            url: "{{ route('modal.seen') }}",
-                            method: "POST",
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                            },
-                            success: function(response) {
-                                if (response.status === 'success') {
-                                    sessionStorage.setItem('admin_modal_shown', 'true');
-                                }
-                            }
-                        });
-                    }, 5000);
-                }
-            }
+{{--                if (currentIndex < messages.length) {--}}
+{{--                    setTimeout(showModalMessage, 5000);--}}
+{{--                } else {--}}
+{{--                    setTimeout(function () {--}}
+{{--                        modal.hide();--}}
+{{--                        $.ajax({--}}
+{{--                            url: "{{ route('modal.seen') }}",--}}
+{{--                            method: "POST",--}}
+{{--                            data: {--}}
+{{--                                _token: "{{ csrf_token() }}",--}}
+{{--                            },--}}
+{{--                            success: function(response) {--}}
+{{--                                if (response.status === 'success') {--}}
+{{--                                    sessionStorage.setItem('admin_modal_shown', 'true');--}}
+{{--                                }--}}
+{{--                            }--}}
+{{--                        });--}}
+{{--                    }, 5000);--}}
+{{--                }--}}
+{{--            }--}}
 
-            setTimeout(function() {
-                $('.btn-close, .btn-secondary').removeAttr('disabled');
-            }, 10000);
+{{--            setTimeout(function() {--}}
+{{--                $('.btn-close, .btn-secondary').removeAttr('disabled');--}}
+{{--            }, 10000);--}}
 
-            showModalMessage();
-        }
+{{--            showModalMessage();--}}
+{{--        }--}}
 
-        function checkAndShowModal() {
-            if (!sessionStorage.getItem('admin_modal_shown')) {
-                $.ajax({
-                    url: "{{ route('modal.check') }}",
-                    method: "GET",
-                    success: function(response) {
-                        if (response.show_modal) {
-                            showModal();
-                        }
-                    }
-                });
-            }
-        }
+{{--        function checkAndShowModal() {--}}
+{{--            if (!sessionStorage.getItem('admin_modal_shown')) {--}}
+{{--                $.ajax({--}}
+{{--                    url: "{{ route('modal.check') }}",--}}
+{{--                    method: "GET",--}}
+{{--                    success: function(response) {--}}
+{{--                        if (response.show_modal) {--}}
+{{--                            showModal();--}}
+{{--                        }--}}
+{{--                    }--}}
+{{--                });--}}
+{{--            }--}}
+{{--        }--}}
 
-        setInterval(function() {
-            sessionStorage.removeItem('admin_modal_shown');
-            checkAndShowModal();
-        }, 4 * 60 * 60 * 1000);
+{{--        setInterval(function() {--}}
+{{--            sessionStorage.removeItem('admin_modal_shown');--}}
+{{--            checkAndShowModal();--}}
+{{--        }, 4 * 60 * 60 * 1000);--}}
 
-        checkAndShowModal();
-    });
+{{--        checkAndShowModal();--}}
+{{--    });--}}
 
-</script>
+{{--</script>--}}

@@ -20,14 +20,6 @@
                         <li class="breadcrumb-item">Seksiyalar</li>
                     </ul>
                 </div>
-{{--                <div class="page-header-right ms-auto">--}}
-{{--                    <div class="page-header-right-items">--}}
-{{--                        <a href="{{ route('sections.create') }}" class="btn btn-primary">--}}
-{{--                            <i class="feather-plus me-2"></i>--}}
-{{--                            <span>Yangi Seksiya qo'shish</span>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
             </div>
             <!-- [ page-header ] end -->
 
@@ -54,6 +46,12 @@
                                             <td>{{ $section->floor }}</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">
+                                                    <a href="javascript:void(0)" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addSectionModal{{ $section->id }}">
+                                                        <span>Etaj qo'shish</span>
+                                                        <span class="avatar-text avatar-md">
+                                                            <i class="feather feather-plus me-3"></i>
+                                                        </span>
+                                                    </a>
                                                     <a href="{{ route('sections.show', $section->id) }}" class="avatar-text avatar-md">
                                                         <i class="feather-eye"></i>
                                                     </a>
@@ -73,7 +71,7 @@
                                                                 <form class="dropdown-item" action="{{ route('sections.destroy', $section->id) }}" method="POST" onsubmit="confirmDelete(event)">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" style="background: none; border: none; padding: 0;"  onclick="return confirm('Ushbu bo\'limni o‘chirishni xohlaysizmi?')">
+                                                                    <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Ushbu bo\'limni o‘chirishni xohlaysizmi?')">
                                                                         <i class="feather feather-trash-2 me-3"></i>
                                                                         Delete
                                                                     </button>
@@ -95,4 +93,83 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
+
+    @foreach($sections as $section)
+        <div class="modal fade" id="addSectionModal{{ $section->id }}" tabindex="-1" aria-labelledby="addSectionModalLabel{{ $section->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSectionModalLabel{{ $section->id }}">Etaj qo'shish</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('floors.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!-- Hidden Section ID -->
+                            <input type="hidden" name="section_id" value="{{ $section->id }}">
+                            <input type="hidden" name="building_id" value="{{ $section->building->id }}">
+
+                            <!-- Floor Number -->
+                            <div class="row mb-4 align-items-center">
+                                <div class="col-lg-4">
+                                    <label for="number" class="fw-semibold">Qavat tanglang:</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select name="number" id="number_{{ $section->id }}" class="form-select max-select" required>
+                                        <option value="" disabled selected>Qavatni tanlang</option>
+                                        @for ($i = 1; $i <= $section->floor; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Image Upload -->
+                            <div class="row align-items-center mb-4">
+                                <div class="col-lg-4">
+                                    <label for="images" class="fw-semibold">Rasmlar</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="file" name="images[]" id="images_{{ $section->id }}" class="form-control" multiple>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    <script>
+        $(document).ready(function() {
+            $('.max-select').select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Tanlang...',
+                allowClear: true
+            });
+
+            @foreach($sections as $section)
+            // Update the floor select when a section is selected
+            $('#section_id_{{ $section->id }}').on('change', function() {
+                let selectedSectionId = $(this).val();
+                let sectionData = @json($sections);
+
+                let selectedSection = sectionData.find(section => section.id == selectedSectionId);
+                let floorSelect = $('#number_{{ $section->id }}');
+
+                floorSelect.empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
+
+                if (selectedSection) {
+                    for (let i = 1; i <= selectedSection.floor; i++) {
+                        floorSelect.append('<option value="' + i + '">' + i + '</option>');
+                    }
+                }
+            });
+            @endforeach
+        });
+    </script>
+
 @endsection

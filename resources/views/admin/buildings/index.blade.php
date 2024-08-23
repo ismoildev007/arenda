@@ -56,9 +56,9 @@
                                                 <div class="hstack gap-2 justify-content-end">
                                                     <a href="javascript:void(0)" class="d-flex align-items-center"  data-bs-toggle="modal" data-bs-target="#addSectionModal{{ $branch->id }}">
                                                         <span>Seksiya qo'shish</span>
-                                                        <a href="javascript:void(0)" class="avatar-text avatar-md">
+                                                        <span class="avatar-text avatar-md">
                                                             <i class="feather feather-plus me-3"></i>
-                                                        </a>
+                                                        </span>
                                                     </a>
                                                     <a href="{{ route('buildings.show', $branch->id) }}" class="avatar-text avatar-md">
                                                         <i class="feather-eye"></i>
