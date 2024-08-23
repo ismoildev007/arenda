@@ -47,7 +47,7 @@ class SectionController extends Controller
         }
         Section::create($request->all());
 
-        return redirect()->route('sections.index')->with('success', 'Section created successfully.');
+        return redirect()->back()->with('success', 'Section created successfully.');
     }
 
     public function show(Section $section)
@@ -87,14 +87,14 @@ class SectionController extends Controller
 
         $section->update($request->all());
 
-        return redirect()->route('sections.index')->with('success', 'Section updated successfully.');
+        return redirect()->back()->with('success', 'Section updated successfully.');
     }
 
     public function destroy(Section $section)
     {
         $section->delete();
 
-        return redirect()->route('sections.index')->with('success', 'Section deleted successfully.');
+        return redirect()->back()->with('success', 'Section deleted successfully.');
     }
     // SectionController.php
     public function getSections($buildingId)

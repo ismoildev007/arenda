@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Building;
 use App\Models\Region;
 use App\Models\District;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
 class BuildingController extends Controller
@@ -37,6 +38,7 @@ class BuildingController extends Controller
 
     public function show($id)
     {
+//        $sections = Section::all();
         $building = Building::with([
             'region',
             'contracts.client',
@@ -45,6 +47,7 @@ class BuildingController extends Controller
                 $query->where('role', 'manager');
             },
             'rooms',
+            'sections',
         ])->findOrFail($id);
 
         return view('admin.buildings.view', compact('building'));

@@ -35,18 +35,18 @@
                         <span class="nxl-mtext">Obyekti</span>
                     </a>
                 </li>
-                <li class="nxl-item">
-                    <a href="{{ route('sections.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
-                        <span class="nxl-mtext">Seksiya</span>
-                    </a>
-                </li>
-                <li class="nxl-item">
-                    <a href="{{ route('floors.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
-                        <span class="nxl-mtext">Etaj</span>
-                    </a>
-                </li>
+{{--                <li class="nxl-item">--}}
+{{--                    <a href="{{ route('sections.index') }}" class="nxl-link">--}}
+{{--                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>--}}
+{{--                        <span class="nxl-mtext">Seksiya</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nxl-item">--}}
+{{--                    <a href="{{ route('floors.index') }}" class="nxl-link">--}}
+{{--                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>--}}
+{{--                        <span class="nxl-mtext">Etaj</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 <li class="nxl-item">
                     <a href="{{ route('employees.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-life-buoy"></i></span>

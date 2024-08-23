@@ -50,10 +50,9 @@ class FloorController extends Controller
             $validated['images'] = $images;
         }
 
-        dd($request->all());
         Floor::create($validated);
 
-        return redirect()->route('floors.index')->with('success', 'Qavat muvaffaqiyatli yaratildi.');
+        return redirect()->back()->with('success', 'Floor created successfully.');
     }
 
     public function edit(Floor $floor)
@@ -104,7 +103,7 @@ class FloorController extends Controller
 
         $floor->update($validated);
 
-        return redirect()->route('floors.index')->with('success', 'Qavat muvaffaqiyatli yangilandi.');
+        return redirect()->back()->with('success', 'Qavat muvaffaqiyatli yangilandi.');
     }
 
     public function destroy(Floor $floor)
@@ -118,7 +117,7 @@ class FloorController extends Controller
 
         $floor->delete();
 
-        return redirect()->route('floors.index')->with('success', 'Floor deleted successfully.');
+        return redirect()->back()->with('success', 'Floor deleted successfully.');
     }
 
     // FloorController.php
