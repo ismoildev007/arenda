@@ -50,9 +50,9 @@
                                 </button>
                                 <ul class="dropdown-menu" id="temp-contract-checkSelect">
                                     <li><a class="dropdown-item" href="{{ route('buildings.create') }}">Create Building</a></li>
-                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSectionModal0{{ $building->id }}">Create Section</a></li>
-                                    <li><a class="dropdown-item" href="javascript:void(0);" role="option" onclick="tempContractCheckSelect('temp-contract-check');">Create Floor</a></li>
-                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="openRoomModal({{ $building->id }})">Create Room</a></li>
+                                    <li><a class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#sectionOffcanvas">Create Section</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#floorOffcanvas">Create Floor</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#roomOffcanvas">Create Room</a></li>
                                 </ul>
                             </div>
 
@@ -65,34 +65,6 @@
                     </div>
                 </div>
             </div>
-
-            <script>
-                function tempContractCheckSelect(value) {
-                    if(value === 'temp-contract-check') {
-                        const tempContractCheckSelectOffcanvas = document.getElementById('tempContractCheckSelectOffcanvas');
-                        tempContractCheckSelectOffcanvas.style.visibility = "visible";
-                        tempContractCheckSelectOffcanvas.classList.add('show');
-                    }
-                }
-
-                function openRoomModal(buildingId) {
-                    // Bu yerda modalni topamiz
-                    const roomModal = document.getElementById('addRoomModal' + buildingId);
-
-                    if (roomModal) {
-                        // Building ID-ni yashirin inputga uzatamiz
-                        const buildingIdInput = roomModal.querySelector('input[name="building_id"]');
-                        if (buildingIdInput) {
-                            buildingIdInput.value = buildingId;
-                        }
-
-                        // Modalni ko'rsatamiz
-                        const bsRoomModal = new bootstrap.Modal(roomModal);
-                        bsRoomModal.show();
-                    }
-                }
-
-            </script>
             <!-- [ page-header ] end -->
             <!-- [ Main Content ] start -->
             <div class="main-content">
@@ -615,6 +587,7 @@
     </main>
     <x-modals.floor-modal :building="$building"></x-modals.floor-modal>
     <x-modals.room-modal :building="$building"></x-modals.room-modal>
+    <x-modals.section-modal :building="$building"></x-modals.section-modal>
 
 {{--    Sectin qo'shish uchun modal --}}
         <div class="modal fade" id="addSectionModal0{{ $building->id }}" tabindex="-1" aria-labelledby="addSectionModalLabel0{{ $building->id }}" aria-hidden="true">
