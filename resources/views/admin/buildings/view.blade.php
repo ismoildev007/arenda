@@ -52,7 +52,7 @@
                                     <li><a class="dropdown-item" href="{{ route('buildings.create') }}">Create Building</a></li>
                                     <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSectionModal0{{ $building->id }}">Create Section</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);" role="option" onclick="tempContractCheckSelect('temp-contract-check');">Create Floor</a></li>
-                                    <li><a class="dropdown-item" href="javascript:void(0);">Create Room</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="openRoomModal({{ $building->id }})">Create Room</a></li>
                                 </ul>
                             </div>
 
@@ -74,6 +74,24 @@
                         tempContractCheckSelectOffcanvas.classList.add('show');
                     }
                 }
+
+                function openRoomModal(buildingId) {
+                    // Bu yerda modalni topamiz
+                    const roomModal = document.getElementById('addRoomModal' + buildingId);
+
+                    if (roomModal) {
+                        // Building ID-ni yashirin inputga uzatamiz
+                        const buildingIdInput = roomModal.querySelector('input[name="building_id"]');
+                        if (buildingIdInput) {
+                            buildingIdInput.value = buildingId;
+                        }
+
+                        // Modalni ko'rsatamiz
+                        const bsRoomModal = new bootstrap.Modal(roomModal);
+                        bsRoomModal.show();
+                    }
+                }
+
             </script>
             <!-- [ page-header ] end -->
             <!-- [ Main Content ] start -->
@@ -595,7 +613,8 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
-    <x-modals.right-modal></x-modals.right-modal>
+    <x-modals.floor-modal :building="$building"></x-modals.floor-modal>
+    <x-modals.room-modal :building="$building"></x-modals.room-modal>
 
 {{--    Sectin qo'shish uchun modal --}}
         <div class="modal fade" id="addSectionModal0{{ $building->id }}" tabindex="-1" aria-labelledby="addSectionModalLabel0{{ $building->id }}" aria-hidden="true">
