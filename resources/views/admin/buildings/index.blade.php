@@ -41,9 +41,11 @@
                                     <thead>
                                     <tr>
                                         <th>Building nomi</th>
-                                        <th>Region</th>
-                                        <th>District</th>
-                                        <th>Actions</th>
+                                        <th>Viloyat</th>
+                                        <th>shaxar (tuman)</th>
+                                        <th>ism</th>
+                                        <th>familiya</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -52,6 +54,8 @@
                                             <td>{{ $branch->name }}</td>
                                             <td>{!! $branch->region->name !!}</td>
                                             <td>{{ $branch->district->name }}</td>
+                                            <td>{{ $branch->first_name }}</td>
+                                            <td>{{ $branch->last_name }}</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">
                                                     <a href="javascript:void(0)" class="d-flex align-items-center"  data-bs-toggle="modal" data-bs-target="#addSectionModal{{ $branch->id }}">

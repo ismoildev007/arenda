@@ -48,7 +48,7 @@ class RoomController extends Controller
 
         $room = Room::create($validated);
 
-        return redirect()->route('rooms.index')->with('success', 'Xona muvaffaqiyatli yaratildi');
+        return redirect()->back()->with('success', 'Xona muvaffaqiyatli yaratildi');
     }
 
 

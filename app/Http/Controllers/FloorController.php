@@ -30,6 +30,7 @@ class FloorController extends Controller
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
             'section_id' => 'required|exists:sections,id',
+            'room_of_number' => 'required|string',
             'number' => [
                 'required',
                 'integer',
@@ -73,6 +74,7 @@ class FloorController extends Controller
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
             'section_id' => 'required|exists:sections,id',
+            'room_of_number' => 'nullable|string',
             'number' => [
                 'required',
                 'integer',

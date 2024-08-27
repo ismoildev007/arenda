@@ -27,6 +27,14 @@ class BuildingController extends Controller
     {
         $request->validate([
             'name' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'inn' => 'nullable|string|max:255',
+            'pinfl' => 'nullable|string|max:255',
+            'oked' => 'nullable|string|max:255',
+            'bank' => 'nullable|string|max:255',
+            'account' => 'nullable|string|max:255',
             'region_id' => 'required|exists:regions,id',
             'district_id' => 'required|exists:districts,id',
         ]);
@@ -66,6 +74,14 @@ class BuildingController extends Controller
     {
         $request->validate([
             'name' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'inn' => 'nullable|string|max:255',
+            'pinfl' => 'nullable|string|max:255',
+            'oked' => 'nullable|string|max:255',
+            'bank' => 'nullable|string|max:255',
+            'account' => 'nullable|string|max:255',
             'region_id' => 'required|exists:regions,id',
             'district_id' => 'required|exists:districts,id',
         ]);

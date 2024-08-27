@@ -1,15 +1,7 @@
-<?php
-
-$buildings = \App\Models\Building::all();
-$sections = \App\Models\Section::all();
-
-?>
-
-
 <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="floorOffcanvas" aria-labelledby="floorOffcanvas">
     <div class="offcanvas-header border-bottom" style="padding-top: 20px; padding-bottom: 20px">
         <div class="d-flex align-items-center">
-            <div onclick="closeTempContractCheckSelect()" class="avatar-text avatar-md items-details-close-trigger" id="close-tempContractCheckSelectOffcanvas" data-bs-dismiss="offcanvas" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Details Close"><i class="feather-arrow-left"></i></div>
+            <div onclick="closeTempContractCheckSelect()" class="avatar-text avatar-md items-details-close-trigger" id="close-floorOffcanvas" data-bs-dismiss="offcanvas" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Details Close"><i class="feather-arrow-left"></i></div>
             <span class="vr text-muted mx-4"></span>
             <a href="javascript:void(0);">Etaj qo'shish</a>
         </div>
@@ -19,46 +11,50 @@ $sections = \App\Models\Section::all();
             <form action="{{ route('floors.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Building Select -->
                 <div class="row mb-4 align-items-center">
                     <div class="col-lg-4">
                         <label for="regionSelect" class="fw-semibold">Building :</label>
                     </div>
                     <div class="col-lg-8 mb-4">
                         <select name="building_id" id="building_id" class="form-select max-select" required>
-                            <option value="" disabled selected>Building tanlang</option>
-                            @foreach($buildings as $building)
-                                <option value="{{ $building->id }}">{{ $building->name }}</option>
-                            @endforeach
+                            <option value="{{ $building->id }}" selected>{{ $building->name }}</option>
                         </select>
                     </div>
-                    <div class="col-lg-12" id="sectionSelectBox" style="display: none;">
+                    <div class="col-lg-12" id="sectionSelectBox">
                         <div class="row align-items-center">
                             <div class="col-lg-4">
-                                <label for="section_id" class="fw-semibold">Bo'lim</label>
+                                <label for="section_id" class="fw-semibold">Seksiya</label>
                             </div>
                             <div class="col-lg-8">
                                 <select name="section_id" id="section_id" class="form-select max-select" required>
-                                    <option value="" disabled selected>Bo'limni tanlang</option>
+                                    @foreach($building->sections as $section)
+                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Floor Number (loaded dynamically) -->
                 <div class="row mb-4 align-items-center">
                     <div class="col-lg-4">
                         <label for="number" class="fw-semibold">Qavat tanlang:</label>
                     </div>
                     <div class="col-lg-8">
                         <select name="number" id="number" class="form-select max-select" required>
-                            <option value="" disabled selected>Qavatni tanlang</option>
+
                         </select>
                     </div>
                 </div>
+                <div class="row mb-4 align-items-center">
+                    <div class="col-lg-4">
+                        <label for="room_of_number" class="fw-semibold">Xona soni :</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" name="room_of_number" id="room_of_number" class="form-control" required>
+                    </div>
+                </div>
 
-                <!-- Image Upload -->
                 <div class="row align-items-center mb-4">
                     <div class="col-lg-4">
                         <label for="images" class="fw-semibold">Rasmlar</label>
@@ -82,6 +78,10 @@ $sections = \App\Models\Section::all();
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- Custom Script -->
+<?php
+
+$sections = \App\Models\Section::all();
+?>
 <script>
     $(document).ready(function() {
         // Initialize Select2

@@ -12,7 +12,7 @@
                         <h5 class="m-b-10">Obyekt</h5>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(1);">Home</a></li>
                         <li class="breadcrumb-item">View</li>
                     </ul>
                 </div>
@@ -86,7 +86,8 @@
                                     </div>
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">{{ $building->rooms->sum('size') }}</h6>
+                                            <h6 class="fs-15 fw-bolder">{{ $building->size }}</h6>
+{{--                                            <h6 class="fs-15 fw-bolder">{{ $building->rooms->sum('size') }}</h6>--}}
                                             <p class="fs-12 text-muted mb-0">Umumiy hajmi m<sup>2</sup></p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
@@ -144,13 +145,13 @@
                                         <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Billing</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Section</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Seksiyalar</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationsTab" role="tab">Notifications</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationsTab" role="tab">Qavatlar</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#connectionTab" role="tab">Connection</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#connectionTab" role="tab">Xonalar</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
                                         <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#securityTab" role="tab">Security</a>
@@ -166,8 +167,12 @@
                                         </div>
 
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Obyekt etaji:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $building->floor }}</div>
+                                            <div class="col-sm-6 text-muted">Obyekt nomi:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $building->name }}</div>
+                                        </div>
+                                        <div class="row g-0 mb-4">
+                                            <div class="col-sm-6 text-muted">Obyekt egasi ism familiaysi:</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $building->first_name }} {{ $building->last_name }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Region:</div>
@@ -212,55 +217,6 @@
                                                 <strong>No clients found for this building.</strong>
                                             </div>
                                         @endif
-
-
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Rooms:</h5>
-                                        </div>
-                                        @foreach($building->rooms as $room)
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Room Number:</div>
-                                                <div class="col-sm-6 fw-semibold">{{ $room->number }}</div>
-                                            </div>
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Size:</div>
-                                                <div class="col-sm-6 fw-semibold">{{ $room->size }} sqm</div>
-                                            </div>
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Price per sqm:</div>
-                                                <div class="col-sm-6 fw-semibold">${{ $room->price_per_sqm }}</div>
-                                            </div>
-
-                                            <div class="mb-4 d-flex align-items-center justify-content-between">
-                                                <h5 class="fw-bold mb-0">Contracts:</h5>
-                                            </div>
-                                            @foreach($room->contracts as $contract)
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">Contract Number:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $contract->contract_number }}</div>
-                                                </div>
-
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">Client:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $contract->client->first_name }} {{ $contract->client->last_name }}</div>
-                                                </div>
-
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">Room:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $contract->room->number }}</div>
-                                                </div>
-
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">Start Date:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $contract->start_date->format('d M, Y') }}</div>
-                                                </div>
-
-                                                <div class="row g-0 mb-4">
-                                                    <div class="col-sm-6 text-muted">End Date:</div>
-                                                    <div class="col-sm-6 fw-semibold">{{ $contract->end_date->format('d M, Y') }}</div>
-                                                </div>
-                                            @endforeach
-                                        @endforeach
 
 
                                         <div class="mb-4 d-flex align-items-center justify-content-between">
@@ -479,7 +435,7 @@
                                     <div class="logs-history mb-0 mt-2">
                                         <div class="px-4 mb-4 d-flex justify-content-between">
                                             <h5 class="fw-bold">Section</h5>
-                                            <a href="javascript:void(0)" class="d-flex align-items-center"  data-bs-toggle="modal" data-bs-target="#addSectionModal0{{ $building->id }}">
+                                            <a href="javascript:void(0)" class="d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#sectionOffcanvas">
                                                 <span>Seksiya qo'shish</span>
                                                 <span class="avatar-text avatar-md">
                                                             <i class="feather feather-plus me-3"></i>
@@ -544,26 +500,125 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="connectionTab" role="tabpanel">
-                                    <div class="development-connections p-4 pb-0">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold">Developement Connections:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">View Alls</a>
+                                <div class="tab-pane fade" id="notificationsTab" role="tabpanel">
+                                    <div class="logs-history mb-0 mt-2">
+                                        <div class="px-4 mb-4 d-flex justify-content-between">
+                                            <h5 class="fw-bold">Etaj</h5>
                                         </div>
-                                        <div class="hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1">
-                                            <div class="hstack me-4">
-                                                <div class="wd-40">
-                                                    <img src="/assets/images/brand/google-drive.png" class="img-fluid" alt="">
-                                                </div>
-                                                <div class="ms-4">
-                                                    <a href="javascript:void(0);" class="fw-bold mb-1 text-truncate-1-line">Google Drive: Cloud Storage & File Sharing</a>
-                                                    <div class="fs-12 text-muted text-truncate-1-line">Google's powerful search capabilities are embedded in Drive and offer speed, reliability, and collaboration. And features like Drive search chips help your team ...</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check form-switch form-switch-sm">
-                                                <label class="form-check-label fw-500 text-dark c-pointer" for="formSwitchGDrive"></label>
-                                                <input class="form-check-input c-pointer" type="checkbox" id="formSwitchGDrive">
-                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="text-dark text-center border-top">
+                                                <tr>
+                                                    <th class="text-start ps-4">Building</th>
+                                                    <th>Seksiya nomi</th>
+                                                    <th>Qavati</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="text-center">
+                                                @foreach($building->floors as $section)
+                                                    <tr>
+                                                        <td class="fw-medium text-dark text-start ps-4">{{ $section->building->name }}</td>
+                                                        <td>{{ $section->section->name }}</td>
+                                                        <td>{{ $section->number }}</td>
+                                                        <td>
+                                                            <div class="hstack gap-2 justify-content-end">
+                                                                <a href="{{ route('floors.show', $section->id) }}" class="avatar-text avatar-md">
+                                                                    <i class="feather-eye"></i>
+                                                                </a>
+
+                                                                <div class="dropdown">
+                                                                    <a href="javascript:void(0)" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,21">
+                                                                        <i class="feather feather-more-horizontal"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li>
+                                                                            <a class="dropdown-item" href="{{ route('floors.edit', $section->id) }}">
+                                                                                <i class="feather feather-edit-3 me-3"></i>
+                                                                                <span>Edit</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <form class="dropdown-item" action="{{ route('floors.destroy', $section->id) }}" method="POST" onsubmit="confirmDelete(event)">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Ushbu bo\'limni o‘chirishni xohlaysizmi?')">
+                                                                                    <i class="feather feather-trash-2 me-3"></i>
+                                                                                    Delete
+                                                                                </button>
+                                                                            </form>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="connectionTab" role="tabpanel">
+                                    <div class="logs-history mb-0 mt-2">
+                                        <div class="px-4 mb-4 d-flex justify-content-between">
+                                            <h5 class="fw-bold">Xonalar</h5>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="text-dark text-center border-top">
+                                                <tr>
+                                                    <th class="text-start ps-4">Building</th>
+                                                    <th>Seksiya nomi</th>
+                                                    <th>Qavati</th>
+                                                    <th>Raqami</th>
+                                                    <th>hajmi</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="text-center">
+                                                @foreach($building->rooms as $section)
+                                                    <tr>
+                                                        <td class="fw-medium text-dark text-start ps-4">{{ $section->building->name }}</td>
+                                                        <td>{{ $section->section->name }}</td>
+                                                        <td>{{ $section->floor->number }}</td>
+                                                        <td>{{ $section->number }}</td>
+                                                        <td>{{ $section->size }}</td>
+                                                        <td>
+                                                            <div class="hstack gap-2 justify-content-end">
+                                                                <a href="{{ route('rooms.show', $section->id) }}" class="avatar-text avatar-md">
+                                                                    <i class="feather-eye"></i>
+                                                                </a>
+
+                                                                <div class="dropdown">
+                                                                    <a href="javascript:void(0)" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,21">
+                                                                        <i class="feather feather-more-horizontal"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li>
+                                                                            <a class="dropdown-item" href="{{ route('rooms.edit', $section->id) }}">
+                                                                                <i class="feather feather-edit-3 me-3"></i>
+                                                                                <span>Edit</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <form class="dropdown-item" action="{{ route('rooms.destroy', $section->id) }}" method="POST" onsubmit="confirmDelete(event)">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Ushbu bo\'limni o‘chirishni xohlaysizmi?')">
+                                                                                    <i class="feather feather-trash-2 me-3"></i>
+                                                                                    Delete
+                                                                                </button>
+                                                                            </form>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -585,9 +640,9 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
+    <x-modals.section-modal :building="$building"></x-modals.section-modal>
     <x-modals.floor-modal :building="$building"></x-modals.floor-modal>
     <x-modals.room-modal :building="$building"></x-modals.room-modal>
-    <x-modals.section-modal :building="$building"></x-modals.section-modal>
 
 {{--    Sectin qo'shish uchun modal --}}
         <div class="modal fade" id="addSectionModal0{{ $building->id }}" tabindex="-1" aria-labelledby="addSectionModalLabel0{{ $building->id }}" aria-hidden="true">

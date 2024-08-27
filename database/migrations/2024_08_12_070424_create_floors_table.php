@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('building_id')->nullable()->constrained('buildings')->cascadeOnDelete();
             $table->foreignId('section_id')->nullable()->constrained('sections')->cascadeOnDelete();
             $table->integer('number');
+            $table->integer('room_of_number')->nullable();
             $table->text('images'); // json field for storing multiple images
             $table->timestamps();
         });

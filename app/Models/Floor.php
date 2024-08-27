@@ -13,6 +13,7 @@ class Floor extends Model
         'building_id',
         'section_id',
         'number',
+        'room_of_number',
         'images',
     ];
 

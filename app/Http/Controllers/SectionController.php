@@ -27,8 +27,19 @@ class SectionController extends Controller
     {
         $request->validate([
             'building_id' => 'required|exists:buildings,id',
-            'floor' => 'required|integer|min:1|max:100',
             'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'section_type' => 'nullable|string|max:255',
+            'construction' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'founded_date' => 'nullable|date',
+            'safety' => 'nullable|string|max:255',
+            'mode_of_operation' => 'nullable|string|max:255',
+            'set' => 'nullable|string|max:255',
+            'floor' => 'nullable|string|max:255',
+            'number_of_rooms' => 'nullable|integer|min:0',
+            'lift' => 'nullable|string|max:255',
+            'parking' => 'nullable|string|max:255',
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|max:2048',
         ]);
@@ -65,10 +76,21 @@ class SectionController extends Controller
     {
         $request->validate([
             'building_id' => 'required|exists:buildings,id',
-            'floor' => 'required|integer|min:1|max:100',
             'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'section_type' => 'nullable|string|max:255',
+            'construction' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'founded_date' => 'nullable|date',
+            'safety' => 'nullable|string|max:255',
+            'mode_of_operation' => 'nullable|string|max:255',
+            'set' => 'nullable|string|max:255',
+            'floor' => 'nullable|string|max:255',
+            'number_of_rooms' => 'nullable|integer|min:0',
+            'lift' => 'nullable|string|max:255',
+            'parking' => 'nullable|string|max:255',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Har bir fayl uchun 2MB limit
         ]);
 
         if ($request->hasFile('images')) {

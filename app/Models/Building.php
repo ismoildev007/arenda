@@ -13,6 +13,14 @@ class Building extends Model
 
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
+        'size',
+        'inn',
+        'pinfl',
+        'oked',
+        'bank',
+        'account',
         'region_id',
         'district_id',
     ];
@@ -20,6 +28,10 @@ class Building extends Model
     public function sections()
     {
         return $this->hasMany(Section::class);
+    }
+    public function floors()
+    {
+        return $this->hasMany(Floor::class);
     }
     public function region()
     {

@@ -21,7 +21,7 @@
                     <div class="card-header p-0">
                         <ul class="nav nav-tabs flex-wrap w-100 text-center customers-nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item flex-fill border-top" role="presentation">
-                                <a href="javascript:void(0);" class="nav-link text-start">Yangi bo'lim malumotlarini kiriting :</a>
+                                <a href="javascript:void(0);" class="nav-link text-start">Yangi bo'lim malumotlarini kiriting:</a>
                             </li>
                         </ul>
                     </div>
@@ -43,14 +43,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row mb-4 align-items-center">
-                                        <div class="col-lg-4">
-                                            <label for="floor" class="fw-semibold">Necha qavat:</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input type="text" class="form-control" id="floor" name="floor" placeholder="Necha qavatligini kiriting">
-                                        </div>
-                                    </div>
+
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
                                             <label for="nameInput" class="fw-semibold">Bo'lim nomi:</label>
@@ -59,6 +52,115 @@
                                             <input type="text" class="form-control" id="nameInput" name="name" placeholder="Bo'lim nomini kiriting">
                                         </div>
                                     </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="addressInput" class="fw-semibold">Manzil:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="addressInput" name="address" placeholder="Manzilni kiriting">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="classesInput" class="fw-semibold">Section turi:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="classesInput" name="section_type" placeholder="Seksiya turini kiriting">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="constructionInput" class="fw-semibold">Qurilish:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="constructionInput" name="construction" placeholder="Qurilish haqida">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="sizeInput" class="fw-semibold">Hajmi:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="sizeInput" name="size" placeholder="Bo'lim hajmini kiriting">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="foundedDateInput" class="fw-semibold">Tashkil topgan sana:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="date" class="form-control" id="foundedDateInput" name="founded_date">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="safetyInput" class="fw-semibold">Xavfsizlik:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="safetyInput" name="safety" placeholder="Xavfsizlik haqida">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="modeOfOperationInput" class="fw-semibold">Ish rejimi:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="modeOfOperationInput" name="mode_of_operation" placeholder="Ish rejimini kiriting">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="setInput" class="fw-semibold">Jihozlar:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="setInput" name="set" placeholder="Jihozlar haqida">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="floorInput" class="fw-semibold">Qavat:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="floorInput" name="floor" placeholder="Necha qavat">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="numberOfRoomsInput" class="fw-semibold">Xonalar soni:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="numberOfRoomsInput" name="number_of_rooms" placeholder="Xonalar sonini kiriting">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="liftInput" class="fw-semibold">Lift:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="liftInput" name="lift" placeholder="Lift mavjudmi?">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="parkingInput" class="fw-semibold">Avtomobil to'xtash joyi:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="parkingInput" name="parking" placeholder="Avtomobil to'xtash joyi haqida">
+                                        </div>
+                                    </div>
+
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
                                             <label for="imagesInput" class="fw-semibold">Rasmlar:</label>
@@ -67,6 +169,7 @@
                                             <input type="file" class="form-control" id="imagesInput" name="images[]" multiple>
                                         </div>
                                     </div>
+
                                     <div class="row mb-4">
                                         <div class="col-lg-12">
                                             <button type="submit" class="btn btn-primary">Saqlash</button>
@@ -87,6 +190,7 @@
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Custom Script -->

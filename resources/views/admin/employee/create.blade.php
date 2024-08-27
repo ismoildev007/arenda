@@ -72,12 +72,12 @@
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="branch_id" class="fw-semibold">Building:</label>
+                                            <label for="building_id" class="fw-semibold">Building:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <select name="branch_id" id="branch_id" class="form-control max-select" required>
+                                            <select name="building_id" id="building_id" class="form-control max-select" required>
                                                 <option disabled selected>Building tanlang</option>
-                                                @foreach($branches as $branch)
+                                                @foreach($buildings as $branch)
                                                     <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                                 @endforeach
                                             </select>

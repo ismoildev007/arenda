@@ -1,14 +1,8 @@
-<?php
 
-$buildings = \App\Models\Building::all();
-$sections = \App\Models\Section::all();
-
-?>
-
-<div class="offcanvas offcanvas-end w-50" tabindex="-1" id="roomOffcanvas" aria-labelledby="roomOffcanvasLabel">
+<div class="offcanvas offcanvas-end w-50" tabindex="-1" id="roomOffcanvas" aria-labelledby="roomOffcanvas">
     <div class="offcanvas-header border-bottom" style="padding-top: 20px; padding-bottom: 20px">
         <div class="d-flex align-items-center">
-            <div onclick="closeRoomModal()" class="avatar-text avatar-md items-details-close-trigger" id="close-roomOffcanvas" data-bs-dismiss="offcanvas" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Close"><i class="feather-arrow-left"></i></div>
+            <div onclick="closeTempContractCheckSelect()" class="avatar-text avatar-md items-details-close-trigger" id="close-roomOffcanvas" data-bs-dismiss="offcanvas" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Close"><i class="feather-arrow-left"></i></div>
             <span class="vr text-muted mx-4"></span>
             <a href="javascript:void(0);">Xona qo'shish</a>
         </div>
@@ -17,34 +11,31 @@ $sections = \App\Models\Section::all();
     <div class="offcanvas-body">
         <form action="{{ route('rooms.store') }}" method="POST" enctype="multipart/form-data" id="roomForm">
             @csrf
-            <!-- Building Select -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="building_id" class="fw-semibold">Building :</label>
                 </div>
                 <div class="col-lg-8">
-                    <select name="building_id" id="building_id" class="form-select max-select" required>
-                        <option value="" disabled selected>Building tanlang</option>
-                        @foreach($buildings as $building)
-                            <option value="{{ $building->id }}">{{ $building->name }}</option>
-                        @endforeach
+                    <select name="building_id" id="room_building_id" class="form-select max-select" required>
+                        <option value="{{ $building->id }}">{{ $building->name }}</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Section Select -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="section_id" class="fw-semibold">Seksiya :</label>
                 </div>
                 <div class="col-lg-8">
-                    <select name="section_id" id="section_id" class="form-select max-select" required>
-                        <option value="" disabled selected>Seksiya tanlang</option>
+                    <select name="section_id" id="room_section_id" class="form-select max-select" required>
+                        <option value="" selected>Seksiyani tanlang</option>
+                        @foreach($building->sections as $section)
+                            <option value="{{ $section->id }}" >{{ $section->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
 
-            <!-- Floor Select -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="floor_id" class="fw-semibold">Qavat :</label>
@@ -56,7 +47,6 @@ $sections = \App\Models\Section::all();
                 </div>
             </div>
 
-            <!-- Room Number -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="number" class="fw-semibold">Xona raqami :</label>
@@ -66,7 +56,6 @@ $sections = \App\Models\Section::all();
                 </div>
             </div>
 
-            <!-- Size -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="size" class="fw-semibold">O'lchami :</label>
@@ -76,7 +65,6 @@ $sections = \App\Models\Section::all();
                 </div>
             </div>
 
-            <!-- Price Per Sqm -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="price_per_sqm" class="fw-semibold">Kvadrat metriga narx :</label>
@@ -86,7 +74,6 @@ $sections = \App\Models\Section::all();
                 </div>
             </div>
 
-            <!-- Status -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="status" class="fw-semibold">Holat :</label>
@@ -101,7 +88,6 @@ $sections = \App\Models\Section::all();
                 </div>
             </div>
 
-            <!-- Type -->
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
                     <label for="type" class="fw-semibold">Turi :</label>
@@ -115,7 +101,6 @@ $sections = \App\Models\Section::all();
                 </div>
             </div>
 
-            <!-- Image Upload -->
             <div class="row align-items-center mb-4">
                 <div class="col-lg-4">
                     <label for="images" class="fw-semibold">Rasmlar</label>
@@ -145,8 +130,8 @@ $sections = \App\Models\Section::all();
             allowClear: true
         });
 
-        // Load sections based on selected building
-        $('#building_id').on('change', function() {
+        $('#room_building_id').on('load', function() {
+            alert(5432)
             let buildingId = $(this).val();
             if (buildingId) {
                 let url = "{{ route('getSections', ':buildingId') }}".replace(':buildingId', buildingId);
@@ -156,17 +141,13 @@ $sections = \App\Models\Section::all();
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        $('#section_id').empty().append('<option value="" disabled selected>Bo\'limni tanlang</option>');
-                        $('#number').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
+                        $('#room_section_id').empty().append('<option value="" disabled selected>Seksiya tanlang</option>');
+                        $('#floor_id').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
 
-                        // Check if sections are available
                         if (data.sections.length > 0) {
                             $.each(data.sections, function(key, value) {
-                                $('#section_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                                $('#room_section_id').append('<option value="' + value.id + '">' + value.name + '</option>');
                             });
-                            $('#sectionSelectBox').show(); // Show section select box
-                        } else {
-                            $('#sectionSelectBox').hide(); // Hide section select box if no sections
                         }
                     },
                     error: function(xhr, status, error) {
@@ -174,33 +155,29 @@ $sections = \App\Models\Section::all();
                     }
                 });
             } else {
-                $('#section_id').empty().append('<option value="" disabled selected>Bo\'limni tanlang</option>');
-                $('#number').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
-                $('#sectionSelectBox').hide(); // Hide section select box if no building selected
+                $('#room_section_id').empty().append('<option value="" disabled selected>Seksiya tanlang</option>');
+                $('#floor_id').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
             }
         });
 
-        // Update the floor select when a section is selected
-        $('#section_id').on('change', function() {
-            let selectedSectionId = $(this).val();
-            let sectionData = @json($sections); // Backenddan olib kelingan section ma'lumotlari
-
-            let selectedSection = sectionData.find(section => section.id == selectedSectionId);
-            let floorSelect = $('#number');
-
-            floorSelect.empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
-
-            if (selectedSection) {
-                // Populate floors based on the section's floor data
-                for (let i = 1; i <= selectedSection.floor; i++) {
-                    floorSelect.append('<option value="' + i + '">' + i + '</option>');
-                }
-            } else {
-                floorSelect.append('<option value="" disabled selected>No floors available</option>');
+        $('#room_section_id').on('change', function() {
+            let sectionId = $(this).val();
+            if (sectionId) {
+                $.ajax({
+                    url: "{{ route('getFloors', '') }}/" + sectionId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data); // Kelayotgan ma'lumotni ko'rsatish
+                        $('#floor_id').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
+                        $.each(data.floors, function(key, value) {
+                            $('#floor_id').append('<option value="' + value.id + '">' + value.number + '</option>');
+                        });
+                    }
+                });
             }
         });
 
-        // Form submit event
         $('#roomForm').on('submit', function(e) {
             let floorValue = $('#floor_id').val();
             if (!floorValue) {

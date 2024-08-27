@@ -62,12 +62,14 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $contract->client->first_name }} {{ $contract->client->last_name }} </a>
+                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $contract->client->first_name ?? 'N/A' }} {{ $contract->client->last_name ?? 'N/A' }} </a>
                                         <a href="javascript:void(0);" class="fs-12 fw-normal text-muted d-block">
                                             @if($contract->client->pinfl !== null)
                                                 {{ $contract->client->pinfl }}
                                             @elseif($contract->client->inn !== null)
                                                 {{ $contract->client->inn }}
+                                            @else
+                                                N/A
                                             @endif
                                         </a>
                                     </div>
@@ -81,21 +83,21 @@
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
                                             <h6 class="fs-15 fw-bolder">
-                                                {{ number_format($contract->room->price_per_sqm, 0, '.', ',') }} so'm
+                                                {{ $contract->room ? number_format($contract->room->price_per_sqm, 0, '.', ',') . ' so\'m' : 'N/A' }}
                                             </h6>
                                             <p class="fs-12 text-muted mb-0">1 m <sup>2</sup></p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
                                             <h6 class="fs-15 fw-bolder">
-                                                {{ number_format($contract->discount, 0, '.', ',') }} %
+                                                {{ $contract->discount ? number_format($contract->discount, 0, '.', ',') . ' %' : 'N/A' }}
                                             </h6>
                                             <p class="fs-12 text-muted mb-0">Chegirma %</p>
                                         </div>
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
                                             <h6 class="fs-15 fw-bolder">
-                                                {{ number_format($contract->total_amount, 0, '.', ',') }} so'm
+                                                {{ $contract->total_amount ? number_format($contract->total_amount, 0, '.', ',') . ' so\'m' : 'N/A' }}
                                             </h6>
-                                            <p class="fs-12 text-muted mb-0">Umumiy narx ({{ $interval->days }} kun {{ $contract->room->size }} m <sup>2</sup>)</p>
+                                            <p class="fs-12 text-muted mb-0">Umumiy narx ({{ $interval->days }} kun {{ $contract->room ? $contract->room->size : 'N/A' }} m <sup>2</sup>)</p>
                                         </div>
                                     </div>
                                 </div>
@@ -103,11 +105,11 @@
                                 <ul class="list-unstyled mb-4">
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Location</span>
-                                        <a href="javascript:void(0);" class="float-end"> {{ $contract->client->region->name }}, {{ $contract->client->district->name }}</a>
+                                        <a href="javascript:void(0);" class="float-end"> {{ $contract->client->region ? $contract->client->region->name : 'N/A' }}, {{ $contract->client->district ? $contract->client->district->name : 'N/A' }}</a>
                                     </li>
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-home"></i>Filial</span>
-                                        <a href="javascript:void(0);" class="float-end">{{ $contract->building->name }}</a>
+                                        <a href="javascript:void(0);" class="float-end">{{ $contract->building ? $contract->building->name : 'N/A' }}</a>
                                     </li>
                                     <li class="hstack justify-content-between mb-4">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-clock"></i>Boshlanish sanasi</span>
@@ -135,8 +137,8 @@
                                         <span>Edit</span>
                                     </a>
                                 </div>
-
                             </div>
+
                         </div>
                         <!--
                         <div class="card stretch stretch-full">
@@ -389,37 +391,52 @@
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Shartnoma raqam:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $contract->contract_number }}</div>
+                                            <div class="col-sm-6 fw-semibold">{{ $contract->contract_number ?? 'N/A' }}</div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Xona:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $contract->room->number }} - xona</div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->room ? $contract->room->number . ' - xona' : 'N/A' }}
+                                            </div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Xona hajmi:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $contract->room->size }} - m <sup>2</sup></div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->room ? $contract->room->size . ' - m <sup>2</sup>' : 'N/A' }}
+                                            </div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Client:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->first_name }} {{ $contract->client->last_name }}</div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->client ? $contract->client->first_name . ' ' . $contract->client->last_name : 'N/A' }}
+                                            </div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Boshlanish sanasi:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $contract->start_date->format('d M, Y') }}</div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->start_date ? $contract->start_date->format('d M, Y') : 'N/A' }}
+                                            </div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Tugash sanasi:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ $contract->end_date->format('d M, Y') }}</div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->end_date ? $contract->end_date->format('d M, Y') : 'N/A' }}
+                                            </div>
                                         </div>
                                         <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">chegirma %:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ number_format($contract->discount, 2) }} %</div>
+                                            <div class="col-sm-6 text-muted">Chegirma %:</div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->discount !== null ? number_format($contract->discount, 2) . ' %' : 'N/A' }}
+                                            </div>
                                         </div>
                                         <div class="row g-0 mb-4">
                                             <div class="col-sm-6 text-muted">Umumiy narx:</div>
-                                            <div class="col-sm-6 fw-semibold">{{ number_format($contract->total_amount, 0, '.', ',') }} so'm</div>
+                                            <div class="col-sm-6 fw-semibold">
+                                                {{ $contract->total_amount !== null ? number_format($contract->total_amount, 0, '.', ',') . ' so\'m' : 'N/A' }}
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-warning-message profile-overview-alert" role="alert">
                                         <div class="me-4 d-none d-md-block">
                                             <i class="feather feather-alert-triangle fs-1"></i>

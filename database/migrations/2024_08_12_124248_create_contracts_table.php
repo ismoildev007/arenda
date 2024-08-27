@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('contract_number');
             $table->string('total_amount');
             $table->unsignedBigInteger('building_id');
-            $table->unsignedBigInteger('section_id');
-            $table->unsignedBigInteger('floor_id');
-            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('section_id')->nullable();
+            $table->unsignedBigInteger('floor_id')->nullable();
+            $table->unsignedBigInteger('room_id')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->date('start_date');
             $table->date('end_date');

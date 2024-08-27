@@ -72,6 +72,14 @@
                                         </div>
                                     </div>
 
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="room_of_number" class="fw-semibold">Xona soni :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="date" class="form-control" id="room_of_number" name="room_of_number" value="{{ old('room_of_number', $building->room_of_number) }}">
+                                        </div>
+                                    </div>
                                     <!-- Floor Number (loaded dynamically) -->
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">

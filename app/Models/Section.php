@@ -11,9 +11,20 @@ class Section extends Model
 
     protected $fillable = [
         'building_id',
-        'floor',
         'name',
-        'images'
+        'address',
+        'section_type',
+        'construction',
+        'size',
+        'founded_date',
+        'safety',
+        'mode_of_operation',
+        'set',
+        'floor',
+        'number_of_rooms',
+        'lift',
+        'parking',
+        'images', // JSON formatida saqlanadigan maydon
     ];
 
     protected $casts = [

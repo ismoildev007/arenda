@@ -24,12 +24,6 @@
                     </a>
                 </li>
                 <li class="nxl-item">
-                    <a href="{{ route('contracts.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
-                        <span class="nxl-mtext">Contracts</span>
-                    </a>
-                </li>
-                <li class="nxl-item">
                     <a href="{{ route('buildings.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
                         <span class="nxl-mtext">Obyekti</span>
@@ -53,16 +47,22 @@
                         <span class="nxl-mtext">Employees</span>
                     </a>
                 </li>
-                <li class="nxl-item">
-                    <a href="{{ route('rooms.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
-                        <span class="nxl-mtext">Xonalar</span>
-                    </a>
-                </li>
+{{--                <li class="nxl-item">--}}
+{{--                    <a href="{{ route('rooms.index') }}" class="nxl-link">--}}
+{{--                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>--}}
+{{--                        <span class="nxl-mtext">Xonalar</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 <li class="nxl-item">
                     <a href="{{ route('clients.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
                         <span class="nxl-mtext">Client</span>
+                    </a>
+                </li>
+                <li class="nxl-item">
+                    <a href="{{ route('contracts.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
+                        <span class="nxl-mtext">Contracts</span>
                     </a>
                 </li>
             </ul>

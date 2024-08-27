@@ -14,8 +14,19 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('building_id')->constrained('buildings')->cascadeOnDelete();
-            $table->string('floor')->nullable();
             $table->string('name');
+            $table->string('address')->nullable();
+            $table->string('section_type')->nullable();
+            $table->string('construction')->nullable();
+            $table->string('size')->nullable();
+            $table->string('founded_date')->nullable();
+            $table->string('safety')->nullable();
+            $table->string('mode_of_operation')->nullable();
+            $table->string('set')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('number_of_rooms')->nullable();
+            $table->string('lift')->nullable();
+            $table->string('parking')->nullable();
             $table->text('images');
             $table->timestamps();
         });
