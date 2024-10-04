@@ -44,9 +44,33 @@
                                             <label for="branchSelect" class="fw-semibold">Building:</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <select name="branch_id" id="branchSelect" class="form-control max-select">
-                                                @foreach($branches as $branch)
-                                                    <option value="{{ $branch->id }}" {{ old('branch_id', $room->branch_id) == $branch->id ? 'selected' : '' }}>{{ $branch->name }}</option>
+                                            <select name="building_id" id="branchSelect" class="form-control max-select">
+                                                @foreach($buildings as $branch)
+                                                    <option value="{{ $branch->id }}" {{ old('building_id', $room->building_id) == $branch->id ? 'selected' : '' }} style="color:black;">{{ $branch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="branchSelect" class="fw-semibold">Section:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="section_id" id="branchSelect" class="form-control max-select">
+                                                @foreach($sections as $section)
+                                                    <option value="{{ $section->id }}" {{ old('section_id', $room->section_id) == $section->id ? 'selected' : '' }} style="color:black;">{{ $section->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="branchSelect" class="fw-semibold">Floor:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="floor_id" id="branchSelect" class="form-control max-select">
+                                                @foreach($floors as $floor)
+                                                    <option value="{{ $floor->id }}" {{ old('floor_id', $room->floor_id) == $floor->id ? 'selected' : '' }} style="color:black;">{{ $floor->number }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

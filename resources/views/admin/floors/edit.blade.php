@@ -71,8 +71,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Floor Number (loaded dynamically) -->
+                                                                        <!-- Floor Number (loaded dynamically) -->
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
                                             <label for="number" class="fw-semibold">Qavat tanglang:</label>
@@ -86,7 +85,31 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="room_of_number" class="fw-semibold">Xona soni :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="number" class="form-control" id="room_of_number" name="room_of_number" value="{{ old('room_of_number', $floor->room_of_number) }}">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="size" class="fw-semibold">Qavat xajmi :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" name="size" id="size" value="{{ old('size', $building->size) }}" class="form-control" required>
+                                        </div>
+                                    </div>
 
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="floor_price_per_sqm" class="fw-semibold">Kvadrat metriga narx :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="number" name="price_per_sqm" id="floor_price_per_sqm" class="form-control" value="{{ old('size', $floor->price_per_sqm) }}" required>
+                                        </div>
+                                    </div>
                                     <!-- Image Upload -->
                                     <div class="row align-items-center mb-4">
                                         <div class="col-lg-4">

@@ -39,6 +39,8 @@
                                     <thead>
                                     <tr>
                                         <th>Shartnoma raqami</th>
+                                        <th>Seksiya</th>
+                                        <th>Qavat</th>
                                         <th>Xona</th>
                                         <th>Mijoz</th>
                                         <th>Boshlanish sanasi</th>
@@ -51,10 +53,12 @@
                                     @foreach($contracts as $contract)
                                         <tr>
                                             <td>{{ $contract->contract_number }}</td>
-                                            <td>{{ $contract->room->number }}</td>
-                                            <td>{{ $contract->client->first_name }}</td>
-                                            <td>{{ $contract->start_date }}</td>
-                                            <td>{{ $contract->end_date }}</td>
+                                            <td>{{ $contract->section ? $contract->section->name : 'N/A' }}</td>
+                                            <td>{{ $contract->floor ? $contract->floor->number : 'N/A' }}</td>
+                                            <td>{{ $contract->room ? $contract->room->number : 'N/A' }}</td>
+                                            <td>{{ $contract->client ? $contract->client->first_name : 'N/A' }}</td>
+                                            <td>{{ $contract->start_date->format('d M, Y') }}</td>
+                                            <td>{{ $contract->end_date->format('d M, Y')  }}</td>
                                             <td>{{ number_format($contract->discount) }} %</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">

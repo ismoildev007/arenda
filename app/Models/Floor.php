@@ -13,6 +13,9 @@ class Floor extends Model
         'building_id',
         'section_id',
         'number',
+        'size',
+        'room_of_number',
+        'price_per_sqm',
         'images',
     ];
 
@@ -30,7 +33,14 @@ class Floor extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'floor_id');
+    }
+
     protected $casts = [
         'images' => 'array',
     ];
 }
+

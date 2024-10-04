@@ -120,6 +120,28 @@
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
+                                            <label  class="fw-semibold">To'lov Holati:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="payment_status"  class="form-control max-select" required>
+                                                <option value="unpaid" >To'lanmagan</option>
+                                                <option value="paid" >To'langan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label  class="fw-semibold">Holati:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select name="status"  class="form-control max-select" required>
+                                                <option value="noactive" >Faol emas</option>
+                                                <option value="active" >Faol</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
                                             <label for="discountInput" class="fw-semibold">Chegirma % da:</label>
                                         </div>
                                         <div class="col-lg-8">
@@ -213,26 +235,55 @@
                     url: "{{ route('contracts.existing', '') }}/" + roomId,
                     type: "GET",
                     success: function (data) {
-                        $('#roomSize').text('O\'lchami: ' + data.room.size + ' m²');
-                        $('#roomPrice').text('Narxi: ' + data.room.price + ' UZS');
-                        $('#totalPrice').text('Umumiy narx: ' + data.total_price + ' UZS');
+                        if (data.room) {
+                            $('#roomSize').text('O\'lchami: ' + data.room.size + ' m²');
+                            $('#roomPrice').text('Narxi: ' + data.room.price_per_sqm + ' UZS');
+                            $('#totalPrice').text('Umumiy narx: ' + data.total_price + ' UZS');
+                        } else {
+                            alert('Room data not found');
+                        }
+                    },
+                    error: function () {
+                        alert('Error retrieving room data');
                     }
                 });
             });
 
             $('#discountInput').on('input', function () {
-                let discount = parseFloat($(this).val());
-                let roomPrice = parseFloat($('#roomPrice').text().split(' ')[1]);
-                let discountAmount = (discount / 100) * roomPrice;
-                let discountedPrice = roomPrice - discountAmount;
+                // Get the text from #roomPrice
+                let roomPriceText = $('#roomPrice').text();
+                // Check if the text is in the expected format
+                if (roomPriceText) {
+                    // Split the text by space and get the second part, which is the price
+                    let roomPriceArray = roomPriceText.split(' ');
+                    let roomPrice = roomPriceArray.length > 1 ? parseFloat(roomPriceArray[1].replace(/,/g, '')) : NaN;
+                    
+                    // Proceed only if roomPrice is a valid number
+                    if (!isNaN(roomPrice)) {
+                        let discount = parseFloat($(this).val());
+                        let discountAmount = (discount / 100) * roomPrice;
+                        let discountedPrice = roomPrice - discountAmount;
 
-                $('#discountAmount').text('Chegirma: ' + discountAmount.toFixed(2) + ' UZS');
-                $('#discountedPrice').text(discountedPrice.toFixed(2) + ' UZS');
+                        // Update the UI with the calculated values
+                        $('#discountAmount').text('Chegirma: ' + discountAmount.toFixed(2) + ' UZS');
+                        $('#discountedPrice').text('Chegirmali narx: ' + discountedPrice.toFixed(2) + ' UZS');
+                    } else {
+                        // If roomPrice is NaN, reset the discount display
+                        $('#discountAmount').text('Chegirma: 0 UZS');
+                        $('#discountedPrice').text('Chegirmali narx: 0 UZS');
+                    }
+                } else {
+                    // If roomPriceText is empty or undefined, reset the discount display
+                    $('#discountAmount').text('Chegirma: 0 UZS');
+                    $('#discountedPrice').text('Chegirmali narx: 0 UZS');
+                }
             });
+
 
             $('#buildingSelect, #sectionSelect, #floorSelect, #roomSelect, #clientSelect').select2({
                 theme: 'bootstrap-5'
             });
+
         });
     </script>
 @endsection

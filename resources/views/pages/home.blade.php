@@ -1,6 +1,5 @@
-@extends('layouts.layout')
+@extends('layouts.client')
 @section('content')
-
     <!--! ================================================================ !-->
     <!--! [Start] Main Content !-->
     <!--! ================================================================ !-->
@@ -27,6 +26,10 @@
                         </div>
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             <div class="dropdown filter-dropdown">
+                                <form action="{{ route('clientLogout') }}" method="post">
+                                    @csrf
+                                    <button class="btn btn-danger">Logout</button>
+                                </form>
                                 <a class="btn btn-light-brand" data-bs-toggle="dropdown" data-bs-offset="0, 10" data-bs-auto-close="outside">
                                     <i class="feather-filter me-2"></i>
                                     <span>Filter</span>

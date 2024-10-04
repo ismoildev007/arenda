@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
                 'email' => 'ismoil_007u@gmail.com',
                 'password' => Hash::make('ismoil_007u@gmail.com'),
                 'role' => 'admin',
+                'phone_number' => 998919579717,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
                 'email' => 'staff@gmail.com',
                 'password' => Hash::make('staff@gmail.com'),
                 'role' => 'staff',
+                'phone_number' => 998919579717,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -43,6 +45,7 @@ class UserSeeder extends Seeder
                 'email' => 'manager@gmail.com',
                 'password' => Hash::make('manager@gmail.com'),
                 'role' => 'manager',
+                'phone_number' => 998919579717,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

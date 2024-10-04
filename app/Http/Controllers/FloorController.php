@@ -30,6 +30,9 @@ class FloorController extends Controller
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
             'section_id' => 'required|exists:sections,id',
+            'room_of_number' => 'required|string',
+            'size' => 'nullable|string',
+            'price_per_sqm' => 'nullable|string|max:255',
             'number' => [
                 'required',
                 'integer',
@@ -70,9 +73,13 @@ class FloorController extends Controller
 
     public function update(Request $request, Floor $floor)
     {
+        
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
             'section_id' => 'required|exists:sections,id',
+            'room_of_number' => 'nullable|string',
+            'size' => 'nullable|string',
+            'price_per_sqm' => 'nullable|string|max:255',
             'number' => [
                 'required',
                 'integer',
@@ -85,7 +92,7 @@ class FloorController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|max:2048',
         ]);
-
+    
         // Eski rasmlarni o'chirish va yangi rasmlarni saqlash
         if ($request->hasFile('images')) {
             if ($floor->images) {
@@ -102,8 +109,11 @@ class FloorController extends Controller
         }
 
         $floor->update($validated);
+       
+       
 
-        return redirect()->back()->with('success', 'Qavat muvaffaqiyatli yangilandi.');
+
+    return redirect()->route('floors.index')->with('success', 'Qavat muvaffaqiyatli yangilandi.');
     }
 
     public function destroy(Floor $floor)
@@ -118,6 +128,22 @@ class FloorController extends Controller
         $floor->delete();
 
         return redirect()->back()->with('success', 'Floor deleted successfully.');
+    }
+
+    public function show(Floor $floor)
+    {
+        $building = Building::with([
+            'region',
+            'contracts.client',
+            'district',
+            'employees' => function ($query) {
+                $query->where('role', 'manager');
+            },
+            'rooms',
+            'sections',
+        ])->findOrFail($floor->id);
+        $sections = Section::all();
+        return view('admin.floors.view', compact('floor', 'sections', 'building'));
     }
 
     // FloorController.php

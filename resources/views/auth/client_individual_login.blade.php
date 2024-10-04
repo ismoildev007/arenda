@@ -15,49 +15,31 @@
                             <a href="{{ route('client_legal_login_form') }}" id="legal-btn" class="btn btn-outline-secondary">Yuridik shaxs</a>
                         </div>
 
-                        <form id="individual-form" action="{{ route('client_individual_login') }}" method="post" class="w-100 mt-4 pt-2">
+                        <form id="individual-form" action="{{ route('client_individual_login') }}" method="post" class="w-100 mt-4 pt-2" novalidate>
                             @csrf
                             <div class="mb-4">
-                                <input id="pinfl-field" type="text" class="form-control" placeholder="PINFL" name="pinfl" required maxlength="14">
+                                <input id="pinfl-field" type="text" class="form-control" placeholder="PINFL" name="pinfl" required maxlength="14" minlength="14">
+                                <div class="invalid-feedback">
+                                    PINFL 14 ta raqamdan iborat bo'lishi kerak.
+                                </div>
                             </div>
-                            <div id="password-field" class="mb-3 d-none">
-                                <input type="password" class="form-control" placeholder="Password" name="password">
+                            <div id="password-field" class="mb-3">
+                                <input type="password" class="form-control" placeholder="Password" name="password" required>
+                                <div class="invalid-feedback">
+                                    Parol maydoni to'ldirilishi shart.
+                                </div>
                             </div>
 
                             <div class="mt-4 mb-3">
-                                <button type="submit" class="btn btn-lg btn-primary w-100" onclick="checkPINFL()">Login</button>
+                                <button type="submit" class="btn btn-lg btn-primary w-100">Login</button>
                             </div>
                         </form>
+                        <a href="{{ route('client_individual_register') }}" class="text-decoration-none mt-3">Sign up</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <script>
-        function checkPINFL() {
-            var pinfl = document.getElementById('pinfl-field').value;
-            fetch(`/check-pinfl?pinfl=${pinfl}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.exists) {
-                        document.getElementById('password-field').classList.remove('d-none');
-                    } else {
-                        Toastify({
-                            text: "PINFL topilmadi, registratsiya sahifasiga o'tkazamiz!",
-                            duration: 5000,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#f00",
-                        }).showToast();
-
-                        setTimeout(function() {
-                            window.location.href = "{{ route('client_individual_register_form') }}";
-                        }, 5000);
-                    }
-                });
-        }
-    </script>
 
     <style>
         .card {
@@ -83,4 +65,36 @@
             border-radius: .5rem;
         }
     </style>
+
+    <script>
+        (function () {
+            'use strict';
+            var form = document.getElementById('individual-form');
+            var pinflField = document.getElementById('pinfl-field');
+
+            // PINFL maydoniga faqat raqamlar kiritilishiga ruxsat beradi
+            pinflField.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // faqat raqamlar qoldiriladi
+                if (this.value.length > 14) {
+                    this.value = this.value.slice(0, 14);
+                }
+            });
+
+            form.addEventListener('submit', function (event) {
+                if (pinflField.value.length !== 14) {
+                    pinflField.classList.add('is-invalid');
+                    event.preventDefault();
+                } else {
+                    pinflField.classList.remove('is-invalid');
+                }
+
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
 @endsection

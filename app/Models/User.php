@@ -17,9 +17,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    const ROLE_MANAGER = 'manager';
-    const ROLE_ADMIN = 'admin';
-    const ROLE_STAFF = 'staff';
+    // const ROLE_MANAGER = 'manager';
+    // const ROLE_ADMIN = 'admin';
+    // const ROLE_STAFF = 'staff';
     protected $fillable = [
         'building_id',
         'region_id',
@@ -28,6 +28,7 @@ class User extends Authenticatable
         'first_name',
         'middle_name',
         'pinfl',
+        'phone_number',
         'birth_day',
         'email',
         'password',

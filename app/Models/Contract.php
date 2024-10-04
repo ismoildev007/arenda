@@ -23,12 +23,20 @@ class Contract extends Model
         'start_date',
         'end_date',
         'discount',
+        'status',
+        'payment_status',
+        'image',
         'total_amount'
     ];
 
     public function section()
     {
         return $this->belongsTo(Section::class);
+    }
+
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class);
     }
 
     public function building()

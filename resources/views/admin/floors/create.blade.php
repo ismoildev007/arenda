@@ -54,29 +54,58 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-12" id="sectionSelectBox" style="display: none;">
-                                            <div class="row align-items-center">
-                                                <div class="col-lg-4">
-                                                    <label for="section_id" class="fw-semibold">Bo'lim</label>
-                                                </div>
-                                                <div class="col-lg-8">
-                                                    <select name="section_id" id="section_id" class="form-select max-select" required>
-                                                        <option value="" disabled selected>Bo'limni tanlang</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                        <div class="col-lg-4">
+                                            <label for="regionSelect" class="fw-semibold">Section :</label>
+                                        </div>
+                                        <div class="col-lg-8 mb-4">
+                                            <select name="building_id" id="building_id" class="form-select max-select" required>
+                                                <option value="" disabled selected>section tanlang</option>
+                                                @foreach($sections as $section)
+                                                    <option value="{{ $building->id }}">{{ $section->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
 
                                     <!-- Floor Number (loaded dynamically) -->
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="number" class="fw-semibold">Qavat tanglang:</label>
+                                            <label for="number" class="fw-semibold">Qavat tanlang:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <select name="number" id="number" class="form-select max-select" required>
-                                                <option value="" disabled selected>Qavatni tanlang</option>
+
                                             </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Room Count -->
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="room_of_number" class="fw-semibold">Xona soni :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" name="room_of_number" id="room_of_number" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Size -->
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="size" class="fw-semibold">Qavat xajmi :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="text" name="size" id="size" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price per Square Meter -->
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label for="floor_price_per_sqm" class="fw-semibold">Kvadrat metriga narx :</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input type="number" name="price_per_sqm" id="floor_price_per_sqm" class="form-control" required>
                                         </div>
                                     </div>
 
@@ -90,6 +119,7 @@
                                         </div>
                                     </div>
 
+                                    <!-- Submit Button -->
                                     <button type="submit" class="btn btn-primary">Saqlash</button>
                                 </form>
                             </div>
@@ -101,62 +131,67 @@
         </div>
     </main>
 
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <!-- Custom Script -->
-    <script>
-        $(document).ready(function() {
-            // Initialize Select2
-            $('.max-select').select2({
-                theme: 'bootstrap-5',
-                placeholder: 'Tanlang...',
-                allowClear: true
-            });
+<!-- Custom Script -->
+<?php
 
-            // Load sections based on selected building
-            $('#building_id').on('change', function() {
-                let buildingId = $(this).val();
-                if (buildingId) {
-                    $.ajax({
-                        url: "{{ route('getSections', '') }}/" + buildingId,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('#section_id').empty().append('<option value="" disabled selected>Bo\'limni tanlang</option>');
-                            $('#number').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
-
-                            $.each(data.sections, function(key, value) {
-                                $('#section_id').append('<option value="' + value.id + '">' + value.name + '</option>');
-                            });
-
-                            $('#sectionSelectBox').show();
-                        }
-                    });
-                }
-            });
-
-            // Update the floor select when a section is selected
-            $('#section_id').on('change', function() {
-                let selectedSectionId = $(this).val();
-                let sectionData = @json($sections); // Yoki AJAX orqali olib kelingan section ma'lumotlari
-
-                let selectedSection = sectionData.find(section => section.id == selectedSectionId);
-                let floorSelect = $('#number');
-
-                floorSelect.empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
-
-                if (selectedSection) {
-                    for (let i = 1; i <= selectedSection.floor; i++) {
-                        floorSelect.append('<option value="' + i + '">' + i + '</option>');
-                    }
-                }
-            });
+$sections = \App\Models\Section::all();
+?>
+<script>
+    $(document).ready(function() {
+        // Initialize Select2
+        $('.max-select').select2({
+            theme: 'bootstrap-5',
+            placeholder: 'Tanlang...',
+            allowClear: true
         });
-    </script>
+
+        // Load sections based on selected building
+        $('#building_id').on('change', function() {
+            let buildingId = $(this).val();
+            if (buildingId) {
+                $.ajax({
+                    url: "{{ route('getSections', '') }}/" + buildingId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#section_id').empty().append('<option value="" disabled selected>Bo\'limni tanlang</option>');
+                        $('#number').empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
+
+                        $.each(data.sections, function(key, value) {
+                            $('#section_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+
+                        $('#sectionSelectBox').show();
+                    }
+                });
+            }
+        });
+
+        // Update the floor select when a section is selected
+        $('#section_id').on('change', function() {
+            let selectedSectionId = $(this).val();
+            let sectionData = @json($sections); // Yoki AJAX orqali olib kelingan section ma'lumotlari
+
+            let selectedSection = sectionData.find(section => section.id == selectedSectionId);
+            let floorSelect = $('#number');
+
+            floorSelect.empty().append('<option value="" disabled selected>Qavatni tanlang</option>');
+
+            if (selectedSection) {
+                for (let i = 1; i <= selectedSection.floor; i++) {
+                    floorSelect.append('<option value="' + i + '">' + i + '</option>');
+                }
+            }
+        });
+    });
+</script>
+
 
 @endsection

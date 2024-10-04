@@ -96,22 +96,8 @@
                                             <input type="text" class="form-control" id="middleNameInput" name="middle_name" placeholder="Otasining ismini kiriting">
                                         </div>
                                     </div>
-
-                                    <!-- PINFL Field -->
-                                    <div class="row mb-4 align-items-center" id="pinflField" style="display: none;">
-                                        <div class="col-lg-4">
-                                            <label for="pinflInput" class="fw-semibold">PINFL:</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input id="pinfl" type="text" class="form-control mb-3" placeholder="PINFL" name="pinfl" pattern="\d{14}" title="PINFL should be exactly 14 digits long">
-                                            @error('pinfl')
-                                            <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <!-- Company Name Field -->
-                                    <div class="row mb-4 align-items-center" id="companyNameField" style="display: none;">
+                                     <!-- Company Name Field -->
+                                    <div class="row mb-4 align-items-center" id="companyNameField" >
                                         <div class="col-lg-4">
                                             <label for="companyNameInput" class="fw-semibold">Kompaniya nomi:</label>
                                         </div>
@@ -119,7 +105,29 @@
                                             <input type="text" class="form-control" id="companyNameInput" name="company_name" placeholder="Kompaniya nomini kiriting">
                                         </div>
                                     </div>
-
+                                    <!-- PINFL Field -->
+                                    <div class="row mb-4 align-items-center" id="pinflField" style="display: none;">
+                                        <div class="col-lg-4">
+                                            <label for="pinflInput" class="fw-semibold">PINFL:</label>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input id="pinfl" type="text" class="form-control mb-3" placeholder="PINFL" name="pinfl" pattern="\d{14}" title="PINFL should be exactly 14 digits long">
+                                            @error('pinfl')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
+                                            <label class="fw-semibold">Telefon Raqam:</label>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input id="phone_number" type="text" class="form-control mb-3" placeholder="Phone number" name="phone_number" >
+                                            @error('phone_number')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <!-- OKED Field -->
                                     <div class="row mb-4 align-items-center" id="okedField" style="display: none;">
                                         <div class="col-lg-4">
@@ -166,27 +174,34 @@
                                     <!-- Password Field -->
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
-                                            <label for="passwordInput" class="fw-semibold">Parol:</label>
+                                            <label for="password-input" class="fw-semibold">Parol:</label>
                                         </div>
-                                        <div class="col-lg-8">
-                                            <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Parolni kiriting" required>
+                                        <div class="col-lg-8 position-relative">
+                                            <input type="password" class="form-control" id="password-input"  name="password" placeholder="Parolni kiriting" required>
+                                            <i class="fa fa-eye-slash position-absolute " id="toggle-password" style="right: 30px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                                         </div>
                                     </div>
+
 
                                     <!-- Confirm Password Field -->
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
                                             <label for="passwordConfirmationInput" class="fw-semibold">Parolni tasdiqlash:</label>
                                         </div>
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-8 position-relative">
                                             <input type="password" class="form-control" id="passwordConfirmationInput" name="password_confirmation" placeholder="Parolni tasdiqlang" required>
+                                            <i class="fa fa-eye-slash position-absolute " id="confirm-toggle-password" style="right: 30px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                                         </div>
                                     </div>
 
                                     <!-- Submit Button -->
                                     <div class="row mb-4">
-                                        <div class="col-lg-12">
+                                        
+                                        <div class="col-lg-4">
                                             <button type="submit" class="btn btn-success w-100">Saqlash</button>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            
                                         </div>
                                     </div>
                                 </form>
@@ -198,7 +213,54 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
+<script>
+                                        document.addEventListener('DOMContentLoaded', () => {
+                                            const phoneInput = document.getElementById('phone_number');
+                                            const pattern = /^\+998\s?(90|91|93|94|95|98|99|33|97|71)\s?\d{3}\s?\d{2}\s?\d{2}$/;
 
+                                            // Initialize value with +998
+                                            phoneInput.value = '+998 ';
+
+                                            phoneInput.addEventListener('input', (e) => {
+                                                let value = e.target.value;
+
+                                                // Ensure the value starts with +998
+                                                if (!value.startsWith('+998 ')) {
+                                                    value = '+998 ' + value.replace(/^\+998\s*/, '');
+                                                }
+
+                                                // Remove invalid characters
+                                                value = value.replace(/[^\d\s+()-]/g, '');
+
+                                                // Format value according to the pattern
+                                                let formattedValue = '+998 ';
+                                                const match = value.match(/^(\+998\s?)(90|91|93|94|95|98|99|33|97|71)?\s?(\d{0,3})?\s?(\d{0,2})?\s?(\d{0,2})?/);
+                                                if (match) {
+                                                    if (match[2]) formattedValue += match[2] + ' ';
+                                                    if (match[3]) formattedValue += match[3] + (match[3].length === 3 ? ' ' : '');
+                                                    if (match[4]) formattedValue += match[4] + (match[4].length === 2 ? ' ' : '');
+                                                    if (match[5]) formattedValue += match[5];
+                                                }
+                                                
+                                                e.target.value = formattedValue.trim();
+                                            });
+
+                                            phoneInput.addEventListener('keydown', (e) => {
+                                                const value = e.target.value;
+                                                // Prevent user from deleting +998
+                                                if (e.key === 'Backspace' && value.length <= 5) {
+                                                    e.preventDefault();
+                                                }
+                                            });
+
+                                            document.getElementById('phone-form').addEventListener('submit', (e) => {
+                                                if (!pattern.test(phoneInput.value)) {
+                                                    e.preventDefault();
+                                                    alert('Please enter a valid phone number: +998 (XX) XXX-XX-XX');
+                                                }
+                                            });
+                                        });
+                                    </script>
     {{--    @section('scripts')--}}
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -271,8 +333,8 @@
             document.getElementById('individualClientBtn').addEventListener('click', function () {
                 document.getElementById('clientForm').style.display = 'block';
                 document.getElementById('clientType').value = 'individual';
-                document.getElementById('pinflField').style.display = 'block';
-                document.getElementById('companyNameField').style.display = 'none';
+                document.getElementById('pinflField').style.display = 'flex';
+                document.getElementById('companyNameField').style.display = 'flex';
                 document.getElementById('okedField').style.display = 'none';
                 document.getElementById('bankField').style.display = 'none';
                 document.getElementById('accountField').style.display = 'none';
@@ -283,11 +345,11 @@
                 document.getElementById('clientForm').style.display = 'block';
                 document.getElementById('clientType').value = 'legal';
                 document.getElementById('pinflField').style.display = 'none';
-                document.getElementById('companyNameField').style.display = 'block';
-                document.getElementById('okedField').style.display = 'block';
-                document.getElementById('bankField').style.display = 'block';
-                document.getElementById('accountField').style.display = 'block';
-                document.getElementById('innField').style.display = 'block';
+                document.getElementById('companyNameField').style.display = 'flex';
+                document.getElementById('okedField').style.display = 'flex';
+                document.getElementById('bankField').style.display = 'flex';
+                document.getElementById('accountField').style.display = 'flex';
+                document.getElementById('innField').style.display = 'flex';
             });
 
             document.getElementById('regionSelect').addEventListener('change', function() {
@@ -308,6 +370,31 @@
                     .catch(error => console.error('Xato:', error));
             });
         });
+    </script>
+    <script>
+        function togglePasswordVisibility(inputClassName, iconClassName) {
+    var passwordInput = document.getElementById(`${inputClassName}`);
+    var toggleIcon = document.getElementById(`${iconClassName}`);
+
+    toggleIcon.addEventListener('click', function () {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        }
+    });
+}
+
+togglePasswordVisibility('password-input', 'toggle-password');
+togglePasswordVisibility('passwordConfirmationInput', 'confirm-toggle-password');
+
+    </script>
+');
+
     </script>
     {{--    @endsection--}}
 @endsection

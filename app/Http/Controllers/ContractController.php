@@ -6,6 +6,8 @@ use App\Models\Building;
 use App\Models\Client;
 use App\Models\Contract;
 use App\Models\Room;
+use App\Models\Section;
+use App\Models\Floor;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -13,145 +15,171 @@ class ContractController extends Controller
 {
     public function index()
     {
-        $contracts = Contract::with('room', 'client')->get();
+        $contracts = Contract::with('room', 'client', 'floor', 'section')->get();
         return view('admin.contract.index', compact('contracts'));
     }
 
     public function create()
     {
         $buildings = Building::all();
-        $rooms = Room::active()->get(); // Only active rooms
+        $rooms = Room::active()->get();
         $clients = Client::all();
         return view('admin.contract.create', compact('rooms', 'clients', 'buildings'));
     }
 
     public function store(Request $request)
     {
-        // Validatsiya
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
-            'room_id' => 'required|exists:rooms,id',
-            'section_id' => 'required|exists:sections,id',
-            'floor_id' => 'required|exists:floors,id',
+            'room_id' => 'nullable|exists:rooms,id',
+            'section_id' => 'nullable|exists:sections,id',
+            'floor_id' => 'nullable|exists:floors,id',
             'client_id' => 'required|exists:clients,id',
             'contract_number' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'discount' => 'nullable|numeric|min:0'
+            'discount' => 'nullable|numeric|min:0',
+            'payment_status' => "nullable",
         ]);
 
-        // Check for overlapping contracts
-        $overlapping = Contract::where('room_id', $validated['room_id'])
-            ->where(function ($query) use ($validated) {
-                $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
-                    ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
-                    ->orWhere(function ($query) use ($validated) {
-                        $query->where('start_date', '<=', $validated['start_date'])
-                            ->where('end_date', '>=', $validated['end_date']);
-                    });
-            })
-            ->exists();
+        $query = Contract::query();
+
+        if (isset($validated['room_id'])) {
+            $query->where('room_id', $validated['room_id']);
+        }
+
+        if (isset($validated['section_id'])) {
+            $query->where('section_id', $validated['section_id']);
+        }
+
+        if (isset($validated['floor_id'])) {
+            $query->where('floor_id', $validated['floor_id']);
+        }
+
+        $overlapping = $query->where(function ($query) use ($validated) {
+            $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
+                ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
+                ->orWhere(function ($query) use ($validated) {
+                    $query->where('start_date', '<=', $validated['start_date'])
+                        ->where('end_date', '>=', $validated['end_date']);
+                });
+        })->exists();
 
         if ($overlapping) {
             return redirect()->back()->withErrors(['error' => 'Bu sana oraliqida boshqa shartnoma mavjud.'])->withInput();
         }
 
-        // Umumiy summani hisoblash
         $totalAmount = $this->calculateTotalAmount(
             $validated['start_date'],
             $validated['end_date'],
-            $validated['room_id'],
+            $validated['room_id'] ?? null,
+            $validated['section_id'] ?? null,
+            $validated['floor_id'] ?? null,
             $validated['discount'] ?? 0
         );
 
-        // Create the contract with total_amount
         Contract::create(array_merge($validated, ['total_amount' => $totalAmount]));
 
         return redirect()->route('contracts.index')->with('success', 'Shartnoma muvaffaqiyatli yaratildi.');
     }
 
-
     public function show(Contract $contract)
     {
         $contract->start_date = Carbon::parse($contract->start_date);
         $contract->end_date = Carbon::parse($contract->end_date);
-        return view('admin.contract.view', compact('contract'));
+
+        // Calculate the duration
+        $interval = $contract->start_date->diff($contract->end_date);
+
+        return view('admin.contract.view', compact('contract', 'interval'));
     }
 
     public function edit(Contract $contract)
     {
         $buildings = Building::all();
-        $rooms = Room::active()->get(); // Only active rooms
+        $rooms = Room::active()->get();
+        $sections = Section::all();
+        $floors = Floor::all();
         $clients = Client::all();
         $contract->start_date = Carbon::parse($contract->start_date);
         $contract->end_date = Carbon::parse($contract->end_date);
-        return view('admin.contract.edit', compact('contract', 'rooms', 'clients', 'buildings'));
+        return view('admin.contract.edit', compact('contract', 'rooms', 'clients', 'buildings', 'sections', 'floors'));
     }
-    // app/Http/Controllers/ContractController.php
 
-    public function existing()
+    public function existing($roomId)
     {
-        // Fetch existing contracts from the database
-        $existingContracts = Contract::all(); // or use a query to get specific data
+        $room = Room::find($roomId);
 
-        return response()->json([
-            'existingContracts' => $existingContracts
-        ]);
+        if ($room) {
+            return response()->json([
+                'room' => [
+                    'size' => $room->size,
+                    'price_per_sqm' => $room->price_per_sqm,
+                ],
+                'total_price' => $room->price_per_sqm * $room->size,
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Room not found'
+            ], 404);
+        }
     }
 
 
     public function update(Request $request, Contract $contract)
     {
-        // Validatsiya
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
-            'room_id' => 'required|exists:rooms,id',
-            'section_id' => 'required|exists:sections,id',
-            'floor_id' => 'required|exists:floors,id',
+            'room_id' => 'nullable|exists:rooms,id',
+            'section_id' => 'nullable|exists:sections,id',
+            'floor_id' => 'nullable|exists:floors,id',
             'client_id' => 'required|exists:clients,id',
             'contract_number' => 'required|string',
             'start_date' => 'required|date',
+            'status' => "nullable",
+            'payment_status' => 'nullable',
             'end_date' => 'required|date|after_or_equal:start_date',
             'discount' => 'nullable|numeric|min:0'
         ]);
 
-        // Check for overlapping contracts excluding the current contract
-        $overlapping = Contract::where('room_id', $validated['room_id'])
-            ->where('id', '!=', $contract->id)
-            ->where(function ($query) use ($validated) {
-                $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
-                    ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
-                    ->orWhere(function ($query) use ($validated) {
-                        $query->where('start_date', '<=', $validated['start_date'])
-                            ->where('end_date', '>=', $validated['end_date']);
-                    });
-            })
-            ->exists();
+
+        $query = Contract::query()->where('id', '!=', $contract->id);
+
+        if (isset($validated['room_id'])) {
+            $query->where('room_id', $validated['room_id']);
+        }
+
+        if (isset($validated['section_id'])) {
+            $query->where('section_id', $validated['section_id']);
+        }
+
+        if (isset($validated['floor_id'])) {
+            $query->where('floor_id', $validated['floor_id']);
+        }
+
+        $overlapping = $query->where(function ($query) use ($validated) {
+            $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
+                ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
+                ->orWhere(function ($query) use ($validated) {
+                    $query->where('start_date', '<=', $validated['start_date'])
+                        ->where('end_date', '>=', $validated['end_date']);
+                });
+        })->exists();
 
         if ($overlapping) {
             return redirect()->back()->withErrors(['error' => 'Bu sana oraliqida boshqa shartnoma mavjud.'])->withInput();
         }
 
-        // Umumiy summani hisoblash
         $totalAmount = $this->calculateTotalAmount(
             $validated['start_date'],
             $validated['end_date'],
-            $validated['room_id'],
+            $validated['room_id'] ?? null,
+            $validated['section_id'] ?? null,
+            $validated['floor_id'] ?? null,
             $validated['discount'] ?? 0
         );
 
-        // Shartnomani yangilash
-        $contract->building_id = $validated['building_id'];
-        $contract->section_id = $validated['section_id'];
-        $contract->floor_id = $validated['floor_id'];
-        $contract->room_id = $validated['room_id'];
-        $contract->client_id = $validated['client_id'];
-        $contract->contract_number = $validated['contract_number'];
-        $contract->start_date = $validated['start_date'];
-        $contract->end_date = $validated['end_date'];
-        $contract->discount = $validated['discount'];
-        $contract->total_amount = $totalAmount;
-        $contract->save();
+        $contract->update(array_merge($validated, ['total_amount' => $totalAmount]));
 
         return redirect()->route('contracts.index')->with('success', 'Shartnoma muvaffaqiyatli yangilandi.');
     }
@@ -164,26 +192,46 @@ class ContractController extends Controller
         return redirect()->route('contracts.index')->with('success', 'Shartnoma muvaffaqiyatli o\'chirildi.');
     }
 
-    private function calculateTotalAmount($startDate, $endDate, $room_id, $discount = 0)
+    private function calculateTotalAmount($startDate, $endDate, $roomId = null, $sectionId = null, $floorId = null, $discount = 0)
     {
-        $room = Room::find($room_id);
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
 
-        $pricePerMonth = $room->price_per_sqm * $room->size; // Oyiga narx
-        $pricePerDay = $pricePerMonth / 30; // Kunlik narx (oyda taxminan 30 kun)
+        $pricePerSquareMeter = 0;
+        $size = 0;
 
-        $start = Carbon::parse($startDate);
-        $end = Carbon::parse($endDate);
+        if ($roomId) {
+            $room = Room::find($roomId);
+            if ($room) {
+                $pricePerSquareMeter = $room->price_per_sqm;
+                $size = $room->size;
+            }
+        } elseif ($floorId) {
+            $floor = Floor::find($floorId);
+            if ($floor) {
+                $pricePerSquareMeter = $floor->price_per_sqm;
+                $size = $floor->size;
+            }
+        }
+        elseif ($sectionId) {
+            $section = Section::find($sectionId);
+            if ($section) {
+                $pricePerSquareMeter = $section->price_per_sqm;
+                $size = $section->size;
+            }
+        }
 
-        // To'liq oylardan va kunlardan iborat vaqtni hisoblash
-        $totalMonths = $start->diffInMonths($end);
-        $totalDays = $start->diffInDays($end) % 30; // 30 kunlik bir oydan qolgan kunlar
+        if ($pricePerSquareMeter > 0 && $size > 0) {
 
-        // Umumiy summani hisoblash
-        $totalAmount = ($totalMonths * $pricePerMonth) + ($totalDays * $pricePerDay);
+            $interval = $startDate->diffInDays($endDate);
 
-        // Chegirma foizda qo'llash
-        if ($discount) {
-            $totalAmount -= ($totalAmount * ($discount / 100));
+            $monthlyAmount = $pricePerSquareMeter * $size; 
+            $dailyAmount = $monthlyAmount / 30;
+            $totalAmount = $dailyAmount * $interval;
+
+            $totalAmount -= $totalAmount * ($discount / 100);
+        } else {
+            $totalAmount = 0;
         }
 
         return $totalAmount;

@@ -25,33 +25,48 @@ class SectionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request
+        $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
-            'floor' => 'required|integer|min:1|max:100',
             'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'section_type' => 'nullable|string|max:255',
+            'construction' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'founded_date' => 'nullable|date',
+            'safety' => 'nullable|string|max:255',
+            'mode_of_operation' => 'nullable|string|max:255',
+            'set' => 'nullable|string|max:255',
+            'floor' => 'nullable|string|max:255',
+            'number_of_rooms' => 'nullable|integer|min:0',
+            'lift' => 'nullable|string|max:255',
+            'parking' => 'nullable|string|max:255',
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|max:2048',
+            'price_per_sqm' => 'nullable|string|max:255',
         ]);
 
+        // Handle file uploads if images are provided
         if ($request->hasFile('images')) {
-            // Old images storage path
-            $oldImages = [];
-
-            // Save new images and collect their paths
             $images = array_map(function($file) {
-                return $file->store('images');
+                // Store each image in the 'public/images' directory and get its path
+                return $file->store('images', 'public');
             }, $request->file('images'));
 
-            // Save new room with images
+            // Add the images array to the validated data
             $validated['images'] = $images;
         }
-        Section::create($request->all());
 
+        // Create the section with the validated data
+        Section::create($validated);
+
+        // Redirect back with a success message
         return redirect()->back()->with('success', 'Section created successfully.');
     }
 
     public function show(Section $section)
     {
+        
         return view('admin.sections.view', compact('section'));
     }
 
@@ -65,10 +80,22 @@ class SectionController extends Controller
     {
         $request->validate([
             'building_id' => 'required|exists:buildings,id',
-            'floor' => 'required|integer|min:1|max:100',
             'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'section_type' => 'nullable|string|max:255',
+            'construction' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'founded_date' => 'nullable|date',
+            'safety' => 'nullable|string|max:255',
+            'mode_of_operation' => 'nullable|string|max:255',
+            'set' => 'nullable|string|max:255',
+            'floor' => 'nullable|string|max:255',
+            'number_of_rooms' => 'nullable|integer|min:0',
+            'lift' => 'nullable|string|max:255',
+            'parking' => 'nullable|string|max:255',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'price_per_sqm' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('images')) {

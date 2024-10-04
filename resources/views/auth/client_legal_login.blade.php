@@ -19,95 +19,26 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="inn" class="form-label">INN:</label>
-                                <input type="text" id="inn" name="inn" class="form-control" required maxlength="14" placeholder="INN ni kiriting">
+                                <input type="text" id="inn" name="inn" class="form-control" required maxlength="9" placeholder="INN ni kiriting">
                                 <div class="invalid-feedback">
-                                    INN 14 raqamdan iborat bo'lishi kerak.
+                                    INN 9 raqamdan iborat bo'lishi kerak.
                                 </div>
                             </div>
-                            <div id="passwordField" class="mb-3" style="display: none;">
+                            <div id="passwordField" class="mb-3">
                                 <label for="password" class="form-label">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="Parolni kiriting">
+                                <input type="password" id="password" name="password" class="form-control" required placeholder="Parolni kiriting">
+                                <div class="invalid-feedback">
+                                    Parol bo'sh bo'lishi mumkin emas.
+                                </div>
                             </div>
-                            <button type="button" id="loginBtn" class="btn btn-primary w-100">Login</button>
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
                         </form>
+                        <a href="{{ route('client_legal_register_form') }}" class="text-decoration-none mt-3">Sign up</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <script>
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            const inn = document.getElementById('inn').value;
-
-            if (inn.length === 9) {
-                fetch('{{ route("checkInn") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ inn: inn })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.exists) {
-                            document.getElementById('passwordField').style.display = 'block';
-                            const password = document.getElementById('password').value;
-
-                            if (password) {
-                                document.getElementById('legalForm').submit();
-                            } else {
-                                Toastify({
-                                    text: "Parolni kiriting!",
-                                    duration: 5000,
-                                    gravity: "top",
-                                    position: "right",
-                                    backgroundColor: "#f00",
-                                }).showToast();
-                            }
-                        } else {
-                            Toastify({
-                                text: "Bunaqa INN topilmadi!",
-                                duration: 5000,
-                                gravity: "top",
-                                position: "right",
-                                backgroundColor: "#f00",
-                            }).showToast();
-
-                            setTimeout(function() {
-                                window.location.href = "{{ route('client_legal_register_form') }}";
-                            }, 5000);
-                        }
-                    });
-            } else {
-                document.getElementById('passwordField').style.display = 'none';
-                Toastify({
-                    text: "INN noto'g'ri kiritilgan!",
-                    duration: 5000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#f00",
-                }).showToast();
-            }
-        });
-
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                var forms = document.getElementsByClassName('needs-validation');
-                Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
 
     <style>
         .card {
@@ -133,4 +64,28 @@
             border-radius: .5rem;
         }
     </style>
+
+    <script>
+        // Bootstrap validatsiya
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })();
+
+        // INN maydoni faqat raqam kiritilishiga ruxsat beradi
+        document.getElementById('inn').addEventListener('input', function (e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    </script>
 @endsection
