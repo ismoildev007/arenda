@@ -18,7 +18,7 @@
                 </div>
                 <div class="page-header-right ms-auto">
                     <div class="page-header-right-items">
-                        <a href="{{ route('floors.create') }}" class="btn btn-primary">
+                        <a  href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#floorOffcanvas" class="btn btn-primary">
                             <i class="feather-plus me-2"></i>
                             <span>Yangi qavat qo'shish</span>
                         </a>
@@ -50,6 +50,9 @@
                                             <td>{{ $floor->section->name }}</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">
+                                                     <a href="{{ route('floors.show', $floor->id) }}" class="avatar-text avatar-md">
+                                                        <i class="feather-eye"></i>
+                                                    </a>
                                                     <a href="{{ route('floors.edit', $floor->id) }}" class="avatar-text avatar-md">
                                                         <i class="feather-edit-3"></i>
                                                     </a>
@@ -74,4 +77,5 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
+
 @endsection

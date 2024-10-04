@@ -46,7 +46,7 @@
                                             <label for="firs_name" class="fw-semibold">Ism :</label>
                                         </div>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" id="firs_name" name="firs_name" value="{{ old('firs_name', $building->firs_name) }}" placeholder="Biznes senter egasi ismi" required>
+                                            <input type="text" class="form-control" id="firs_name" name="firs_name" value="{{ old('firs_name', $building->first_name) }}" placeholder="Biznes senter egasi ismi" required>
                                         </div>
                                     </div>
                                     <div class="row mb-4 align-items-center">

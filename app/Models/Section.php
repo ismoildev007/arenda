@@ -24,7 +24,8 @@ class Section extends Model
         'number_of_rooms',
         'lift',
         'parking',
-        'images', // JSON formatida saqlanadigan maydon
+        'images',
+        'price_per_sqm',
     ];
 
     protected $casts = [
@@ -35,6 +36,12 @@ class Section extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'section_id');
+    }
+
 
     public function building()
     {

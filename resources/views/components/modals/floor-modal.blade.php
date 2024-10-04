@@ -28,6 +28,7 @@
                             <div class="col-lg-8">
                                 <select name="section_id" id="section_id" class="form-select max-select" required>
                                     @foreach($building->sections as $section)
+                                        <option value="" selected disabled>tanlang</option>
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
                                 </select>
@@ -52,6 +53,22 @@
                     </div>
                     <div class="col-lg-8">
                         <input type="text" name="room_of_number" id="room_of_number" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mb-4 align-items-center">
+                    <div class="col-lg-4">
+                        <label for="size" class="fw-semibold">Qavat xajmi :</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" name="size" id="size" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mb-4 align-items-center">
+                    <div class="col-lg-4">
+                        <label for="floor_price_per_sqm" class="fw-semibold">Kvadrat metriga narx :</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="number" name="price_per_sqm" id="floor_price_per_sqm" class="form-control" required>
                     </div>
                 </div>
 

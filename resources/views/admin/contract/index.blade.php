@@ -57,8 +57,8 @@
                                             <td>{{ $contract->floor ? $contract->floor->number : 'N/A' }}</td>
                                             <td>{{ $contract->room ? $contract->room->number : 'N/A' }}</td>
                                             <td>{{ $contract->client ? $contract->client->first_name : 'N/A' }}</td>
-                                            <td>{{ $contract->start_date }}</td>
-                                            <td>{{ $contract->end_date }}</td>
+                                            <td>{{ $contract->start_date->format('d M, Y') }}</td>
+                                            <td>{{ $contract->end_date->format('d M, Y')  }}</td>
                                             <td>{{ number_format($contract->discount) }} %</td>
                                             <td>
                                                 <div class="hstack gap-2 justify-content-end">

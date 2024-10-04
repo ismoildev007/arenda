@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
+use App\Models\Section;
+use App\Models\Floor;
+use App\Models\Branch;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -60,11 +63,14 @@ class RoomController extends Controller
     public function edit(Room $room)
     {
         $buildings = Building::all();
-        return view('admin.room.edit', compact('room', 'buildings'));
+        $sections = Section::all();
+        $floors = Floor::all();
+        return view('admin.room.edit', compact('room', 'buildings', 'sections', 'floors'));
     }
 
     public function update(Request $request, Room $room)
     {
+
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
             'section_id' => 'required|exists:sections,id',
@@ -77,7 +83,6 @@ class RoomController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|max:2048',
         ]);
-
         if ($request->hasFile('images')) {
             // Delete old images
             foreach ($room->images as $image) {

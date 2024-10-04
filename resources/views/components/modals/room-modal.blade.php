@@ -67,10 +67,10 @@
 
             <div class="row mb-4 align-items-center">
                 <div class="col-lg-4">
-                    <label for="price_per_sqm" class="fw-semibold">Kvadrat metriga narx :</label>
+                    <label for="room_price_per_sqm" class="fw-semibold">Kvadrat metriga narx :</label>
                 </div>
                 <div class="col-lg-8">
-                    <input type="number" name="price_per_sqm" id="price_per_sqm" class="form-control" required>
+                    <input type="number" name="price_per_sqm" id="room_price_per_sqm" class="form-control" required>
                 </div>
             </div>
 

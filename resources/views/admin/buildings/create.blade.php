@@ -136,7 +136,7 @@
                                         <div class="col-lg-4">
                                             <label for="regionSelect" class="fw-semibold">Viloyat:</label>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-8">
                                             <select class="form-control max-select" id="regionSelect" name="region_id" placeholder="Viloyatni tanlang" required>
                                                 <option value="" disabled selected>Viloyatni tanlang</option>
                                                 @foreach ($regions as $region)

@@ -1,6 +1,22 @@
 @extends('layouts.layout')
 
 @section('content')
+<style>
+.contract-info {
+    line-height: 1.6;
+}
+
+.contract-section, .contract-floor, .contract-room {
+    margin-bottom: 5px;
+}
+
+.contract-section strong, .contract-floor strong, .contract-room strong {
+    color: #333;
+}
+
+
+
+</style>
     <!--! [Start] Main Content !-->
     <!--! ================================================================ !-->
     <main class="nxl-container">
@@ -16,34 +32,7 @@
                         <li class="breadcrumb-item">View</li>
                     </ul>
                 </div>
-                <div class="page-header-right ms-auto">
-                    <div class="page-header-right-items">
-                        <div class="d-flex d-md-none">
-                            <a href="javascript:void(0)" class="page-header-right-close-toggle">
-                                <i class="feather-arrow-left me-2"></i>
-                                <span>Back</span>
-                            </a>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                            <a href="javascript:void(0);" class="btn btn-icon btn-light-brand successAlertMessage">
-                                <i class="feather-star"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="btn btn-icon btn-light-brand">
-                                <i class="feather-eye me-2"></i>
-                                <span>Follow</span>
-                            </a>
-                            <a href="customers-create.html" class="btn btn-primary">
-                                <i class="feather-plus me-2"></i>
-                                <span>Create Customer</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="d-md-none d-flex align-items-center">
-                        <a href="javascript:void(0)" class="page-header-right-open-toggle">
-                            <i class="feather-align-right fs-20"></i>
-                        </a>
-                    </div>
-                </div>
+         
             </div>
             <!-- [ page-header ] end -->
             <!-- [ Main Content ] start -->
@@ -61,37 +50,67 @@
                                             <i class="bi bi-patch-check-fill"></i>
                                         </div>
                                     </div>
+                                        @php
+                                            $totalSectionSize = 0;
+                                            $totalFloorSize = 0;
+                                            $totalRoomSize = 0;
+                                        @endphp
+
+                                        @foreach($client->contracts as $contract)
+                                            @php
+                                               
+                                                if($contract->floor == null && $contract->room == null && $contract->section) {
+                                                    $totalSectionSize += $contract->section->size ?? 0;
+                                                }
+
+                                              
+                                                if($contract->room == null && $contract->section) {
+                                                    $totalFloorSize += $contract->floor->size ?? 0 ;
+                                                }
+
+                                                
+                                                if($contract->section &&  $contract->floor) {
+                                                    $totalRoomSize += $contract->room->size ?? 0;
+                                                }
+                                            @endphp
+                                        @endforeach
+
+                                        @php
+                                            $totalSize = $totalSectionSize + $totalFloorSize + $totalRoomSize;
+                                        @endphp
+                                   
                                     <div class="mb-4">
-                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> Alexandra Della</a>
-                                        <a href="javascript:void(0);" class="fs-12 fw-normal text-muted d-block">alex.della@outlook.com</a>
+                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{$client->company_name}} </a>
+    
+                                         @if($client->pinfl == null)
+                                           <a href="javascript:void(0);" class="fs-12 fw-normal text-muted ">{{ $client->inn ?? "N/A" }}</a>
+                                         @endif
+                                         @if($client->inn == null)
+                                            <a href="javascript:void(0);" class="fs-12 fw-normal text-muted ">{{ $client->pinfl ?? "N/A" }}</a>
+                                        @endif
+                                        
                                     </div>
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">28.65K</h6>
-                                            <p class="fs-12 text-muted mb-0">Followers</p>
+                                            <h6 class="fs-15 fw-bolder">{{number_format($totalSize, 2, '.', ',')}}  m <sup> 2 </sup></h6>
+                                            <p class="fs-12 text-muted mb-0">Total area</p>
                                         </div>
+                                            
+
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">38.85K</h6>
-                                            <p class="fs-12 text-muted mb-0">Following</p>
-                                        </div>
-                                        <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                                            <h6 class="fs-15 fw-bolder">43.67K</h6>
-                                            <p class="fs-12 text-muted mb-0">Engagement</p>
+                                              <a href="javascript:void(0);" class="badge bg-green text-white  fs-16">Active</a>
+                                            <p class="fs-12 text-muted mb-0 mt-1 mx-1">Status</p>
                                         </div>
                                     </div>
                                 </div>
                                 <ul class="list-unstyled mb-4">
                                     <li class="hstack justify-content-between mb-4">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Location</span>
-                                        <a href="javascript:void(0);" class="float-end">California, USA</a>
+                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-user"></i>Name</span>
+                                        <a href="javascript:void(0);" class="float-end">{{$client->first_name ?? null}} {{$client->last_name ?? null}}</a>
                                     </li>
-                                    <li class="hstack justify-content-between mb-4">
+                                    <li class="hstack justify-content-between mb-4  ">
                                         <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Phone</span>
-                                        <a href="javascript:void(0);" class="float-end">+01 (375) 2589 645</a>
-                                    </li>
-                                    <li class="hstack justify-content-between mb-0">
-                                        <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Email</span>
-                                        <a href="javascript:void(0);" class="float-end">alex.della@outlook.com</a>
+                                        <a href="javascript:void(0);" class="float-end">{{$client->phone_number}}</a>
                                     </li>
                                 </ul>
                                 <div class="d-flex gap-2 text-center pt-4">
@@ -99,226 +118,14 @@
                                         <i class="feather-trash-2 me-2"></i>
                                         <span>Delete</span>
                                     </a>
-                                    <a href="javascript:void(0);" class="w-50 btn btn-primary">
+                                    <a href="{{route('clients.edit',$client->id)}}" class="w-50 btn btn-primary">
                                         <i class="feather-edit me-2"></i>
                                         <span>Edit Profile</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="card stretch stretch-full">
-                            <div class="card-header">
-                                <h5 class="card-title">Social</h5>
-                                <div class="dropdown">
-                                    <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25,25">
-                                        <i class="feather feather-more-vertical"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-lock me-3"></i>
-                                                <span>Only Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-globe me-3"></i>
-                                                <span>Everyone</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-users me-3"></i>
-                                                <span>Anonymous</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-user-check me-3"></i>
-                                                <span>People I Follow</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-eye me-3"></i>
-                                                <span>People Follow Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-settings me-3"></i>
-                                                <span>Custom Selections Ever</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-facebook"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.facebook.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.facebook.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-twitter"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.twitter.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.twitter.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-github"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.github.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.github.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-linkedin"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.linkedin.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.linkedin.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-text bg-gray-100">
-                                        <i class="feather feather-youtube"></i>
-                                    </div>
-                                    <span class="mx-2 text-gray-300">/</span>
-                                    <a href="https://www.youtube.com/wrapcoders" target="_blank" class="text-truncate-1-line">https://www.youtube.com/<span class="text-muted">wrapcoders</span></a>
-                                </div>
-                            </div>
-                            <a href="javascript:void(0);" class="ladda-button zoom-out" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Refresh Now">
-                                <span>Refresh</span>
-                                <span class="spinner"></span>
-                            </a>
-                        </div>
-                        <div class="card stretch stretch-full">
-                            <div class="card-header">
-                                <h2 class="card-title">Suggestions</h2>
-                                <div class="dropdown">
-                                    <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25,25">
-                                        <i class="feather feather-more-vertical"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-lock me-3"></i>
-                                                <span>Only Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-globe me-3"></i>
-                                                <span>Everyone</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-users me-3"></i>
-                                                <span>Anonymous</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-user-check me-3"></i>
-                                                <span>People I Follow</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-eye me-3"></i>
-                                                <span>People Follow Me</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <i class="feather feather-settings me-3"></i>
-                                                <span>Custom Selections Ever</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="avatar-image flex-shrink-0 me-3">
-                                        <img src="/assets/images/avatar/1.png" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Alexandra Della</h5>
-                                            <p class="fs-12 text-muted mb-0">Frontend Developer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="bg-warning text-white avatar-text">B</div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Bryan Waters</h5>
-                                            <p class="fs-12 text-muted mb-0">UI/UX Designer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="avatar-image flex-shrink-0 me-3">
-                                        <img src="/assets/images/avatar/2.png" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Curtis Green</h5>
-                                            <p class="fs-12 text-muted mb-0">Backend Developer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="bg-danger text-white avatar-text">E</div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Edward Andrade</h5>
-                                            <p class="fs-12 text-muted mb-0">Fullstack Designer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-image flex-shrink-0 me-3">
-                                        <img src="/assets/images/avatar/3.png" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div>
-                                            <h5 class="fs-13 mb-1">Marianne Audrey</h5>
-                                            <p class="fs-12 text-muted mb-0">Fullstack Developer</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0 ms-2">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-md"><i class="feather feather-user-plus align-middle"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="javascript:void(0);" class="ladda-button zoom-out" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Refresh Now">
-                                <span>Refresh</span>
-                                <span class="spinner"></span>
-                            </a>
-                        </div>
+                        
                     </div>
                     <div class="col-xxl-8 col-xl-6">
                         <div class="card border-top-0">
@@ -328,213 +135,191 @@
                                     <li class="nav-item flex-fill border-top" role="presentation">
                                         <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#overviewTab" role="tab">Overview</a>
                                     </li>
-                                    <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Billing</a>
+                                     <li class="nav-item flex-fill border-top " role="presentation">
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#securityTab" role="tab">Contracts </a>    
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Activity</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Billing <span class="text-danger"> (cooming soon)  </span></a> 
                                     </li>
+
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationsTab" role="tab">Notifications</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Activity <span class="text-danger"> (cooming soon)  </span></a> 
                                     </li>
-                                    <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#connectionTab" role="tab">Connection</a>
+                                    <li class="nav-item flex-fill border-top d-none" role="presentation">
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationsTab" role="tab">Notifications <span class="text-danger"> (cooming soon)  </span> </a>   
                                     </li>
-                                    <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#securityTab" role="tab">Security</a>
+                                    <li class="nav-item flex-fill border-top d-none" role="presentation">
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#connectionTab" role="tab">Connection <span class="text-danger"> (cooming soon)  </span> </a>   
                                     </li>
+
                                 </ul>
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active p-4" id="overviewTab" role="tabpanel">
-                                    <div class="about-section mb-5">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Profile About:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Updates</a>
-                                        </div>
-                                        <p>John Doe is a frontend developer with over 5 years of experience creating high-quality, user-friendly websites and web applications. He has a strong understanding of web development technologies and a keen eye for design.</p>
-                                        <p>John is proficient in languages such as HTML, CSS, and JavaScript, and is experienced in using popular frontend frameworks such as React and Angular. He is also well-versed in user experience design and uses his knowledge to create engaging and intuitive user interfaces.</p>
-                                        <p>Throughout his career, John has worked on a wide range of projects for clients in various industries, including e-commerce, healthcare, and education. He takes a collaborative approach to development and enjoys working closely with clients and other developers to bring their ideas to life.</p>
-                                    </div>
-                                    <div class="profile-details mb-5">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Profile Details:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Edit Profile</a>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Full Name:</div>
-                                            <div class="col-sm-6 fw-semibold">Alexandra Della</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Surname:</div>
-                                            <div class="col-sm-6 fw-semibold">Della</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Company:</div>
-                                            <div class="col-sm-6 fw-semibold">WRAPCODERS</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Date of Birth:</div>
-                                            <div class="col-sm-6 fw-semibold">26 May, 2000</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Mobile Number:</div>
-                                            <div class="col-sm-6 fw-semibold">+01 (375) 5896 3214</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Email Address:</div>
-                                            <div class="col-sm-6 fw-semibold">alex.della@outlook.com</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Location:</div>
-                                            <div class="col-sm-6 fw-semibold">California, United States</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Joining Date:</div>
-                                            <div class="col-sm-6 fw-semibold">20 Dec, 2023</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Country:</div>
-                                            <div class="col-sm-6 fw-semibold">United States</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Communication:</div>
-                                            <div class="col-sm-6 fw-semibold">Email, Phone</div>
-                                        </div>
-                                        <div class="row g-0 mb-4">
-                                            <div class="col-sm-6 text-muted">Allow Changes:</div>
-                                            <div class="col-sm-6 fw-semibold">YES</div>
-                                        </div>
-                                        <div class="row g-0">
-                                            <div class="col-sm-6 text-muted">Website:</div>
-                                            <div class="col-sm-6 fw-semibold">https://wrapcoders.com</div>
-                                        </div>
-                                    </div>
-                                    <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-warning-message profile-overview-alert" role="alert">
-                                        <div class="me-4 d-none d-md-block">
-                                            <i class="feather feather-alert-triangle fs-1"></i>
-                                        </div>
-                                        <div>
-                                            <p class="fw-bold mb-1 text-truncate-1-line">Your profile has not been updated yet!!!</p>
-                                            <p class="fs-10 fw-medium text-uppercase text-truncate-1-line">Last Update: <strong>26 Dec, 2023</strong></p>
-                                            <a href="javascript:void(0);" class="btn btn-sm bg-soft-warning text-warning d-inline-block">Update Now</a>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                    <div class="project-section">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Projects Details:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">View Alls</a>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xxl-6 col-xl-12 col-md-6">
-                                                <div class="border border-dashed border-gray-5 rounded mb-4 md-lg-0">
-                                                    <div class="p-4">
-                                                        <div class="d-sm-flex align-items-center">
-                                                            <div class="wd-50 ht-50 p-2 bg-gray-200 rounded-2">
-                                                                <img src="/assets/images/brand/github.png" class="img-fluid" alt="">
-                                                            </div>
-                                                            <div class="ms-0 mt-4 ms-sm-3 mt-sm-0">
-                                                                <a href="javascript:void(0);" class="d-block">Mailbox Platform Github</a>
-                                                                <div class="fs-12 d-block text-muted">Development</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="my-4 text-muted text-truncate-2-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias dolorem necessitatibus temporibus nemo commodi eaque dignissimos itaque unde hic, sed rerum doloribus possimus minima nobis porro facilis voluptatum atque asperiores perspiciatis saepe laboriosam rem cupiditate libero sit.</div>
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <div class="img-group lh-0 ms-3">
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Janette Dalton">
-                                                                    <img src="/assets/images/avatar/2.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Michael Ksen">
-                                                                    <img src="/assets/images/avatar/3.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Socrates Itumay">
-                                                                    <img src="/assets/images/avatar/4.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/5.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/6.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-text avatar-sm bg-soft-primary" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Explorer More">
-                                                                    <i class="feather feather-more-horizontal"></i>
-                                                                </a>
-                                                            </div>
-                                                            <div class="badge bg-soft-primary text-primary">Inprogress</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="px-4 py-3 border-top border-top-dashed border-gray-5 d-flex justify-content-between gap-2">
-                                                        <div class="w-75 d-none d-md-block">
-                                                            <small class="fs-11 fw-medium text-uppercase text-muted d-flex align-items-center justify-content-between">
-                                                                <span>Progress</span>
-                                                                <span>80%</span>
-                                                            </small>
-                                                            <div class="progress mt-1 ht-3">
-                                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <span class="mx-2 text-gray-400 d-none d-md-block">|</span>
-                                                        <a href="javascript:void(0);" class="fs-12 fw-bold">View &rarr;</a>
+                                    
+                                        <div class="profile-details mb-5">
+                                            <div class="mb-4 d-flex align-items-center justify-content-between">
+                                                <h5 class="fw-bold mb-0">Profile Details:</h5>
+                                                <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-light-brand">Edit Profile</a>
+                                            </div>
+
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Full Name:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $client->first_name ?? "N/A" }} {{ $client->middle_name ?? "N/A" }} {{ $client->last_name ?? "N/A" }}</div>
+                                            </div>
+
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Date of Birth:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ \Carbon\Carbon::parse($client->birth_day)->format('d M, Y') ?? "N/A" }}</div>
+                                            </div>
+
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Mobile Number:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $client->phone_number ?? 'N/A' }}</div>
+                                            </div>
+
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Location:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ $client->region->name ?? 'N/A' }}, {{ $client->district->name ?? 'N/A' }}</div>
+                                            </div>
+
+                                            <div class="row g-0 mb-4">
+                                                <div class="col-sm-6 text-muted">Joining Date:</div>
+                                                <div class="col-sm-6 fw-semibold">{{ \Carbon\Carbon::parse($client->created_at)->format('d M, Y') ?? "N/A" }}</div>
+                                            </div>
+
+                                            @if($client->pinfl !== null)
+                                                <div class="row g-0">
+                                                    <div class="col-sm-6 text-muted">Pinfl:</div>
+                                                    <div class="col-sm-6 fw-semibold">
+                                                        <a href="{{ $client->pinfl }}" target="_blank">{{ $client->pinfl ?? "N/A" }}</a>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-xxl-6 col-xl-12 col-md-6">
-                                                <div class="border border-dashed border-gray-5 rounded">
-                                                    <div class="p-4">
-                                                        <div class="d-sm-flex align-items-center">
-                                                            <div class="wd-50 ht-50 p-2 bg-gray-200 rounded-2">
-                                                                <img src="/assets/images/brand/figma.png" class="img-fluid" alt="">
-                                                            </div>
-                                                            <div class="ms-0 mt-4 ms-sm-3 mt-sm-0">
-                                                                <a href="javascript:void(0);" class="d-block">Chatting Platform Figme</a>
-                                                                <div class="fs-12 text-muted">Design</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="my-4 text-muted text-truncate-2-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias dolorem necessitatibus temporibus nemo commodi eaque dignissimos itaque unde hic, sed rerum doloribus possimus minima nobis porro facilis voluptatum atque asperiores perspiciatis saepe laboriosam rem cupiditate libero sit.</div>
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <div class="img-group lh-0 ms-3">
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Janette Dalton">
-                                                                    <img src="/assets/images/avatar/2.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Michael Ksen">
-                                                                    <img src="/assets/images/avatar/3.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Socrates Itumay">
-                                                                    <img src="/assets/images/avatar/4.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/5.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/6.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-text avatar-sm bg-soft-primary" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Explorer More">
-                                                                    <i class="feather feather-more-horizontal"></i>
-                                                                </a>
-                                                            </div>
-                                                            <div class="badge bg-soft-success text-success">Completed</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="px-4 py-3 border-top border-top-dashed border-gray-5 d-flex justify-content-between gap-2">
-                                                        <div class="w-75 d-none d-md-block">
-                                                            <small class="fs-10 fw-medium text-uppercase text-muted d-flex align-items-center justify-content-between">
-                                                                <span>progress</span>
-                                                                <span>100%</span>
-                                                            </small>
-                                                            <div class="progress mt-1 ht-3">
-                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <span class="mx-2 text-gray-400 d-none d-md-block">|</span>
-                                                        <a href="javascript:void(0);" class="fs-12 fw-bold">View &rarr;</a>
+                                            @endif()
+                                            @if($client->inn !== null)
+                                                <div class="row mb-4 g-0">
+                                                    <div class="col-sm-6 text-muted">Inn:</div>
+                                                    <div class="col-sm-6 fw-semibold">
+                                                        <a href="{{ $client->inn }}" target="_blank">{{ $client->inn ?? "N/A" }}</a>
                                                     </div>
                                                 </div>
-                                            </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Bank:</div>
+                                                    <div class="col-sm-6 fw-semibold">
+                                                        <a href="{{ $client->bank }}" target="_blank">{{ $client->bank ?? 'N/A' }}</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Oked:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $client->oked ? 'YES' : 'NO' }}</div>
+                                                </div>
+
+                                                <div class="row g-0 mb-4">
+                                                    <div class="col-sm-6 text-muted">Company:</div>
+                                                    <div class="col-sm-6 fw-semibold">{{ $client->company_name ?? "N/A" }}</div>
+                                                </div>
+                                            @endif
+
                                         </div>
-                                    </div>
+                                            <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-warning-message profile-overview-alert" role="alert">
+                                                <div class="me-4 d-none d-md-block">
+                                                    <i class="feather feather-alert-triangle fs-1"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="fw-bold mb-1 text-truncate-1-line">Your data is securely stored!!!</p>
+                                                    <p class="fs-10 fw-medium text-uppercase text-truncate-1-line">
+                                                        Last data update: 
+                                                        <strong>{{ $client->updated_at->format('d M, Y') }}</strong>
+                                                    </p>                                            
+                                                    <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm bg-soft-warning text-warning d-inline-block">Update Now</a>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            </div>
                                 </div>
+                                 
+                                <div class="tab-pane fade p-4" id="securityTab" role="tabpanel">
+                                    @foreach($client->contracts as $contract)
+                                            @php
+                                                $isExpired = \Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($contract->end_date));
+                                                $status = $isExpired ? 'active' : $contract->status;
+                                            @endphp
+                                        <div class="subscription-plan px-4 pt-4">
+                                            <div class="p-4 mb-4 d-xxl-flex d-xl-block d-md-flex align-items-center justify-content-between gap-4 border border-dashed border-gray-5 rounded-1">
+                                                <div>
+
+                                                    <div class="fs-14 fw-bold text-dark mb-1">
+                                                        {{$contract->contract_number}}
+                                                        @if($status == 'active')
+                                                          <a href="javascript:void(0);" class="badge bg-soft-success  text-success ms-2">Paid</a>
+
+                                                        @else
+                                                           <a href="javascript:void(0);" class="badge bg-soft-danger  text-danger ms-2">Unpaid</a>
+                                                        @endif
+
+                                                    </div>
+                                                
+                                                    <!-- Contract Info -->
+                                                    <div class="contract-info fs-12 text-muted">
+                                                        <div class="contract-section">
+                                                            <strong>Section:</strong> {{$contract->section->name ?? 'N/A'}} 
+                                                            @if($contract->floor==null && $contract->room==null)
+                                                              =>   {{$contract->section->size}}   m <sup> 2 </sup>
+                                                            @endif
+
+
+                                                        </div>
+                                                        @if($contract->floor)
+                                                            <div class="contract-floor">
+                                                                <strong>Floor:</strong> {{$contract->floor->number}}-floor  
+                                                                @if($contract->room == null)
+                                                                   =>   {{$contract->floor->size}} m <sup> 2 </sup>
+                                                                @endif
+                                                            </div>
+                                                        @endif
+                                                        @if($contract->room)
+                                                            <div class="contract-room">
+                                                                <strong>Room:</strong> {{$contract->room->number}}-room => {{$contract->room->size}} m <sup> 2 </sup>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <!-- Pricing and Payment Info -->
+                                                <div class="my-3 my-xxl-0 my-md-3 my-md-0">
+                                                    <div class="fs-20 text-dark">
+                                                        <span class="fw-bold">
+                                                            @if($contract->room !== null)
+                                                                {{ number_format($contract->room->price_per_sqm, 0, '.', ',') . ' so\'m' }}
+                                                            @elseif($contract->floor !== null)
+                                                                {{ number_format($contract->floor->price_per_sqm, 0, '.', ',') . ' so\'m' }}
+                                                            @elseif($contract->section !== null)
+                                                                {{ number_format($contract->section->price_per_sqm, 0, '.', ',') . ' so\'m' }}
+                                                            @else
+                                                                N/A
+                                                            @endif
+                                                        </span> / <em class="fs-11 fw-medium">Month  (1 m <sup> 2 </sup>) </em>
+                                                    </div>
+                                                        <div class="fs-12 text-muted mt-1">
+                                                        Contract Duration: <strong class="text-dark">{{ $contract->start_date->format('Y-m-d') }} to {{ $contract->end_date->format('Y-m-d') }}</strong>.         
+                                                        </div>
+
+                                                </div>
+
+                                                <!-- Contract Actions -->
+                                                <div class="hstack gap-3">
+                                                    <a href="{{ route('contracts.show', $contract->id) }}" class="btn btn-light-brand">Show contract</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                </div>                                
                                 <div class="tab-pane fade" id="billingTab" role="tabpanel">
+
+                                     
+                    
                                     <div class="alert alert-dismissible m-4 p-4 d-flex alert-soft-teal-message" role="alert">
                                         <div class="me-4 d-none d-md-block">
                                             <i class="feather feather-alert-octagon fs-1"></i>
@@ -1553,71 +1338,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade p-4" id="securityTab" role="tabpanel">
-                                    <div class="p-4 mb-4 border border-dashed border-gray-3 rounded-1">
-                                        <h6 class="fw-bolder"><a href="javascript:void(0);">Two-factor Authentication</a></h6>
-                                        <div class="fs-12 text-muted text-truncate-3-line mt-2 mb-4">Two-factor authentication is an enhanced security meansur. Once enabled, you'll be required to give two types of identification when you log into Google Authentication and SMS are Supported.</div>
-                                        <div class="form-check form-switch form-switch-sm">
-                                            <label class="form-check-label fw-500 text-dark c-pointer" for="2faVerification">Enable 2FA Verification</label>
-                                            <input class="form-check-input c-pointer" type="checkbox" id="2faVerification" checked>
-                                        </div>
-                                    </div>
-                                    <div class="p-4 mb-4 border border-dashed border-gray-3 rounded-1">
-                                        <h6 class="fw-bolder"><a href="javascript:void(0);">Secondary Verification</a></h6>
-                                        <div class="fs-12 text-muted text-truncate-3-line mt-2 mb-4">The first factor is a password and the second commonly includes a text with a code sent to your smartphone, or biometrics using your fingerprint, face, or retina.</div>
-                                        <div class="form-check form-switch form-switch-sm">
-                                            <label class="form-check-label fw-500 text-dark c-pointer" for="secondaryVerification">Set up secondary method</label>
-                                            <input class="form-check-input c-pointer" type="checkbox" id="secondaryVerification" checked>
-                                        </div>
-                                    </div>
-                                    <div class="p-4 mb-4 border border-dashed border-gray-3 rounded-1">
-                                        <h6 class="fw-bolder"><a href="javascript:void(0);">Backup Codes</a></h6>
-                                        <div class="fs-12 text-muted text-truncate-3-line mt-4 mb-4">A backup code is automatically generated for you when you turn on two-factor authentication through your iOS or Android Twitter app. You can also generate a backup code on twitter.com.</div>
-                                        <div class="form-check form-switch form-switch-sm">
-                                            <label class="form-check-label fw-500 text-dark c-pointer" for="generateBackup">Generate backup codes</label>
-                                            <input class="form-check-input c-pointer" type="checkbox" id="generateBackup">
-                                        </div>
-                                    </div>
-                                    <div class="p-4 border border-dashed border-gray-3 rounded-1">
-                                        <h6 class="fw-bolder"><a href="javascript:void(0);">Login Verification</a></h6>
-                                        <div class="fs-12 text-muted text-truncate-3-line mt-2 mb-4">Login verification is an enhanced security meansur. Once enabled, you'll be required to give two types of identification when you log into Google Authentication and SMS are Supported.</div>
-                                        <div class="form-check form-switch form-switch-sm">
-                                            <label class="form-check-label fw-500 text-dark c-pointer" for="loginVerification">Enable Login Verification</label>
-                                            <input class="form-check-input c-pointer" type="checkbox" id="loginVerification" checked>
-                                        </div>
-                                    </div>
-                                    <hr class="my-5">
-                                    <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-danger-message" role="alert">
-                                        <div class="me-4 d-none d-md-block">
-                                            <i class="feather feather-alert-triangle text-danger fs-1"></i>
-                                        </div>
-                                        <div>
-                                            <p class="fw-bold mb-0 text-truncate-1-line">You Are Delete or Deactivating Your Account</p>
-                                            <p class="text-truncate-3-line mt-2 mb-4">Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</p>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-danger d-inline-block">Learn more</a>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                    <div class="card mt-5">
-                                        <div class="card-body">
-                                            <h6 class="fw-bold">Delete Account</h6>
-                                            <p class="fs-11 text-muted">Go to the Data & Privacy section of your profile Account. Scroll to "Your data & privacy options." Delete your Profile Account. Follow the instructions to delete your account:</p>
-                                            <div class="my-4 py-2">
-                                                <input type="password" class="form-control" placeholder="Enter your password">
-                                                <div class="mt-3">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="acDeleteDeactive">
-                                                        <label class="custom-control-label c-pointer" for="acDeleteDeactive">I confirm my account deletations or deactivation.</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="d-sm-flex gap-2">
-                                                <a href="javascript:void(0);" class="btn btn-danger" data-action-target="#acSecctingsActionMessage">Delete Account</a>
-                                                <a href="javascript:void(0);" class="btn btn-warning mt-2 mt-sm-0 successAlertMessage">Deactiveted Account</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>

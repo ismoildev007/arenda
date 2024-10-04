@@ -25,46 +25,32 @@
                 </li>
                 <li class="nxl-item">
                     <a href="{{ route('buildings.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
-                        <span class="nxl-mtext">Obyekti</span>
+                        <span class="nxl-micon"><i class="feather-home"></i></span> <!-- Building icon -->
+                        <span class="nxl-mtext">Buildings</span>
                     </a>
                 </li>
-{{--                <li class="nxl-item">--}}
-{{--                    <a href="{{ route('sections.index') }}" class="nxl-link">--}}
-{{--                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>--}}
-{{--                        <span class="nxl-mtext">Seksiya</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nxl-item">--}}
-{{--                    <a href="{{ route('floors.index') }}" class="nxl-link">--}}
-{{--                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>--}}
-{{--                        <span class="nxl-mtext">Etaj</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+
                 <li class="nxl-item">
                     <a href="{{ route('employees.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
+                        <span class="nxl-micon"><i class="feather-users"></i></span> <!-- Employees icon -->
                         <span class="nxl-mtext">Employees</span>
                     </a>
                 </li>
-{{--                <li class="nxl-item">--}}
-{{--                    <a href="{{ route('rooms.index') }}" class="nxl-link">--}}
-{{--                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>--}}
-{{--                        <span class="nxl-mtext">Xonalar</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+
                 <li class="nxl-item">
                     <a href="{{ route('clients.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
+                        <span class="nxl-micon"><i class="feather-user"></i></span> <!-- Client icon -->
                         <span class="nxl-mtext">Client</span>
                     </a>
                 </li>
+
                 <li class="nxl-item">
                     <a href="{{ route('contracts.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-life-buoy"></i></span>
+                        <span class="nxl-micon"><i class="feather-file-text"></i></span> <!-- Contracts icon -->
                         <span class="nxl-mtext">Contracts</span>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>

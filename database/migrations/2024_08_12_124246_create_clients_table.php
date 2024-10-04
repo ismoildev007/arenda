@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('first_name')->nullable();
             $table->string('password')->unique();
-            $table->string('pinfl')->nullable();
+            $table->string('pinfl')->nullable()->unique();
             $table->string('birth_day')->nullable();
             $table->string('company_name')->nullable();
             $table->foreignId('region_id')->constrained('regions')->cascadeOnDelete();
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('oked')->nullable();
             $table->string('bank')->nullable();
             $table->string('account')->nullable();
-            $table->string('inn')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('inn')->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
         });

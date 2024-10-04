@@ -30,5 +30,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'eskiz' => [
+        'email' => env('jalilovquvonchbek4@gmail.com'),
+        'password' => env('Z89s7c1Hg7QyVSnmqT4fEzrcs7tSuzlp1gkDapz6'),
+    ],
 
 ];

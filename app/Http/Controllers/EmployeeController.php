@@ -14,7 +14,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = User::whereNotIn('id', [1, 2, 3])->get();
+        $employees = User::whereNotIn('role', ['admin'])->get();
         return view('admin.employee.index', compact('employees'));
     }
 
@@ -36,13 +36,17 @@ class EmployeeController extends Controller
             'region_id' => 'nullable|exists:regions,id',
             'district_id' => 'nullable|exists:districts,id',
             'pinfl' => 'nullable|unique:employees',
+            'phone_number' => 'nullable|max:19',
             'birth_day' => 'nullable|date',
             'email' => 'nullable|email|unique:users',
             'password' => 'nullable|min:6',
             'role' => 'nullable',
         ]);
 
+        $phone_number = preg_replace('/\s+/', '', $request->phone_number);
+
         $data = $request->all();
+        $data['phone_number'] = $phone_number;
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
@@ -75,6 +79,7 @@ class EmployeeController extends Controller
             'region_id' => 'nullable|exists:regions,id',
             'district_id' => 'nullable|exists:districts,id',
             'birth_day' => 'nullable|date',
+            'phone_number' => 'nullable|max:19',
             'pinfl' => 'nullable|unique:employees,pinfl,' . $employee->id,
             'email' => 'nullable|email|unique:users,email,' . $employee->id,
             'password' => 'nullable|min:6',
@@ -82,6 +87,8 @@ class EmployeeController extends Controller
         ]);
 
         $data = $request->all();
+        $phone_number = preg_replace('/\s+/', '', $request->phone_number);
+        $data['phone_number'] = $phone_number;
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         } else {

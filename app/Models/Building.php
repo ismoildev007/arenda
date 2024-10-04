@@ -17,6 +17,7 @@ class Building extends Model
         'last_name',
         'size',
         'inn',
+        'date',
         'pinfl',
         'oked',
         'bank',

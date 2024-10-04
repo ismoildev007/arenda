@@ -3,6 +3,14 @@
 @section('content')
     <!--! [Start] Main Content !-->
     <!--! ================================================================ !-->
+<style>
+.table-responsive {
+    overflow-x: visible !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+</style>
     <main class="nxl-container">
         <div class="nxl-content">
             <!-- [ page-header ] start -->
@@ -82,7 +90,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $building->name }} </a>
+                                        <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> {{ $building->name  }} </a>
                                     </div>
                                     <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
                                         <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
@@ -142,19 +150,16 @@
                                         <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#overviewTab" role="tab">Overview</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Billing</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Clients</a>   
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Seksiyalar</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Sections</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationsTab" role="tab">Qavatlar</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationsTab" role="tab">Floors</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#connectionTab" role="tab">Xonalar</a>
-                                    </li>
-                                    <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#securityTab" role="tab">Security</a>
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#connectionTab" role="tab">Rooms</a>
                                     </li>
                                 </ul>
                             </div>
@@ -182,60 +187,6 @@
                                             <div class="col-sm-6 text-muted">District:</div>
                                             <div class="col-sm-6 fw-semibold">{{ $building->district->name }}</div>
                                         </div>
-
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Clients:</h5>
-                                        </div>
-                                        @if($building->contracts->isNotEmpty())
-                                            @foreach($building->contracts as $contract)
-                                                @if($contract->client)
-                                                    <div class="row g-0 mb-4">
-                                                        <div class="col-sm-6 text-muted">Client Name:</div>
-                                                        <div class="col-sm-6 fw-semibold">{{ $contract->client->first_name }} {{ $contract->client->last_name }}</div>
-                                                    </div>
-                                                    @if($contract->client->pinfl !== null)
-                                                        <div class="row g-0 mb-4">
-                                                            <div class="col-sm-6 text-muted">Jismoniy shaxs PINFL:</div>
-                                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->pinfl }}</div>
-                                                        </div>
-                                                        <hr/>
-                                                    @endif
-                                                    @if($contract->client->inn !== null)
-                                                        <div class="row g-0 mb-4">
-                                                            <div class="col-sm-6 text-muted">Yuridik shaxs INN:</div>
-                                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->inn }}</div>
-                                                        </div>
-                                                        <div class="row g-0 mb-4">
-                                                            <div class="col-sm-6 text-muted">Company:</div>
-                                                            <div class="col-sm-6 fw-semibold">{{ $contract->client->company_name }}</div>
-                                                        </div>
-                                                    @endif
-                                                @endif
-                                            @endforeach
-                                        @else
-                                            <div class="alert alert-info">
-                                                <strong>No clients found for this building.</strong>
-                                            </div>
-                                        @endif
-
-
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Employees:</h5>
-                                        </div>
-                                        @foreach($building->employees as $employee)
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Employee Name:</div>
-                                                <div class="col-sm-6 fw-semibold">{{ $employee->first_name }} {{ $employee->last_name }}</div>
-                                            </div>
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Email:</div>
-                                                <div class="col-sm-6 fw-semibold">{{ $employee->email }}</div>
-                                            </div>
-                                            <div class="row g-0 mb-4">
-                                                <div class="col-sm-6 text-muted">Role:</div>
-                                                <div class="col-sm-6 fw-semibold">{{ ucfirst($employee->role) }}</div>
-                                            </div>
-                                        @endforeach
                                     </div>
 
                                     <div class="alert alert-dismissible mb-4 p-4 d-flex alert-soft-warning-message profile-overview-alert" role="alert">
@@ -247,118 +198,6 @@
                                             <p class="fs-10 fw-medium text-uppercase text-truncate-1-line">Last Update: <strong>26 Dec, 2023</strong></p>
                                             <a href="javascript:void(0);" class="btn btn-sm bg-soft-warning text-warning d-inline-block">Update Now</a>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                    <div class="project-section">
-                                        <div class="mb-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Projects Details:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">View Alls</a>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xxl-6 col-xl-12 col-md-6">
-                                                <div class="border border-dashed border-gray-5 rounded mb-4 md-lg-0">
-                                                    <div class="p-4">
-                                                        <div class="d-sm-flex align-items-center">
-                                                            <div class="wd-50 ht-50 p-2 bg-gray-200 rounded-2">
-                                                                <img src="/assets/images/brand/github.png" class="img-fluid" alt="">
-                                                            </div>
-                                                            <div class="ms-0 mt-4 ms-sm-3 mt-sm-0">
-                                                                <a href="javascript:void(0);" class="d-block">Mailbox Platform Github</a>
-                                                                <div class="fs-12 d-block text-muted">Development</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="my-4 text-muted text-truncate-2-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias dolorem necessitatibus temporibus nemo commodi eaque dignissimos itaque unde hic, sed rerum doloribus possimus minima nobis porro facilis voluptatum atque asperiores perspiciatis saepe laboriosam rem cupiditate libero sit.</div>
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <div class="img-group lh-0 ms-3">
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Janette Dalton">
-                                                                    <img src="/assets/images/avatar/2.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Michael Ksen">
-                                                                    <img src="/assets/images/avatar/3.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Socrates Itumay">
-                                                                    <img src="/assets/images/avatar/4.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/5.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/6.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-text avatar-sm bg-soft-primary" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Explorer More">
-                                                                    <i class="feather feather-more-horizontal"></i>
-                                                                </a>
-                                                            </div>
-                                                            <div class="badge bg-soft-primary text-primary">Inprogress</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="px-4 py-3 border-top border-top-dashed border-gray-5 d-flex justify-content-between gap-2">
-                                                        <div class="w-75 d-none d-md-block">
-                                                            <small class="fs-11 fw-medium text-uppercase text-muted d-flex align-items-center justify-content-between">
-                                                                <span>Progress</span>
-                                                                <span>80%</span>
-                                                            </small>
-                                                            <div class="progress mt-1 ht-3">
-                                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <span class="mx-2 text-gray-400 d-none d-md-block">|</span>
-                                                        <a href="javascript:void(0);" class="fs-12 fw-bold">View &rarr;</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xxl-6 col-xl-12 col-md-6">
-                                                <div class="border border-dashed border-gray-5 rounded">
-                                                    <div class="p-4">
-                                                        <div class="d-sm-flex align-items-center">
-                                                            <div class="wd-50 ht-50 p-2 bg-gray-200 rounded-2">
-                                                                <img src="/assets/images/brand/figma.png" class="img-fluid" alt="">
-                                                            </div>
-                                                            <div class="ms-0 mt-4 ms-sm-3 mt-sm-0">
-                                                                <a href="javascript:void(0);" class="d-block">Chatting Platform Figme</a>
-                                                                <div class="fs-12 text-muted">Design</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="my-4 text-muted text-truncate-2-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias dolorem necessitatibus temporibus nemo commodi eaque dignissimos itaque unde hic, sed rerum doloribus possimus minima nobis porro facilis voluptatum atque asperiores perspiciatis saepe laboriosam rem cupiditate libero sit.</div>
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <div class="img-group lh-0 ms-3">
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Janette Dalton">
-                                                                    <img src="/assets/images/avatar/2.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Michael Ksen">
-                                                                    <img src="/assets/images/avatar/3.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Socrates Itumay">
-                                                                    <img src="/assets/images/avatar/4.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/5.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-image avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Marianne Audrey">
-                                                                    <img src="/assets/images/avatar/6.png" class="img-fluid" alt="image">
-                                                                </a>
-                                                                <a href="javascript:void(0);" class="avatar-text avatar-sm bg-soft-primary" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Explorer More">
-                                                                    <i class="feather feather-more-horizontal"></i>
-                                                                </a>
-                                                            </div>
-                                                            <div class="badge bg-soft-success text-success">Completed</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="px-4 py-3 border-top border-top-dashed border-gray-5 d-flex justify-content-between gap-2">
-                                                        <div class="w-75 d-none d-md-block">
-                                                            <small class="fs-10 fw-medium text-uppercase text-muted d-flex align-items-center justify-content-between">
-                                                                <span>progress</span>
-                                                                <span>100%</span>
-                                                            </small>
-                                                            <div class="progress mt-1 ht-3">
-                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <span class="mx-2 text-gray-400 d-none d-md-block">|</span>
-                                                        <a href="javascript:void(0);" class="fs-12 fw-bold">View &rarr;</a>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -377,69 +216,153 @@
                                     <hr class="mt-2">
                                     <div class="payment-history">
                                         <div class="mb-4 px-4 d-flex align-items-center justify-content-between">
-                                            <h5 class="fw-bold mb-0">Billing History:</h5>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-light-brand">Alls History</a>
+                                            <h5 class="fw-bold mb-0">Clients:</h5>
+                                            <a href="{{ route('clients.index') }}" class="btn btn-sm btn-light-brand">Alls History</a>
                                         </div>
-                                        <div class="table-responsive">
-                                            <table class="table mb-0">
-                                                <thead>
-                                                <tr class="border-top">
-                                                    <th>ID</th>
-                                                    <th>Date</th>
-                                                    <th>Amount</th>
-                                                    <th>Status</th>
-                                                    <th class="text-end">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td><a href="javascript:void(0);">#258963</a></td>
-                                                    <td>02 NOV, 2022</td>
-                                                    <td>$350</td>
-                                                    <td><span class="badge bg-soft-success text-success">Completed</span></td>
-                                                    <td class="hstack justify-content-end gap-4 text-end">
-                                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Sent Mail">
-                                                            <i class="feather feather-send fs-12"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Invoice Details">
-                                                            <i class="feather feather-eye fs-12"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="More Options">
-                                                            <i class="feather feather-more-vertical fs-12"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="javascript:void(0);">#987456</a></td>
-                                                    <td>05 DEC, 2022</td>
-                                                    <td>$590</td>
-                                                    <td><span class="badge bg-soft-warning text-warning">Pendign</span></td>
-                                                    <td class="hstack justify-content-end gap-4 text-end">
-                                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Sent Mail">
-                                                            <i class="feather feather-send fs-12"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Invoice Details">
-                                                            <i class="feather feather-eye fs-12"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="More Options">
-                                                            <i class="feather feather-more-vertical fs-12"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+
+                                        <ul class="nav nav-tabs flex-wrap w-100 text-center customers-nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item flex-fill border-top" role="presentation">
+                                                <a href="javascript:void(0);" class="nav-link active" id="physical-persons-tab" data-bs-toggle="tab" data-bs-target="#physical-persons-content" role="tab">Jismoniy shaxslar</a>
+                                            </li>
+                                            <li class="nav-item flex-fill border-top" role="presentation">
+                                                <a href="javascript:void(0);" class="nav-link" id="legal-persons-tab" data-bs-toggle="tab" data-bs-target="#legal-persons-content" role="tab">Yuridik shaxslar</a>
+                                            </li>
+                                            <li class="nav-item flex-fill border-top" role="presentation">
+                                                <a href="javascript:void(0);" class="nav-link" id="all-clients-tab" data-bs-toggle="tab" data-bs-target="#all-clients-content" role="tab">Barchasi</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content mt-3" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="physical-persons-content" role="tabpanel">
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <tr class="border-top">
+                                                                <th>ID</th>
+                                                                <th>Client Name</th>
+                                                                <th>PINFL</th>
+                                                                <th>Company</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($building->contracts as $contract)
+                                                                @if($contract->client && $contract->client->pinfl !== null)
+                                                                    <tr class="client-row" data-type="physical">
+                                                                        <td>{{ $loop->iteration }}</td>
+                                                                        <td>{{ $contract->client->first_name }} {{ $contract->client->last_name }}</td>
+                                                                        <td>{{ $contract->client->pinfl }}</td>
+                                                                        <td>
+                                                                            @if($contract->client->company_name !== null)
+                                                                                {{ $contract->client->company_name }}
+                                                                            @else
+                                                                                N/A
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="legal-persons-content" role="tabpanel">
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <tr class="border-top">
+                                                                <th>ID</th>
+                                                                <th>Client Name</th>
+                                                                <th>INN</th>
+                                                                <th>Company</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($building->contracts as $contract)
+                                                                @if($contract->client && $contract->client->pinfl === null)
+                                                                    <tr class="client-row" data-type="legal">
+                                                                        <td>{{ $loop->iteration }}</td>
+                                                                        <td>{{ $contract->client->first_name }} {{ $contract->client->last_name }}</td>
+                                                                        <td>
+                                                                            @if($contract->client->inn !== null)
+                                                                                {{ $contract->client->inn }}
+                                                                            @else
+                                                                                N/A
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if($contract->client->company_name !== null)
+                                                                                {{ $contract->client->company_name }}
+                                                                            @else
+                                                                                N/A
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="all-clients-content" role="tabpanel">
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <tr class="border-top">
+                                                                <th>ID</th>
+                                                                <th>Client Name</th>
+                                                                <th>PINFL</th>
+                                                                <th>INN</th>
+                                                                <th>Company</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($building->contracts as $contract)
+                                                                @if($contract->client)
+                                                                    <tr class="client-row" data-type="{{ $contract->client->pinfl ? 'physical' : 'legal' }}">
+                                                                        <td>{{ $loop->iteration }}</td>
+                                                                        <td>{{ $contract->client->first_name }} {{ $contract->client->last_name }}</td>
+                                                                        <td>
+                                                                            @if($contract->client->pinfl !== null)
+                                                                                {{ $contract->client->pinfl }}
+                                                                            @else
+                                                                                N/A
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if($contract->client->inn !== null)
+                                                                                {{ $contract->client->inn }}
+                                                                            @else
+                                                                                N/A
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if($contract->client->company_name !== null)
+                                                                                {{ $contract->client->company_name }}
+                                                                            @else
+                                                                                N/A
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="activityTab" role="tabpanel">
                                     <div class="logs-history mb-0 mt-2">
                                         <div class="px-4 mb-4 d-flex justify-content-between">
                                             <h5 class="fw-bold">Section</h5>
-                                            <a href="javascript:void(0)" class="d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#sectionOffcanvas">
-                                                <span>Seksiya qo'shish</span>
-                                                <span class="avatar-text avatar-md">
-                                                            <i class="feather feather-plus me-3"></i>
-                                                        </span>
+                                            <a href="javascript:void(0)" class="brn btn-primary d-flex align-items-center px-2 py-1  border" data-bs-toggle="offcanvas" data-bs-target="#sectionOffcanvas">
+                                                 
+                                               <i class="feather feather-plus "></i>
+                                               <span>Add section</span>
                                             </a>
                                         </div>
                                         <div class="table-responsive">
@@ -447,8 +370,8 @@
                                                 <thead class="text-dark text-center border-top">
                                                 <tr>
                                                     <th class="text-start ps-4">Building</th>
-                                                    <th>Seksiya nomi</th>
-                                                    <th>Qavati</th>
+                                                    <th>Section name</th>
+                                                    <th>Floor</th>
                                                     <th>Actions</th>
                                                 </tr>
                                                 </thead>
@@ -459,15 +382,10 @@
                                                         <td>{{ $section->name }}</td>
                                                         <td>{{ $section->floor }}</td>
                                                         <td>
-                                                            <div class="hstack gap-2 justify-content-end">
-                                                                <a href="javascript:void(0)" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addSectionModal{{ $section->id }}">
-                                                                    <span>Etaj qo'shish</span>
-                                                                    <span class="avatar-text avatar-md"><i class="feather feather-plus me-3"></i></span>
-                                                                </a>
+                                                            <div class="hstack gap-2 justify-content-center">
                                                                 <a href="{{ route('sections.show', $section->id) }}" class="avatar-text avatar-md">
                                                                     <i class="feather-eye"></i>
                                                                 </a>
-
                                                                 <div class="dropdown">
                                                                     <a href="javascript:void(0)" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,21">
                                                                         <i class="feather feather-more-horizontal"></i>
@@ -479,20 +397,29 @@
                                                                                 <span>Edit</span>
                                                                             </a>
                                                                         </li>
+                                                                    
+                                                                        <li>
+                                                                            <a class="dropdown-item" href="javascript:void(0)">
+                                                                                <i class="feather feather-clock me-3"></i>
+                                                                                <span>Remind</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="dropdown-divider"></li>
                                                                         <li>
                                                                             <form class="dropdown-item" action="{{ route('sections.destroy', $section->id) }}" method="POST" onsubmit="confirmDelete(event)">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Ushbu bo\'limni o‘chirishni xohlaysizmi?')">
+                                                                                <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Ushbu faoliyatni o‘chirishni xohlaysizmi?')">
                                                                                     <i class="feather feather-trash-2 me-3"></i>
                                                                                     Delete
                                                                                 </button>
-                                                                            </form>
+                                                                            </form>                                                                   
                                                                         </li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
                                                         </td>
+
                                                     </tr>
                                                 @endforeach
                                                 </tbody>
@@ -503,15 +430,19 @@
                                 <div class="tab-pane fade" id="notificationsTab" role="tabpanel">
                                     <div class="logs-history mb-0 mt-2">
                                         <div class="px-4 mb-4 d-flex justify-content-between">
-                                            <h5 class="fw-bold">Etaj</h5>
+                                            <h5 class="fw-bold">Floor</h5>
+                                            <a href="javascript:void(0)" class="brn btn-primary d-flex align-items-center px-2 py-1  rounded" data-bs-toggle="offcanvas" data-bs-target="#floorOffcanvas">
+                                               <i class="feather feather-plus "></i>
+                                               <span>Add floor</span>
+                                            </a>
                                         </div>
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead class="text-dark text-center border-top">
                                                 <tr>
                                                     <th class="text-start ps-4">Building</th>
-                                                    <th>Seksiya nomi</th>
-                                                    <th>Qavati</th>
+                                                    <th>Section name</th>
+                                                    <th>Floor</th>
                                                     <th>Actions</th>
                                                 </tr>
                                                 </thead>
@@ -563,6 +494,10 @@
                                     <div class="logs-history mb-0 mt-2">
                                         <div class="px-4 mb-4 d-flex justify-content-between">
                                             <h5 class="fw-bold">Xonalar</h5>
+                                            <a href="javascript:void(0)" class="brn btn-primary d-flex align-items-center px-2 py-1  rounded" data-bs-toggle="offcanvas" data-bs-target="#roomOffcanvas">
+                                               <i class="feather feather-plus "></i>
+                                               <span>Add room</span>
+                                            </a>
                                         </div>
                                         <div class="table-responsive">
                                             <table class="table">
@@ -622,16 +557,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade p-4" id="securityTab" role="tabpanel">
-                                    <div class="p-4 mb-4 border border-dashed border-gray-3 rounded-1">
-                                        <h6 class="fw-bolder"><a href="javascript:void(0);">Two-factor Authentication</a></h6>
-                                        <div class="fs-12 text-muted text-truncate-3-line mt-2 mb-4">Two-factor authentication is an enhanced security meansur. Once enabled, you'll be required to give two types of identification when you log into Google Authentication and SMS are Supported.</div>
-                                        <div class="form-check form-switch form-switch-sm">
-                                            <label class="form-check-label fw-500 text-dark c-pointer" for="2faVerification">Enable 2FA Verification</label>
-                                            <input class="form-check-input c-pointer" type="checkbox" id="2faVerification" checked>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -677,55 +602,7 @@
                 </div>
             </div>
         </div>
-{{--    Etaj qo'shish uchun modal --}}
-    @foreach($building->sections as $section)
-        <div class="modal fade" id="addSectionModal{{ $section->id }}" tabindex="-1" aria-labelledby="addSectionModalLabel{{ $section->id }}" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addSectionModalLabel{{ $section->id }}">Etaj qo'shish</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('floors.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!-- Hidden Section ID -->
-                            <input type="hidden" name="section_id" value="{{ $section->id }}">
-                            <input type="hidden" name="building_id" value="{{ $section->building->id }}">
 
-                            <!-- Floor Number -->
-                            <div class="row mb-4 align-items-center">
-                                <div class="col-lg-4">
-                                    <label for="number" class="fw-semibold">Qavat tanglang:</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <select name="number" id="number_{{ $section->id }}" class="form-select max-select" required>
-                                        <option class="text-black" value="" disabled selected>Qavatni tanlang</option>
-                                        @for ($i = 1; $i <= $section->floor; $i++)
-                                            <option class="text-black" value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Image Upload -->
-                            <div class="row align-items-center mb-4">
-                                <div class="col-lg-4">
-                                    <label for="images" class="fw-semibold">Rasmlar</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input type="file" name="images[]" id="images_{{ $section->id }}" class="form-control" multiple>
-                                </div>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary">Saqlash</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
     <script>
         $(document).ready(function() {
             $('.max-select').select2({

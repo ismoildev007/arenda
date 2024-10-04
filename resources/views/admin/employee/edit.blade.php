@@ -65,6 +65,61 @@
                                     </div>
                                     <div class="row mb-4 align-items-center">
                                         <div class="col-lg-4">
+                                            <label for="phone_number" class="fw-semibold">Phone Number:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <!-- Pre-populate with existing phone number -->
+                                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number', $employee->phone_number) }}" placeholder="Enter your phone number" required>
+                                        </div>
+                                    </div>
+
+              <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoneInput = document.getElementById('phone_number');
+            const pattern = /^\+998\s?(90|91|93|94|95|98|99|33|97|71)\s?\d{3}\s?\d{2}\s?\d{2}$/;
+
+            phoneInput.addEventListener('input', (e) => {
+                let value = e.target.value;
+
+                // Ensure the value starts with +998
+                if (!value.startsWith('+998 ')) {
+                    value = '+998 ' + value.replace(/^\+998\s*/, '');
+                }
+
+                // Remove invalid characters
+                value = value.replace(/[^\d\s+()-]/g, '');
+
+                // Format value according to the pattern
+                let formattedValue = '+998 ';
+                const match = value.match(/^(\+998\s?)(90|91|93|94|95|98|99|33|97|71)?\s?(\d{0,3})?\s?(\d{0,2})?\s?(\d{0,2})?/);
+                if (match) {
+                    if (match[2]) formattedValue += match[2] + ' ';
+                    if (match[3]) formattedValue += match[3] + (match[3].length === 3 ? ' ' : '');
+                    if (match[4]) formattedValue += match[4] + (match[4].length === 2 ? ' ' : '');
+                    if (match[5]) formattedValue += match[5];
+                }
+
+                e.target.value = formattedValue.trim();
+            });
+
+            phoneInput.addEventListener('keydown', (e) => {
+                const value = e.target.value;
+                // Prevent user from deleting +998
+                if (e.key === 'Backspace' && value.length <= 5) {
+                    e.preventDefault();
+                }
+            });
+
+            document.getElementById('phone-form').addEventListener('submit', (e) => {
+                if (!pattern.test(phoneInput.value)) {
+                    e.preventDefault();
+                    alert('Please enter a valid phone number: +998 (XX) XXX-XX-XX');
+                }
+            });
+        });
+    </script>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-lg-4">
                                             <label for="birth_day" class="fw-semibold">Tug'ilgan sana:</label>
                                         </div>
                                         <div class="col-lg-8">
@@ -78,7 +133,7 @@
                                         <div class="col-lg-8">
                                             <select name="branch_id" id="branch_id" class="form-control max-select" required>
                                                 <option disabled>Building tanlang</option>
-                                                @foreach($branches as $branch)
+                                                @foreach($buildings as $branch)
                                                     <option value="{{ $branch->id }}" {{ $employee->branch_id == $branch->id ? 'selected' : '' }}>
                                                         {{ $branch->name }}
                                                     </option>

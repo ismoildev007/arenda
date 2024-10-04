@@ -22,15 +22,15 @@ class ClientController extends Controller
     public function legalLogin(Request $request)
     {
         $request->validate([
-            'inn' => 'required|digits:14',
+            'inn' => 'required|digits:9',
             'password' => 'required|string',
         ]);
 
         $client = Client::where('inn', $request->inn)->first();
 
         if ($client && Hash::check($request->password, $client->password)) {
-            Auth::login($client);
-            return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+            Auth::guard('client')->login($client); 
+            return redirect()->route('client.contract'); 
         } else {
             return back()->withErrors(['error' => 'INN yoki parol noto‘g‘ri']);
         }
@@ -45,21 +45,28 @@ class ClientController extends Controller
     // Legal Register Function
     public function legalRegister(Request $request)
     {
-        $request->validate([
-            'inn' => 'required|digits:14|unique:clients,inn',
-            'name' => 'required|string|max:255',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        // $request->validate([
+        //     'inn' => 'required|digits:9',
+        //     'name' => 'required|string|max:255',
+        //     'password' => 'required|string|min:8|confirmed',
+        // ]);
+        $phone_number = preg_replace('/\s+/', '', $request->phone_number);
 
         $client = Client::create([
             'inn' => $request->inn,
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'oked' => $request->oked,
+            'bank' => $request->bank,
+            'account' => $request->account,
+            'company_name' => $request->company_name,
+            
             'password' => Hash::make($request->password),
         ]);
 
-        Auth::login($client);
+        Auth::guard('client')->login($client); // Use the 'client' guard
 
-        return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+        return redirect()->route('client.contract');
     }
 
     // Individual Login Form
@@ -79,12 +86,14 @@ class ClientController extends Controller
         $client = Client::where('pinfl', $request->pinfl)->first();
 
         if ($client && Hash::check($request->password, $client->password)) {
-            Auth::login($client);
-            return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+            Auth::guard('client')->login($client); // Use the 'client' guard
+
+            return redirect()->intended('client.contract'); // Redirect to intended or default page
         } else {
-            return back()->withErrors(['error' => 'PINFL yoki parol noto‘g‘ri']);
+            return back()->withErrors(['error' => __('auth.failed')]); // Use a translation string
         }
     }
+
 
     // Individual Register Form
     public function showIndividualRegisterForm()
@@ -97,19 +106,20 @@ class ClientController extends Controller
     {
         $request->validate([
             'pinfl' => 'required|digits:14|unique:clients,pinfl',
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
         $client = Client::create([
             'pinfl' => $request->pinfl,
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'password' => Hash::make($request->password),
         ]);
 
-        Auth::login($client);
+        Auth::guard('client')->login($client);
 
-        return redirect()->route('dashboard'); // Yoki kerakli sahifaga yo'naltiring
+        return redirect()->route('client.contract'); 
     }
 
     // Logout Function
@@ -121,6 +131,15 @@ class ClientController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/'); // Bosh sahifaga yo'naltirish
+    }
+    public function clientLogout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('client_legal_login_form'); // Bosh sahifaga yo'naltirish
     }
     public function checkINN(Request $request)
     {
@@ -134,7 +153,7 @@ class ClientController extends Controller
     public function checkPINFL(Request $request)
     {
         $pinfl = $request->query('pinfl');
-        $exists = Client::where('pinfl', $pinfl)->exists(); // `Client` modelida `pinfl` ustunini tekshirish
+        $exists = Client::where('pinfl', $pinfl)->exists();
 
         return response()->json(['exists' => $exists]);
     }
@@ -166,6 +185,7 @@ class ClientController extends Controller
             'pinfl.unique' => 'Bu PINFL avvaldan mavjud.',
             'inn.unique' => 'Bu INN avvaldan mavjud.',
         ]);
+        $phone_number = preg_replace('/\s+/', '', $request->phone_number);
 
         Client::create([
             'last_name' => $request->last_name,
@@ -175,6 +195,7 @@ class ClientController extends Controller
             'pinfl' => $request->pinfl,
             'birth_day' => $request->birth_day,
             'company_name' => $request->company_name,
+            'phone_number' => $phone_number,
             'region_id' => $request->region_id,
             'district_id' => $request->district_id,
             'oked' => $request->oked,
@@ -210,6 +231,8 @@ class ClientController extends Controller
             'inn.unique' => 'Bu INN avvaldan mavjud.',
         ]);
 
+        $phone_number = preg_replace('/\s+/', '', $request->phone_number);
+
         $client->update([
             'last_name' => $request->last_name,
             'first_name' => $request->first_name,
@@ -219,6 +242,7 @@ class ClientController extends Controller
             'company_name' => $request->company_name,
             'region_id' => $request->region_id,
             'district_id' => $request->district_id,
+            'phone_number' => $phone_number,
             'oked' => $request->oked,
             'bank' => $request->bank,
             'account' => $request->account,

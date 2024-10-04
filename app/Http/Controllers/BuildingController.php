@@ -46,6 +46,7 @@ class BuildingController extends Controller
 
     public function show($id)
     {
+        
 //        $sections = Section::all();
         $building = Building::with([
             'region',
@@ -72,6 +73,7 @@ class BuildingController extends Controller
 
     public function update(Request $request, Building $building)
     {
+
         $request->validate([
             'name' => 'nullable|string|max:255',
             'size' => 'nullable|string|max:255',
@@ -85,7 +87,6 @@ class BuildingController extends Controller
             'region_id' => 'required|exists:regions,id',
             'district_id' => 'required|exists:districts,id',
         ]);
-
         $building->update($request->all());
 
         return redirect()->route('buildings.index');
