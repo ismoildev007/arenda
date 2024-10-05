@@ -21,8 +21,8 @@ $buildings = \App\Models\Building::all();
         </div>
         <div class="offcanvas-body">
             <div class="row">
-               <div class="col-md-6"> 
-                    <div class="row"> 
+               <div class="col-md-6">
+                    <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="nameInput" class="fw-semibold">Section Name:</label>
                             <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter section name">
@@ -52,12 +52,12 @@ $buildings = \App\Models\Building::all();
 
                         <div class="col-md-12 mb-3">
                             <label for="sizeInput" class="fw-semibold">Size:</label>
-                            <input type="text" class="form-control" id="sizeInput" name="size" placeholder="Enter section size">
+                            <input type="text" class="form-control" id="sizeInput" name="size" placeholder="Enter section size" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
 
                         <div class="col-md-12 mb-3">
                             <label for="section_price_per_sqm" class="fw-semibold">Price per Square Meter (UZS):</label>
-                            <input type="number" name="price_per_sqm" id="section_price_per_sqm" class="form-control" required>
+                            <input type="text" name="price_per_sqm" id="section_price_per_sqm" class="form-control" required  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -66,9 +66,9 @@ $buildings = \App\Models\Building::all();
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6"> 
-                    <div class="row"> 
+
+                <div class="col-md-6">
+                    <div class="row">
                        <div class="col-md-12 mb-3">
                             <label for="safetyInput" class="fw-semibold">Safety:</label>
                             <input type="text" class="form-control" id="safetyInput" name="safety" placeholder="Enter safety details">
@@ -86,7 +86,7 @@ $buildings = \App\Models\Building::all();
 
                         <div class="col-md-12 mb-3">
                             <label for="floorInput" class="fw-semibold">Floor:</label>
-                            <input type="text" class="form-control" id="floorInput" name="floor" placeholder="Enter floor number">
+                            <input type="text" class="form-control" id="floorInput" name="floor" placeholder="Enter floor number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
 
                         <div class="col-md-12 mb-3">

@@ -25,6 +25,7 @@ class SectionController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         // Validate the incoming request
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
@@ -66,7 +67,7 @@ class SectionController extends Controller
 
     public function show(Section $section)
     {
-        
+
         return view('admin.sections.view', compact('section'));
     }
 
