@@ -1,5 +1,4 @@
 @extends('layouts.auth')
-
 @section('content')
     <main class="auth-minimal-wrapper">
         <div class="auth-minimal-inner">
@@ -39,6 +38,27 @@
                                     Iltimos, familiyangizni kiriting.
                                 </div>
                             </div>
+                            <!-- Region Select -->
+                            <div class="form-group mb-4">
+                                <select class="form-control max-select" id="regionSelect" name="region_id" required>
+                                    <option value="" disabled selected>Viloyatni tanlang</option>
+                                    @foreach ($regions as $region)
+                                        <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">
+                                    Iltimos, viloyatni tanlang.
+                                </div>
+                            </div>
+                            <!-- District Select -->
+                            <div class="form-group mb-4" id="districtSelectBox" style="display: none;">
+                                <select class="form-control max-select" id="districtSelect" name="district_id" required>
+                                    <option value="" disabled selected>Tumanni tanlang</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Iltimos, tumanni tanlang.
+                                </div>
+                            </div>
                             <div class="form-group mb-4">
                                 <input type="password" class="form-control mb-3" placeholder="Password" name="password" required>
                                 @error('password')
@@ -65,33 +85,72 @@
         </div>
     </main>
 
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
-        // PINFL uchun faqat raqamlarni kiritishiga imkon beradi
-        document.getElementById('pinfl-input').addEventListener('input', function (e) {
-            this.value = this.value.replace(/\D/g, '');
+        $(document).ready(function() {
+            // Initialize Select2 for all select elements
+            $('.max-select').select2({
+                theme: 'classic', // Change theme if 'bootstrap-5' doesn't work
+                placeholder: 'Tanlang...',
+                allowClear: true
+            });
 
-            // Maksimal uzunlikni tekshiradi
-            if (this.value.length > 14) {
-                this.value = this.value.slice(0, 14);
-            }
-        });
+            // Handle region change event
+            $('#regionSelect').change(function() {
+                var regionId = $(this).val();
+                if (regionId) {
+                    var url = '{{ route("getDistricts", ":region_id") }}';
+                    url = url.replace(':region_id', regionId); // Dinamik almashtirish
 
-        // Bootstrap form validatsiyasi
-        (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-
-            Array.prototype.slice.call(forms)
-                .forEach(function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#districtSelect').empty().append('<option value="" disabled selected>Tumanni tanlang</option>');
+                            $.each(data, function(key, district) {
+                                $('#districtSelect').append('<option value="'+ district.id +'">'+ district.name +'</option>');
+                            });
+                            $('#districtSelectBox').show(); // Tumanni tanlash oynasini ko'rsatish
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error("AJAX Error: " + textStatus, errorThrown);
+                            alert("Tumanni olishda xatolik yuz berdi.");
                         }
-
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
+                    });
+                } else {
+                    $('#districtSelect').empty().append('<option value="" disabled selected>Tumanni tanlang</option>');
+                    $('#districtSelectBox').hide(); // Hide district select box if no region is selected
+                }
+            });
+            // PINFL input validation (only numbers)
+            $('#pinfl-input').on('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // Remove non-numeric characters
+                if (this.value.length > 14) {
+                    this.value = this.value.slice(0, 14); // Limit to 14 digits
+                }
+            });
+            // Form validation
+            (function () {
+                'use strict';
+                var forms = document.querySelectorAll('.needs-validation');
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+            })();
+        });
     </script>
 @endsection

@@ -25,7 +25,6 @@ class Contract extends Model
         'discount',
         'status',
         'payment_status',
-        'image',
         'total_amount'
     ];
 

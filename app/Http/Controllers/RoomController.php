@@ -37,7 +37,7 @@ class RoomController extends Controller
             'status' => 'required|in:noactive,active,bron',
             'type' => 'required|in:business,standard',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|mimes:jpg,jpeg,png,gif,svg,webp',
         ]);
 
         if ($request->hasFile('images')) {
@@ -81,7 +81,7 @@ class RoomController extends Controller
             'status' => 'required|in:noactive,active,bron',
             'type' => 'required|in:business,standard',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|mimes:jpg,jpeg,png,gif,svg,webp',
         ]);
         if ($request->hasFile('images')) {
             // Delete old images

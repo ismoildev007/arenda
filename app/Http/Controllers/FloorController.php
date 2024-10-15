@@ -42,7 +42,7 @@ class FloorController extends Controller
                 })
             ],
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|mimes:jpg,jpeg,png,gif,svg,webp',
         ]);
 
         // Rasm yuklash jarayoni
@@ -73,7 +73,7 @@ class FloorController extends Controller
 
     public function update(Request $request, Floor $floor)
     {
-        
+
         $validated = $request->validate([
             'building_id' => 'required|exists:buildings,id',
             'section_id' => 'required|exists:sections,id',
@@ -90,9 +90,9 @@ class FloorController extends Controller
                 })
             ],
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|mimes:jpg,jpeg,png,gif,svg,webp',
         ]);
-    
+
         // Eski rasmlarni o'chirish va yangi rasmlarni saqlash
         if ($request->hasFile('images')) {
             if ($floor->images) {
@@ -109,8 +109,8 @@ class FloorController extends Controller
         }
 
         $floor->update($validated);
-       
-       
+
+
 
 
     return redirect()->route('floors.index')->with('success', 'Qavat muvaffaqiyatli yangilandi.');

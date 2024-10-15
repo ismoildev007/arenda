@@ -1,13 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Section;
 use App\Models\Building;
 use App\Models\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
 class SectionController extends Controller
 {
     public function index()
@@ -16,67 +13,52 @@ class SectionController extends Controller
         $buildings = Building::all();
         return view('admin.sections.index', compact('sections', 'buildings'));
     }
-
     public function create()
     {
         $buildings = Building::all();
         return view('admin.sections.create', compact('buildings'));
     }
-
     public function store(Request $request)
     {
-        dd($request->all());
-        // Validate the incoming request
-        $validated = $request->validate([
-            'building_id' => 'required|exists:buildings,id',
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'section_type' => 'nullable|string|max:255',
-            'construction' => 'nullable|string|max:255',
-            'size' => 'nullable|string|max:255',
-            'founded_date' => 'nullable|date',
-            'safety' => 'nullable|string|max:255',
-            'mode_of_operation' => 'nullable|string|max:255',
-            'set' => 'nullable|string|max:255',
-            'floor' => 'nullable|string|max:255',
-            'number_of_rooms' => 'nullable|integer|min:0',
-            'lift' => 'nullable|string|max:255',
-            'parking' => 'nullable|string|max:255',
-            'images' => 'nullable|array',
-            'images.*' => 'nullable|image|max:2048',
-            'price_per_sqm' => 'nullable|string|max:255',
-        ]);
+//        $validated = $request->validate([
+//            'building_id' => 'required|exists:buildings,id',
+//            'name' => 'nullable|string|max:255',
+//            'address' => 'nullable|string|max:255',
+//            'section_type' => 'nullable|string|max:255',
+//            'construction' => 'nullable|string|max:255',
+//            'size' => 'nullable|string|max:255',
+//            'founded_date' => 'nullable|string',
+//            'safety' => 'nullable|string|max:255',
+//            'mode_of_operation' => 'nullable|string|max:255',
+//            'set' => 'nullable|string|max:255',
+//            'floor' => 'nullable|string|max:255',
+//            'number_of_rooms' => 'nullable|integer|min:0',
+//            'lift' => 'nullable|string|max:255',
+//            'parking' => 'nullable|string|max:255',
+//            'images' => 'nullable|array',
+//            'images.*' => 'nullable|image',
+//            'price_per_sqm' => 'nullable|string|max:255',
+//        ]);
 
-        // Handle file uploads if images are provided
         if ($request->hasFile('images')) {
             $images = array_map(function($file) {
-                // Store each image in the 'public/images' directory and get its path
                 return $file->store('images', 'public');
             }, $request->file('images'));
 
-            // Add the images array to the validated data
-            $validated['images'] = $images;
+            $request['images'] = $images;
         }
-
-        // Create the section with the validated data
-        Section::create($validated);
-
-        // Redirect back with a success message
+        Section::create($request->all());
         return redirect()->back()->with('success', 'Section created successfully.');
     }
-
     public function show(Section $section)
     {
-
         return view('admin.sections.view', compact('section'));
     }
-
     public function edit(Section $section)
     {
         $buildings = Building::all();
         return view('admin.sections.edit', compact('section', 'buildings'));
     }
-
     public function update(Request $request, Section $section)
     {
         $request->validate([
@@ -95,29 +77,22 @@ class SectionController extends Controller
             'lift' => 'nullable|string|max:255',
             'parking' => 'nullable|string|max:255',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'nullable|mimes:jpg,jpeg,png,gif,svg,webp',
             'price_per_sqm' => 'nullable|string|max:255',
         ]);
-
         if ($request->hasFile('images')) {
-            // Delete old images
             foreach ($section->images as $image) {
                 Storage::delete($image);
             }
-
-            // Save new images and collect their paths
             $images = array_map(function($file) {
                 return $file->store('images');
             }, $request->file('images'));
 
             $validated['images'] = $images;
         }
-
         $section->update($request->all());
-
         return redirect()->back()->with('success', 'Section updated successfully.');
     }
-
     public function destroy(Section $section)
     {
         $section->delete();
@@ -137,6 +112,4 @@ class SectionController extends Controller
 
         return response()->json(['sections' => $sections]);
     }
-
-
 }

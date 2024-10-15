@@ -24,10 +24,10 @@ return new class extends Migration
             $table->string('mode_of_operation')->nullable();
             $table->string('set')->nullable();
             $table->integer('floor')->nullable();
-            $table->string('number_of_rooms')->nullable();
+            $table->integer('number_of_rooms')->nullable();
             $table->string('lift')->nullable();
             $table->string('parking')->nullable();
-            $table->decimal('price_per_sqm', 8, 2);
+            $table->decimal('price_per_sqm', 15, 2);
             $table->text('images');
             $table->timestamps();
         });

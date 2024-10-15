@@ -29,8 +29,8 @@ class ClientController extends Controller
         $client = Client::where('inn', $request->inn)->first();
 
         if ($client && Hash::check($request->password, $client->password)) {
-            Auth::guard('client')->login($client); 
-            return redirect()->route('client.contract'); 
+            Auth::guard('client')->login($client);
+            return redirect()->route('client.contract');
         } else {
             return back()->withErrors(['error' => 'INN yoki parol noto‘g‘ri']);
         }
@@ -60,7 +60,7 @@ class ClientController extends Controller
             'bank' => $request->bank,
             'account' => $request->account,
             'company_name' => $request->company_name,
-            
+
             'password' => Hash::make($request->password),
         ]);
 
@@ -98,7 +98,9 @@ class ClientController extends Controller
     // Individual Register Form
     public function showIndividualRegisterForm()
     {
-        return view('auth.client_individual_register');
+        $regions = Region::all();
+        $districts = District::all();
+        return view('auth.client_individual_register', compact( 'regions', 'districts'));
     }
 
     // Individual Register Function
@@ -119,7 +121,7 @@ class ClientController extends Controller
 
         Auth::guard('client')->login($client);
 
-        return redirect()->route('client.contract'); 
+        return redirect()->route('client.contract');
     }
 
     // Logout Function

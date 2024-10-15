@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('contract_number');
             $table->string('total_amount');
+            $table->string('status');
+            $table->string('payment_status');
             $table->unsignedBigInteger('building_id');
             $table->unsignedBigInteger('section_id')->nullable();
             $table->unsignedBigInteger('floor_id')->nullable();

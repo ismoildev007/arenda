@@ -40,15 +40,15 @@
                 </div>
             </div>
               <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body">
-                Section added successfully!
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
+                    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                Section added successfully!
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
             <!-- [ page-header ] end -->
 
             <!-- [ Main Content ] start -->
@@ -133,10 +133,8 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
-
-
-  @foreach($buildings as $branch)
-<form action="{{ route('sections.store') }}" method="POST">
+@foreach($buildings as $branch)
+    <form action="{{ route('sections.store') }}" method="POST">
     @csrf
     <!--! ================================================================ !-->
     <!--! [Start] Review Provider Offcanvas !-->
@@ -275,18 +273,14 @@
     document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form');
     form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        // Simulate successful form submission (e.g., after Ajax call or validation)
-        // Show toast
+        event.preventDefault();
         const toastEl = document.getElementById('successToast');
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
 
-        // Submit the form after showing the toast (you can remove this if submitting via Ajax)
         setTimeout(() => {
             form.submit();
-        }, 1500); // Wait for 1.5 seconds before submitting the form
+        }, 1500);
     });
 });
 

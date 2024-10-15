@@ -10,26 +10,26 @@
     <meta name="author" content="theme_ocean">
     <!--! The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags !-->
     <!--! BEGIN: Apps Title-->
-    <title>DORA Academy</title>
+    <title>DORA Rent</title>
     <!--! END:  Apps Title-->
     <!--! BEGIN: Favicon-->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/assets/images/favicon.ico') }}">
     <!--! END: Favicon-->
     <!--! BEGIN: Bootstrap CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/css/bootstrap.min.css') }}">
     <!--! END: Bootstrap CSS-->
     <!--! BEGIN: Vendors CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/vendors.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/select2.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/select2-theme.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/vendors/css/vendors.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/vendors/css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/vendors/css/select2-theme.min.css') }}">
 
     <!-- For employees CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/jquery.steps.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/quill.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/datepicker.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/vendors/css/jquery.steps.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/vendors/css/quill.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/vendors/css/datepicker.min.css') }}">
     <!--! END: Vendors CSS-->
     <!--! BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/theme.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/assets/css/theme.min.css') }}">
     <!--! END: Custom CSS-->
     <!--! HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries !-->
     <!--! WARNING: Respond.js doesn"t work if you view the page via file: !-->
@@ -192,15 +192,23 @@
 <!--! Footer Script !-->
 <!--! ================================================================ !-->
 <!--! BEGIN: Vendors JS !-->
-<script src="assets/vendors/js/vendors.min.js"></script>
+<script src="{{ asset('/assets/vendors/js/vendors.min.js') }}"></script>
 <!-- vendors.min.js {always must need to be top} -->
+<script src="{{ asset('/assets/vendors/js/apexcharts.min.js') }}"></script>
+<script src="{{ asset('/assets/vendors/js/circle-progress.min.js') }}"></script>
+<script src="{{ asset('/assets/vendors/js/select2.min.js') }}"></script>
+<script src="{{ asset('/assets/vendors/js/select2-active.min.js') }}"></script>
+<!-- For employees JS-->
+<script src="{{ asset('/assets/vendors/js/quill.min.js') }}"></script>
+<script src="{{ asset('/assets/vendors/js/datepicker.min.js') }}"></script>
 <!--! END: Vendors JS !-->
 <!--! BEGIN: Apps Init  !-->
-<script src="assets/js/common-init.min.js"></script>
+<script src="{{ asset('/assets/js/common-init.min.js') }}"></script>
+<script src="{{ asset('/assets/js/reports-leads-init.min.js') }}"></script>
 <!--! END: Apps Init !-->
 <!--! BEGIN: Theme Customizer  !-->
-<script src="assets/js/theme-customizer-init.min.js"></script>
-<!--! END: Theme Customizer !-->
+<script src="{{ asset('/assets/js/theme-customizer-init.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </body>
 
 </html>

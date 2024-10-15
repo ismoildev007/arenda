@@ -18,6 +18,15 @@
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
                         <h5 class="m-b-10">Obyekt</h5>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript: void(1);">Home</a></li>
@@ -150,7 +159,7 @@
                                         <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#overviewTab" role="tab">Overview</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
-                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Clients</a>   
+                                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#billingTab" role="tab">Clients</a>
                                     </li>
                                     <li class="nav-item flex-fill border-top" role="presentation">
                                         <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab" role="tab">Sections</a>
@@ -360,7 +369,7 @@
                                         <div class="px-4 mb-4 d-flex justify-content-between">
                                             <h5 class="fw-bold">Section</h5>
                                             <a href="javascript:void(0)" class="brn btn-primary d-flex align-items-center px-2 py-1  border" data-bs-toggle="offcanvas" data-bs-target="#sectionOffcanvas">
-                                                 
+
                                                <i class="feather feather-plus "></i>
                                                <span>Add section</span>
                                             </a>
@@ -397,7 +406,7 @@
                                                                                 <span>Edit</span>
                                                                             </a>
                                                                         </li>
-                                                                    
+
                                                                         <li>
                                                                             <a class="dropdown-item" href="javascript:void(0)">
                                                                                 <i class="feather feather-clock me-3"></i>
@@ -413,7 +422,7 @@
                                                                                     <i class="feather feather-trash-2 me-3"></i>
                                                                                     Delete
                                                                                 </button>
-                                                                            </form>                                                                   
+                                                                            </form>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -580,23 +589,102 @@
                     <div class="modal-body">
                         <form action="{{ route('sections.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="building_id" value="{{ $building->id }}">
-                            <div class="mb-3">
-                                <label for="floor" class="form-label">Qavat</label>
-                                <input type="number" class="form-control" id="floor" name="floor" min="1" max="100" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nomi</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="images" class="form-label">Rasmlar (ixtiyoriy)</label>
-                                <input type="file" class="form-control" id="images" name="images[]" multiple>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
-                                <button type="submit" class="btn btn-primary">Saqlash</button>
-                            </div>
+                            <form action="{{ route('sections.store') }}" method="POST">
+                                @csrf
+                                <!--! ================================================================ !-->
+                                <!--! [Start] Review Provider Offcanvas !-->
+                                <!--! ================================================================ !-->
+                                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="sectionOffcanvas" aria-labelledby="section">
+                                    <div class="offcanvas-header border-bottom" style="padding-top: 20px; padding-bottom: 20px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-text avatar-md items-details-close-trigger" data-bs-dismiss="offcanvas" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Details Close"><i class="feather-arrow-left"></i></div>
+                                            <span class="vr text-muted mx-4"></span>
+                                            Add Section
+                                        </div>
+                                    </div>
+                                    <div class="offcanvas-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="nameInput" class="fw-semibold">Section Name:</label>
+                                                        <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter section name">
+                                                    </div>
+                                                    <input type="hidden" name="building_id" value="{{ $building->id }}">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="addressInput" class="fw-semibold">Address:</label>
+                                                        <input type="text" class="form-control" id="addressInput" name="address" placeholder="Enter address">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="classesInput" class="fw-semibold">Section Type:</label>
+                                                        <input type="text" class="form-control" id="classesInput" name="section_type" placeholder="Enter section type">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="constructionInput" class="fw-semibold">Construction:</label>
+                                                        <input type="text" class="form-control" id="constructionInput" name="construction" placeholder="Enter construction details">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="sizeInput" class="fw-semibold">Size:</label>
+                                                        <input type="text" class="form-control" id="sizeInput" name="size" placeholder="Enter section size" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="section_price_per_sqm" class="fw-semibold">Price per Square Meter (UZS):</label>
+                                                        <input type="text" name="price_per_sqm" id="section_price_per_sqm" class="form-control" required oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="foundedDateInput" class="fw-semibold">Founded Date:</label>
+                                                        <input type="date" class="form-control"  name="founded_date">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="safetyInput" class="fw-semibold">Safety:</label>
+                                                        <input type="text" class="form-control" id="safetyInput" name="safety" placeholder="Enter safety details">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="modeOfOperationInput" class="fw-semibold">Mode of Operation:</label>
+                                                        <input type="text" class="form-control" id="modeOfOperationInput" name="mode_of_operation" placeholder="Enter mode of operation">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="setInput" class="fw-semibold">Equipment:</label>
+                                                        <input type="text" class="form-control" id="setInput" name="set" placeholder="Enter equipment details">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="floorInput" class="fw-semibold">Floor:</label>
+                                                        <input type="text" class="form-control" id="floorInput" name="floor" placeholder="Enter floor number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="numberOfRoomsInput" class="fw-semibold">Number of Rooms:</label>
+                                                        <input type="text" class="form-control" id="numberOfRoomsInput" name="number_of_rooms" placeholder="Enter number of rooms" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="liftInput" class="fw-semibold">Lift:</label>
+                                                        <input type="text" class="form-control" id="liftInput" name="lift" placeholder="Is there a lift?">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="parkingInput" class="fw-semibold">Parking:</label>
+                                                        <input type="text" class="form-control" id="parkingInput" name="parking" placeholder="Enter parking details">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="imagesInput" class="fw-semibold">Images:</label>
+                                                        <input type="file" class="form-control" id="imagesInput" name="images[]" multiple accept="image/*">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group mb-4 text-center">
+                                                    <button type="submit" class="btn btn-primary btn-lg">Save Section</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--! ================================================================ !-->
+                                <!--! [End] Review Provider Offcanvas !-->
+                                <!--! ================================================================ !-->
+                            </form>
                         </form>
                     </div>
                 </div>
